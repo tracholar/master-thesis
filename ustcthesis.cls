@@ -178,7 +178,7 @@
         \includegraphics[height=4.9cm]{figures/ustc_logo_fig} \\
         \parbox[t][4.7cm][c]{\textwidth}
             {\centering\sffamily\bfseries\setfontsize{26bp}\ustc@title} \\
-        \parbox[t][4.2cm][c]{\textwidth}{\setfontsize{16bp}
+        \parbox[t][4.2cm][c]{\textwidth}{\setfontsize{16bp}[30bp]   % 中文也设置为30磅的行距，而不是单倍行距
             \hspace*{2.8cm}{\sffamily 作者姓名：}\hfill \ustc@author \hfill\mbox{} \\
             \hspace*{2.8cm}{\sffamily 学科专业：}\hfill \ustc@major \hfill\mbox{} \\
             \hspace*{2.8cm}{\sffamily 导师姓名：}\hfill \ustc@advisor \hfill\mbox{} \\
