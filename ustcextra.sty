@@ -1,0 +1,41 @@
+%%
+%% This is file `ustcextra.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% ustcthesis.dtx  (with options: `extra')
+%% 
+%% Copyright (C) 2015-2016 by Zeping Lee <zepinglee AT gmail.com>
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.2 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%%     http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.2 or later is part of all distributions of
+%% LaTeX version 1999/12/01 or later.
+%% 
+\ProvidesPackage{ustcextra}
+    [2016/02/21 v2.0 USTC thesis template]
+\RequirePackage{booktabs}
+\RequirePackage{longtable}
+\RequirePackage[boxed, algochapter, lined, linesnumbered]{algorithm2e}
+\renewcommand{\listalgorithmcfname}{算法索引}
+\renewcommand{\algorithmcfname}{算法}
+\RequirePackage{listings}
+\lstset{
+    basicstyle=\small\ttfamily,
+    xleftmargin=2pc,
+    xrightmargin=2pc,
+    frame=single,
+    columns=flexible,
+    numbers=left,
+}
+\renewcommand{\lstlistlistingname}{代码索引}
+\renewcommand{\lstlistingname}{代码}
+\endinput
+%%
+%% End of file `ustcextra.sty'.
