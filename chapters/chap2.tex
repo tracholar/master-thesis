@@ -7,6 +7,8 @@
 
 
 
+
+
 \section{经典光通信的接收方案}
 
 \subsection{引言}
@@ -15,7 +17,7 @@
 这三种接收方案受散粒噪声的制约，
 使得每一种接收方案存在一个经典极限
 ——标准量子极限(Standard Quantum Limit)。
-接下来，我们简单介绍一下每一种接收方案的具体实现和它们的性能。
+接下来，我们简单介绍一下每一种接收方案的具体实现方案。
 
 \subsection{直接检测}
 
@@ -25,7 +27,7 @@ OOK调制将符号0编码为没有光脉冲，
 而将符号1编码为有脉冲；PPM调制则将信息编码到脉冲所在的位置上。
 对于这样一类的调制方案，经典光通信中常采用直接检测方案进行探测。
 如图\ref{fig:DD}所示，直接检测方案直接探测信号光的强度，
-来判断是否存在光脉冲或者光脉冲的幅度。
+来判断是否存在光脉冲或者光脉冲的幅度\cite{gagliardi1976optical,gagliardi1998optical}。
 这种方案可以利用一个光电探测器或单光子探测器实现。
 探测器可以输出探测到的光子数目，理想情况下，
 对于给定的相干态，探测到$n$个光子的概率
@@ -50,41 +52,70 @@ OOK调制将符号0编码为没有光脉冲，
 
 \subsection{零差接收}
 零差接收机是一种相干检测方案，如图\ref{fig:HD}所示，
-是一种平衡零差接收方案。这种接收方案和直接检测不同的是，
+是一种平衡零差接收方案\cite{gagliardi1976optical,gagliardi1998optical}。
+这种接收方案和直接检测不同的是，
 需要一个本振。对于零差接收本振频率和信号频率一致。
-通常本振强度$a_{LO}$远大于信号强度$a_s$，
+通常本振强度$a_{LO}$远大于信号强度$a_S$，
 两路信号通过一个50:50的分束器，
 在两个输出口得到两路新的信号$a_+$和$a_-$，满足关系式
 \begin{equation}
-a_\pm = \frac{a_s \pm a_{LO}}{\sqrt{2}}.
+a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 \end{equation}
 这两路信号被光电探测器接收，得到两路光电流$i_\pm$。
-这两路电流通过一个放大系数为$K$的差分放大器，最后通过一个
-低通滤波器积分得到输出统计量
+这两路电流通过一个放大系数为$\frac{1}{K}=\frac{1}{2q\sqrt{N_{LO}}}$的差分放大器，
+最后通过一个低通滤波器积分得到输出统计量
 \begin{equation}
-a_\theta = \frac{N_+ - N_-}{2\sqrt{N_{LO}}}.
+\alpha_\theta = \frac{N_+ - N_-}{2\sqrt{N_{LO}}}.
 \end{equation}
 这里假定所有的器件都是理想的。当$N_{LO} \rightarrow \infty$时，
 输出统计量服从高斯分布
 \begin{equation}
-a_\theta \sim N(Re(ae^{-j\theta}), \frac{1}{4}).
+\alpha_\theta \sim N(Re(ae^{-j\theta}), \frac{1}{4}).
 \end{equation}
-用量子力学算符可以描述为
+其中$\theta$是本振与信号的相位差。
+这种测量方案，用量子力学算符可以用湮灭算符描述为\cite{yuen1980optical}
 \begin{equation}
-\hat{a}_\theta = Re(\hat{a}e^{-j\theta}).
+\hat{\alpha}_\theta = \Re(\hat{a}_S e^{-j\theta}).
 \end{equation}
 
 
 \begin{figure}
 \centering
-  \includegraphics[scale=1]{figures/chap2/homodyne-receiver.pdf}
+  \includegraphics[width=0.8\textwidth]{figures/chap2/homodyne-receiver.pdf}
   \caption{平衡零差检测示意图}
   \label{fig:HD}
 \end{figure}
 
 \subsection{外差接收}
+在上一小节，我们已经介绍了零差接收方案。
+另外一种相干接收方案是外差接收\cite{gagliardi1976optical,gagliardi1998optical}，
+它采用了与信号频率不同的本振。
+图\ref{fig:HeD}是一种平衡外差接收机示意图，
+在这种外差接收机中，频率为$\omega$的信号场$a_S$
+与频率为$\omega - \omega_{IF}$的强本振场$a_{LO}$
+通过一个50:50的分束器混合。
+混合后经过光电探测器，得到两路以中频$\omega_{IF}$震荡的电流$i_\pm$。
+这两路电流经过一个放大系数为$\frac{1}{K'}=\frac{1}{q\sqrt{N_{LO}}}$的差分放大器，
+最后解调出两个正交幅度$\alpha_1$和$\alpha_2$。
+假定所有的器件都是理想的，当$N_{LO} \rightarrow \infty$时，
+这两个统计量独立，分别服从高斯分布
+\begin{equation}
+\alpha_i \sim N(a_{S_i}, \frac{1}{2}).
+\end{equation}
+其中$a_{S_1}=\Re(a_S)$和$a_{S_2}=\Im(a_S)$分别是信号场的两个正交幅度。
+这种测量方案，用量子力学算符可以用湮灭算符描述为\cite{yuen1980optical}
+\begin{equation}
+\hat{\alpha}_1 + j \hat{\alpha}_2 = \hat{a}_S.
+\end{equation}
 
 
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chap2/heretrodyne-receiver.pdf}
+  \caption{平衡外差检测示意图}
+  \label{fig:HeD}
+\end{figure}
 
 
 \section{量子检测与估计理论}
