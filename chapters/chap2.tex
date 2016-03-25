@@ -29,7 +29,7 @@
 \begin{equation}
 \hat{H} = \hbar \omega (\hat{a}^\dagger \hat{a} + \frac{1}{2}).
 \end{equation}
-其中$\hat{a}^\dagger$和 $\hat{a}$ 分别是产生湮灭算符，
+其中$\hat{a}^\dagger$和 $\hat{a}$ 分别是产生算符和湮灭算符，
 乘积$\hat{a}^\dagger \hat{a}$是粒子数算符，他的本振态是Fork态$\ket{n}$。
 \begin{equation}
 \hat{a}^\dagger \hat{a} \ket{n} = n \ket{n}.
@@ -215,12 +215,162 @@ $\alpha_\theta$、$\{\alpha_1, \alpha_2\}$。
 这些统计量通常不是一个固定的值，而是一个随机变量。
 一般的，我们假设输出统计量是一个随即向量$\bm{v} = (v_1, v_2, ..., v_n)$。
 当发送第$j$个符号时，
-假定它的联合分布为$p_j(\bm{v}) = p_j(v_1, v_2, ..., v_n)$。
+假定它的联合分布为
+$p_j(\bm{v}) = p_j(v_1, v_2, ..., v_n)$。
+在通信的接收端，通过对接收到的统计量进行判决，
+判定发送的符号是哪一个。
+下面介绍两种重要的准则——贝叶斯准则和最小错误概率准则。
+
+我们定义决策代价$C_{ij}$为，
+当假设$H_j$是正确的情况下，选择了假设$H_i$所需要的代价。
+我们期望一个决策是最优的是指该决策所需要的代价最小。
+
+我们再来将决策数学化\cite{yzf2002tjxhcl,helstrom1976quantum}，
+定义在观测到的统计量为$\bm{v}$时，
+选择了假设$H_i$的概率为$\pi_i(\bm{v})$，$i=1,2,...,M$。
+这些决策概率需满足条件
+\begin{equation}
+0 \le \pi_i(\bm{v}) \le 1,  \sum_{i=1}^M \pi_i(\bm{v}) = 1.
+\label{eq:pi-cond}
+\end{equation}
+一个简单的例子是一种被称为随机策略的决策方案，
+对于任意观测量，这种策略都是随机选择一个假设，
+即$\pi_i(\bm{v}) \equiv 1/M, \forall i, \bm{v}$。
+
+在上述符号的约定下，我们可以得到在假设$H_j$是正确的情况下，
+策略选择了假设$H_i$的条件概率为
+\begin{equation}
+\Pr\{i|j\} = \int_R \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
+\end{equation}
+那么，对所有的观测结果，平均代价为
+\begin{equation}
+\begin{split}
+\bar{C} &= \sum_{i=1}^M \sum_{j=1}^M \zeta_j C_{ij} \Pr{i|j} \\
+ &= \sum_{i=1}^M \sum_{j=1}^M \zeta_j C_{ij} \int_R \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
+\end{split}
+\end{equation}
+对于每一个假设$H_i$，我们定义它的风险函数
+\begin{equation}
+W_i(\bm{v}) = \sum_{j=1}^M \zeta_j C_{ij} p_j(\bm{v})。
+\end{equation}
+那么决策的平均代价可以改写为
+\begin{equation}
+\bar{C} =  \int_R \sum_{i=1}^M W_i(\bm{v}) \pi_i(\bm{v}) d^n \bm{v}.
+\label{eq:avg-C}
+\end{equation}
+
+在式\ref{eq:pi-cond}条件下，最小化式\ref{eq:avg-C}，
+这是一个凸优化问题。
+这个问题可以通过一个简单的观察得以解决。
+从式\ref{eq:pi-cond}和\ref{eq:avg-C}可以看出，
+对于每一个观测结果$\bm{v} \in R$，要使得平均代价最小，
+需要选择风险$W_i(\bm{v})$最小的那一个假设。
+即对于每一个观测结果$\bm{v} \in R$，若
+\begin{equation}
+W_j(\bm{v}) < W_i(\bm{v}), \forall i \neq j,
+\end{equation}
+那么
+\begin{equation}
+\pi_j(\bm{v})=1, \pi_i(\bm{v}) \equiv 0, \forall i \neq j.
+\end{equation}
+
+为方便记函数
+\begin{equation}
+\Upsilon(\bm{v}) = \min_j W_j(\bm{v}), 
+\end{equation}
+那么对所有的观测结果$\bm{v}$和所有的假设$H_i$，有下式成立
+\begin{equation}
+\begin{split}
+[W_i(\bm{v}) - \Upsilon(\bm{v})] \pi_i(\bm{v}) &= 0,  \\
+W_i(\bm{v}) - \Upsilon(\bm{v}) &\ge 0.
+\label{eq:classic-opt-cond}
+\end{split}
+\end{equation}
+对式\ref{eq:classic-opt-cond}的第一个式子求和，可以得到
+\begin{equation}
+\Upsilon(\bm{v}) = \sum_i^M W_i(\bm{v})\pi_i(\bm{v}), 
+\end{equation}
+因此，可以得到最小平均代价为
+\begin{equation}
+\bar{C}_{min} = \int_R \Upsilon(\bm{v}) d^n \bm{v}. 
+\end{equation}
+容易验证，这样得到的平均代价确实是最小平均代价，
+即对任意其他的决策函数$\{\pi_i'(\bm{v})\}$，有
+\begin{equation}
+\bar{C}' - \bar{C}_{min} = \sum_{i=1}^M \int_R [W_i(\bm{v}) - \Upsilon] \pi_i'(\bm{v}) d^n \bm{v} \ge 0. 
+\end{equation}
+
+
+现代的文献中，常将这种最小化平均代价函数的决策称作贝叶斯准则。
+在这当中，有一种被称为最小错误概率准则的策略，它的决策代价系数定义为
+\begin{equation}
+C_{ii} = -1; C_{ij}=0, \forall i\neq j. 
+\end{equation}
+在这种决策代价下，最小平均代价就是最小平均错误概率
+\begin{equation}
+P_e = 1 - \sum_{j=1}^M \zeta_j \Pr{j|j} = \sum_{j=1}^M \zeta_j \sum_{k\neq j}\Pr{k|j}.
+\end{equation}
+在通信中，常用最小平均错误概率准则来设计接收机的接收策略。
+因此本文也主要以该准则来设计量子接收机。
+
 
 
 
 \subsection{量子最优检测}
+上世纪六十年代，C.W. Helstrom和H. P. Yuen等人
+将假设检验理论与量子力学结合起来，
+发展出一套适用于量子测量的量子检测与估计理论
+\cite{helstrom1976quantum,helstrom1967detection,yuen1975optimum}。
+根据这一套理论，可以从理论上给出最优检测的数学形式，
+下面我们简单回顾一下这个理论的主要内容。
 
+在量子力学中，一个测量在数学上被描述为一个正定算子值测量(POVM)算符\cite{helstrom1976quantum}。
+如果用算符$\Pi_i (i=1,2,...,M)$表示一组POVM测量，
+那么一组完备的POVM测量需要满足条件
+\begin{equation}
+\begin{split}
+\Pi_i & \ge 0, \\
+\sum_{i=1}^M \Pi_i & = 1.
+\end{split}
+\end{equation}
+
+例如，直接检测利用POVM算符可以表达为
+\begin{equation}
+\Pi_n = \ket{n}\bra{n}, n=0,1,2,...
+\end{equation}
+其中$\ket{n}$是Fork态矢量，这是一组正交投影测量。
+我们说一组测量是正交投影测量是指它们满足正交条件
+\begin{equation}
+\Pi_i \Pi_j = 0, \forall i \neq j
+\end{equation}
+和投影算符条件
+\begin{equation}
+\Pi_n^2 = \Pi_n, n=0,1,2,...
+\end{equation}
+如果直接检测采用On-Off探测器，即只能探测到有光子还是没有光子，
+那么直接检测对应于一个二元测量
+\begin{equation}
+\Pi_0 = \ket{0}\bra{0}, \Pi_1 = I - \ket{0}\bra{0}.
+\end{equation}
+
+
+假设发送的信号态用密度矩阵为$\rho_j$，那么将符号$j$检测为符号$i$的条件概率为
+\begin{equation}
+\Pr(i|j) = \Tr(\rho_j \Pi_i), (i,j)=1,2,...,M.
+\end{equation}
+那么利用上一节的符号定义，在这样的信号和测量设置下，
+总的平均代价为
+\begin{equation}
+\bar{C} =  \sum_{i=1}^M \sum_{j=1}^M \zeta_jC_{ij} \Tr(\rho_j \Pi_i) \\
+        =  \Tr \sum_{i=1}^M W_i \Pi_i.
+\label{eq:q-avg-C}
+\end{equation}
+这里，风险算符$W_i$定义为
+\begin{equation}
+W_i = \sum_{j=1}^M \zeta_jC_{ij}\rho_j.
+\end{equation}
+这样，我们得到与经典检测理论对应的优化问题。
+为了得到最小平均代价，
 
 
 
