@@ -407,7 +407,7 @@ s.t. \quad  & \hat{\Pi}_i \ge 0, i=1,2,...,M   \\
 为未知矩阵只有1个的半正定规划问题\cite{eldar2003designing}
 \begin{equation}
 \begin{split}
-\min_\hat{X}  \quad & \Tr(\hat{X}) \\
+\min_{\hat{X}}  \quad & \Tr(\hat{X}) \\
 s.t.          \quad & \hat{X} \ge \hat{\rho}_i', i=1,2,...,M.
 \end{split}
 \end{equation}
@@ -479,11 +479,11 @@ E = \Tr[(\hat{\Gamma} - \hat{M})^\dagger (\hat{\Gamma} - \hat{M})]
 对于纯态信号集合，信号密度矩阵秩为1，因此$\hat{\gamma}_i$和$\hat{\mu}_i$是一个向量，
 因此
 \begin{equation}
-\Pr{j|i} = (G^{1/2})_{ji}.
+\Pr{j|i} = (\hat{G}^{1/2})_{ji}.
 \end{equation}
 所以，若先验概率相同的情况下，平均错误概率为
 \begin{equation}
-P_e = 1 - \frac{1}{M}\sum_{i=1}^M (G^{1/2})_{ii}.
+P_e = 1 - \frac{1}{M}\sum_{i=1}^M (\hat{G}^{1/2})_{ii}.
 \end{equation}
 
 
@@ -501,7 +501,7 @@ P_e = 1 - \frac{1}{M}\sum_{i=1}^M (G^{1/2})_{ii}.
 相似。其中$\hat{n}=\hat{a}^\dagger \hat{a}$是粒子数算符。
 对于M阶PPM，对应的幺正矩阵是一个排列矩阵\cite{cariolaro2010theory}
 \begin{equation}
-\hat{U} = \sum_{k=1}^n \omega_n(k) \otimes I_H \otimes \omega_n^*(k).
+\hat{U} = \sum_{k=1}^n \omega_n(k) \otimes \hat{I}_H \otimes \omega_n^*(k).
 \end{equation}
 其中$\omega_n(k)$是一个$n$维向量，
 它的第$k$维为1，其它维都是0。
