@@ -305,6 +305,7 @@ W_i(\bm{v}) - \Upsilon(\bm{v}) &\ge 0.
 在这当中，有一种被称为最小错误概率准则的策略，它的决策代价系数定义为
 \begin{equation}
 C_{ii} = -1; C_{ij}=0, \forall i\neq j. 
+\label{eq:min-err-cond}
 \end{equation}
 在这种决策代价下，最小平均代价就是最小平均错误概率
 \begin{equation}
@@ -312,6 +313,9 @@ P_e = 1 - \sum_{j=1}^M \zeta_j \Pr{j|j} = \sum_{j=1}^M \zeta_j \sum_{k\neq j}\Pr
 \end{equation}
 在通信中，常用最小平均错误概率准则来设计接收机的接收策略。
 因此本文也主要以该准则来设计量子接收机。
+
+通过经典的三种探测方式加上经典检测预估计理论所得到的最佳接收方案，
+它能达到的最小平均错误概率通常被称作标准量子极限(SQL)。
 
 
 
@@ -325,63 +329,197 @@ P_e = 1 - \sum_{j=1}^M \zeta_j \Pr{j|j} = \sum_{j=1}^M \zeta_j \sum_{k\neq j}\Pr
 下面我们简单回顾一下这个理论的主要内容。
 
 在量子力学中，一个测量在数学上被描述为一个正定算子值测量(POVM)算符\cite{helstrom1976quantum}。
-如果用算符$\Pi_i (i=1,2,...,M)$表示一组POVM测量，
+如果用算符$\hat{\Pi}_i (i=1,2,...,M)$表示一组POVM测量，
 那么一组完备的POVM测量需要满足条件
 \begin{equation}
 \begin{split}
-\Pi_i & \ge 0, \\
-\sum_{i=1}^M \Pi_i & = 1.
+\hat{\Pi}_i & \ge 0, \\
+\sum_{i=1}^M \hat{\Pi}_i & = \hat{I}.
 \end{split}
 \end{equation}
 
 例如，直接检测利用POVM算符可以表达为
 \begin{equation}
-\Pi_n = \ket{n}\bra{n}, n=0,1,2,...
+\hat{\Pi}_n = \ket{n}\bra{n}, n=0,1,2,...
 \end{equation}
 其中$\ket{n}$是Fork态矢量，这是一组正交投影测量。
 我们说一组测量是正交投影测量是指它们满足正交条件
 \begin{equation}
-\Pi_i \Pi_j = 0, \forall i \neq j
+\hat{\Pi}_i \hat{\Pi}_j = 0, \forall i \neq j
 \end{equation}
 和投影算符条件
 \begin{equation}
-\Pi_n^2 = \Pi_n, n=0,1,2,...
+\hat{\Pi}_n^2 = \hat{\Pi}_n, n=0,1,2,...
 \end{equation}
 如果直接检测采用On-Off探测器，即只能探测到有光子还是没有光子，
 那么直接检测对应于一个二元测量
 \begin{equation}
-\Pi_0 = \ket{0}\bra{0}, \Pi_1 = I - \ket{0}\bra{0}.
+\hat{\Pi}_0 = \ket{0}\bra{0}, \hat{\Pi}_1 = \hat{I} - \ket{0}\bra{0}.
 \end{equation}
 
 
-假设发送的信号态用密度矩阵为$\rho_j$，那么将符号$j$检测为符号$i$的条件概率为
+假设发送的信号态用密度矩阵为$\hat{\rho}_j$，那么将符号$j$检测为符号$i$的条件概率为
 \begin{equation}
-\Pr(i|j) = \Tr(\rho_j \Pi_i), (i,j)=1,2,...,M.
+\Pr(i|j) = \Tr(\hat{\rho}_j \hat{\Pi}_i), (i,j)=1,2,...,M.
 \end{equation}
 那么利用上一节的符号定义，在这样的信号和测量设置下，
 总的平均代价为
 \begin{equation}
-\bar{C} =  \sum_{i=1}^M \sum_{j=1}^M \zeta_jC_{ij} \Tr(\rho_j \Pi_i) \\
-        =  \Tr \sum_{i=1}^M W_i \Pi_i.
+\bar{C} =  \sum_{i=1}^M \sum_{j=1}^M \zeta_jC_{ij} \Tr(\hat{\rho}_j \hat{\Pi}_i) \\
+        =  \Tr \sum_{i=1}^M \hat{W}_i \hat{\Pi}_i.
 \label{eq:q-avg-C}
 \end{equation}
-这里，风险算符$W_i$定义为
+这里，风险算符$\hat{W}_i$定义为
 \begin{equation}
-W_i = \sum_{j=1}^M \zeta_jC_{ij}\rho_j.
+\hat{W}_i = \sum_{j=1}^M \zeta_jC_{ij}\hat{\rho}_j.
 \end{equation}
 这样，我们得到与经典检测理论对应的优化问题。
-为了得到最小平均代价，
+H. P. Yuen和C. W. Helstrom等人给出该优化问题的一个充要条件，
+\begin{equation}
+\begin{split}
+(\hat{W}_i - \hat{\Upsilon})\hat{\Pi}_i = \hat{\Pi}_i(\hat{W}_i - \hat{\Upsilon}) & = \bm{0}, i=1,2,...,M,  \\
+\hat{W}_i - \hat{\Upsilon} & \ge \bm{0}, i=1,2,...,M.
+\label{eq:optim-povm-cond}
+\end{split}
+\end{equation}
+其中拉格朗日算符
+\begin{equation}
+\hat{\Upsilon} = \sum_{j=1}^M \hat{\Pi}_j\hat{W}_j = \sum_{j=1}^M\hat{W}_j\hat{\Pi}_j.
+\end{equation}
+那么，最小平均代价可以简化为
+\begin{equation}
+\bar{C}_{min} = \Tr(\hat{\Upsilon}).
+\end{equation}
 
+若取式\ref{eq:min-err-cond}中的最小平均错误概率准则决策代价系数，
+那么最优检测问题可以简化为
+\begin{equation}
+\begin{split}
+\max_{\hat{\Pi}_i}  \quad  &  \sum_{i=1}^M \Tr(\hat{\rho}_i'\hat{\Pi}_i) \\
+s.t. \quad  & \hat{\Pi}_i \ge 0, i=1,2,...,M   \\
+     \quad  & \sum_{i=1}^M \hat{\Pi}_i = \hat{I}.
+\end{split}
+\end{equation}
+上式中，$\hat{\rho}_i' = \zeta_i \hat{\rho}_i$。
+该问题是一个半正定规划(SDP)问题，
+需要求解的未知矩阵个数是$M$，
+可以通过求解其对偶问题将问题简化
+为未知矩阵只有1个的半正定规划问题\cite{eldar2003designing}
+\begin{equation}
+\begin{split}
+\min_\hat{X}  \quad & \Tr(\hat{X}) \\
+s.t.          \quad & \hat{X} \ge \hat{\rho}_i', i=1,2,...,M.
+\end{split}
+\end{equation}
+利用一种为Matlab编写的凸优化工具箱CVX，
+可以很方便地求解上述半正定规划问题\cite{cvx,gb08}。
 
+利用量子检测预估计理论计算出来的最小错误概率，
+通常称作这种信号的Helstrom极限，
+通常比经典检测方案所能达到的极限要低很多\cite{helstrom1976quantum}。
 
 
 
 \subsection{平方根检测}
+一般情况下，为了求解量子最优测量问题，
+需要利用数值优化工具进行数值计算，
+只有很少数情况下可以得到解析表达式。
+因此，这不利于理论研究。
+而平方根检测是一种解析方法，通过信号矢量的Gram矩阵的平方根
+构造出来的一组POVM算符进行测量\cite{hausladen1994pretty,hausladen1996classical}。
+在最小错率概率准则下，它是一种近最优的检测方案，
+但是在最小均方误差准则下，它是最优的。
+并且，在信号具有几何均匀对称性的情况下，
+它也是最小错误概率准则下的最优检测\cite{kato1999quantum,eldar2001quantum,cariolaro2010performance,cariolaro2010theory}。
+在很多理论问题的研究中，由于平方根检测具有良好的解析表达式，
+常常被用来作为一种理论检测方案进行研究\cite{hausladen1996classical,sasaki1998quantum,guha2012polar}。
+下面，我们介绍一下这种接收方案的数学形式。
+
+设$M$个信号由$n$维Hilbert空间$\mathcal{H}$中
+的向量表示为$\ket{\psi_i}(i=1,2,...M)$，对应的密度矩阵为
+$\hat{\rho}_i = \ket{\psi_i} \bra{\psi_i}$。
+这些信号张成$\mathcal{H}$中一个$r\le M$维子空间$\mathcal{U}$。
+当且仅当$M$个信号线性独立时，等号成立$r=M$。
+$M$个POVM测量满足
+\begin{equation}
+\hat{\Pi}_i \ge 0, \sum_{i=1}^M \hat{\Pi}_i = \hat{I}_r.
+\end{equation}
+这里$\hat{I}_r$是子空间$\mathcal{U}$上的单位矩阵。
+
+将信号的密度矩阵和POVM测量矩阵分解为
+\begin{equation}
+\begin{split}
+\hat{\rho}_i & = \hat{\gamma}_i \hat{\gamma}_i^\dagger,\\
+\hat{\Pi}_i & = \hat{\mu}_i \hat{\mu}_i^\dagger.
+\end{split}
+\end{equation}
+重新定义信号集合矩阵$\hat{\Gamma}=[\hat{\gamma}_1 \quad \hat{\gamma}_2 \quad ...\quad \hat{\gamma}_M]$
+和POVM测量集合矩阵$\hat{M} = [\hat{\mu}_1\quad \hat{\mu}_2\quad ...\quad \hat{\mu}_M]$。
+Gram矩阵定义为$\hat{T} = \hat{\Gamma} \hat{\Gamma}^\dagger$
+和$\hat{G} = \hat{\Gamma}^\dagger \hat{\Gamma}$，
+平方根检测给出的POVM测量集合矩阵为
+\begin{equation}
+\hat{M} = \hat{T}^{-\frac{1}{2}} \hat{\Gamma} = \hat{\Gamma} \hat{G}^{-\frac{1}{2}}.
+\end{equation}
+可以证明这种POVM测量使得均方误差
+\begin{equation}
+E = \Tr[(\hat{\Gamma} - \hat{M})^\dagger (\hat{\Gamma} - \hat{M})]
+\end{equation}
+达到最小值\cite{eldar2001quantum}。
+
+在平方根检测的POVM测量算符下，
+将信号$i$判断为$j$的条件概率为
+\begin{equation}
+\begin{split}
+\Pr{j|i} = \Tr(\hat{\rho}_i \hat{\Pi}_j) & = \Tr(\hat{\gamma}_i \hat{\gamma}_i^\dagger \hat{\mu}_j \hat{\mu}_j^\dagger) \\
+     =\Tr(\hat{\mu}_j^\dagger\hat{\gamma}_i \hat{\gamma}_i^\dagger \hat{\mu}_j )     & = \Tr(\hat{B}_{ji} \hat{B}_{ji}^\dagger).
+\end{split}
+\end{equation}
+这里矩阵$\hat{B}_{ji}$是矩阵 $\hat{M}^\dagger \hat{\Gamma} = \hat{G}^{1/2}$的第$(j,i)$子块$\hat{\mu}_j^\dagger\hat{\gamma}_i$。
+对于纯态信号集合，信号密度矩阵秩为1，因此$\hat{\gamma}_i$和$\hat{\mu}_i$是一个向量，
+因此
+\begin{equation}
+\Pr{j|i} = (G^{1/2})_{ji}.
+\end{equation}
+所以，若先验概率相同的情况下，平均错误概率为
+\begin{equation}
+P_e = 1 - \frac{1}{M}\sum_{i=1}^M (G^{1/2})_{ii}.
+\end{equation}
 
 
+如果信号满足几何均匀对称性，即存在幺正矩阵$\hat{U}$使得
+\begin{equation}
+\hat{\rho}_i = \hat{U}^{i-1} \hat{\rho}_1 \hat{U^\dagger} ^ {i-1}
+\end{equation}
+成立。那么，可以验证平方根检测满足最优检测的重要条件\cite{eldar2001quantum}，
+即公式\ref{eq:optim-povm-cond}成立。
 
+容易验证M阶PSK信号密度矩阵可以通过幺正矩阵\cite{kato1999quantum}
+\begin{equation}
+\hat{U} = \exp(j\frac{2\pi}{M} \hat{n})
+\end{equation}
+相似。其中$\hat{n}=\hat{a}^\dagger \hat{a}$是粒子数算符。
+对于M阶PPM，对应的幺正矩阵是一个排列矩阵\cite{cariolaro2010theory}
+\begin{equation}
+\hat{U} = \sum_{k=1}^n \omega_n(k) \otimes I_H \otimes \omega_n^*(k).
+\end{equation}
+其中$\omega_n(k)$是一个$n$维向量，
+它的第$k$维为1，其它维都是0。
+$I_H$是一个$H=n^{M-1}$阶单位矩阵。
 
+因此，对于OOK、M阶PSK、M阶PPM信号，
+平方根检测都是最优检测。
+对于QAM信号，平方根不是最优，但是非常接近最优。
+图\ref{fig:SRM-vs-Hel}显示的是16-QAM平方根检测和
+通过半正定规划计算出来的最优检测性能差异。
+可以看到只在小信号区域有明显差异。
 
+\begin{figure}
+\centering
+  \includegraphics[width=0.5\textwidth]{figures/chap2/SRM-vs-Helstrom}
+  \caption{QAM信号平方根检测与Helstrom极限}
+  \label{fig:SRM-vs-Hel}
+\end{figure}
 
 
 \section{现有的量子接收机简介}
