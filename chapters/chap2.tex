@@ -148,7 +148,8 @@ a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 这里假定所有的器件都是理想的。当$N_{LO} \rightarrow \infty$时，
 输出统计量服从高斯分布
 \begin{equation}
-\alpha_\theta \sim N(Re(ae^{-j\theta}), \frac{1}{4}).
+\alpha_\theta \sim N(\Re(ae^{-j\theta}), \frac{1}{4}).
+\label{eq:HD-alpha}
 \end{equation}
 其中$\theta$是本振与信号的相位差。
 这种测量方案，用量子力学算符可以用湮灭算符描述为\cite{yuen1980optical,mandel1995optical}
@@ -479,11 +480,12 @@ E = \Tr[(\hat{\Gamma} - \hat{M})^\dagger (\hat{\Gamma} - \hat{M})]
 对于纯态信号集合，信号密度矩阵秩为1，因此$\hat{\gamma}_i$和$\hat{\mu}_i$是一个向量，
 因此
 \begin{equation}
-\Pr{j|i} = (\hat{G}^{1/2})_{ji}.
+\Pr{j|i} = |(\hat{G}^{1/2})_{ji}|^2.
 \end{equation}
 所以，若先验概率相同的情况下，平均错误概率为
 \begin{equation}
-P_e = 1 - \frac{1}{M}\sum_{i=1}^M (\hat{G}^{1/2})_{ii}.
+P_e = 1 - \frac{1}{M}\sum_{i=1}^M |(\hat{G}^{1/2})_{ii}|^2.
+\label{eq:SRM-Pe}
 \end{equation}
 
 
@@ -491,8 +493,15 @@ P_e = 1 - \frac{1}{M}\sum_{i=1}^M (\hat{G}^{1/2})_{ii}.
 \begin{equation}
 \hat{\rho}_i = \hat{U}^{i-1} \hat{\rho}_1 \hat{U^\dagger} ^ {i-1}
 \end{equation}
-成立。那么，可以验证平方根检测满足最优检测的重要条件\cite{eldar2001quantum}，
+成立。那么，可以验证平方根检测满足最优检测的充要条件\cite{eldar2001quantum}，
 即公式\ref{eq:optim-povm-cond}成立。
+并且，此时Gram矩阵$\hat{G}$是循环矩阵，
+设$\lambda_i(i=1,2,...,M)$是其$M$个特征值，
+那么式\ref{eq:SRM-Pe}可以进一步简化为\cite{kato1999quantum}
+\begin{equation}
+P_e = 1 - \frac{1}{M^2} (\sum_{i=1}^M \sqrt{\lambda_i})^2.
+\label{eq:SRM-Pe-GUS}
+\end{equation}
 
 容易验证M阶PSK信号密度矩阵可以通过幺正矩阵\cite{kato1999quantum}
 \begin{equation}
@@ -505,27 +514,137 @@ P_e = 1 - \frac{1}{M}\sum_{i=1}^M (\hat{G}^{1/2})_{ii}.
 \end{equation}
 其中$\omega_n(k)$是一个$n$维向量，
 它的第$k$维为1，其它维都是0。
-$I_H$是一个$H=n^{M-1}$阶单位矩阵。
+$\hat{I}_H$是一个$H=n^{M-1}$阶单位矩阵。
 
 因此，对于OOK、M阶PSK、M阶PPM信号，
 平方根检测都是最优检测。
-对于QAM信号，平方根不是最优，但是非常接近最优。
+对于QAM信号，平方根检测不是最优的测量，但是非常接近最优。
 图\ref{fig:SRM-vs-Hel}显示的是16-QAM平方根检测和
 通过半正定规划计算出来的最优检测性能差异。
 可以看到只在小信号区域有明显差异。
 
 \begin{figure}
 \centering
-  \includegraphics[width=0.5\textwidth]{figures/chap2/SRM-vs-Helstrom}
+  \includegraphics[width=0.5\textwidth]{figures/chap2/QAM-SRM-vs-Helstrom}
   \caption{QAM信号平方根检测与Helstrom极限}
   \label{fig:SRM-vs-Hel}
 \end{figure}
 
 
 \section{现有的量子接收机简介}
-
+自量子检测与估计理论提出以来，如何用现有的物理器件来实现量子接收机，
+成为很多研究者关心的问题。二十世纪七十年代，Kennedy和Dolinar等人
+首先对二元调制进行探究，分别提出利用线性光学元件实现的Kennedy接收机
+和Dolinar接收机\cite{kennedy1973near,dolinar1973optimum}。
+后来，经过后续研究者的进一步探索，更多的接收方案
+也被提出来了。在本章中，我们回顾一下历史上被提出的一些重要的接收机
+实现方案。
 \subsection{二进制信号量子接收机}
+首先，我们来看一些最简单的调制方案——二元调制。
+它包括被广泛应用的两种调制方案——OOK和BPSK。
+图\ref{fig:signals}显示了他们在星座图上的图像。
 
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chap2/Kennedy-receiver}
+  \caption{Kennedy接收机示意图}
+  \label{fig:kennedy-receiver}
+\end{figure}
+
+这两种调制的最优量子检测性能被Helstrom给出\cite{helstrom1976quantum}，
+也可以通过平方根检测得到。因为这种两种调制方案是几何均匀对称的，
+其对应的幺正矩阵是位移算符$\hat{D}(\alpha)$和$\hat{D}(2\alpha)$，
+所以平方根检测性能就是最优量子检测的性能。
+我们先求出对应的Gram矩阵
+\begin{equation}
+\hat{G} = \begin{bmatrix}
+            1  &   \xi  \\
+            \xi^*  &  1
+          \end{bmatrix}
+\label{eq:OOK-BPSK-Gram}
+\end{equation}
+其中$\xi$是两个符号对应的向量的内积，
+对于OOK信号，
+\begin{equation}
+\xi = \bra{0}\ket{\alpha} = e^{-\frac{1}{2}|\alpha|^2},
+\end{equation}
+而对BPSK信号，
+\begin{equation}
+\xi = \bra{-\alpha}\ket{\alpha} = e^{-2|\alpha|^2}.
+\end{equation}
+利用Gram矩阵的表达式\ref{eq:OOK-BPSK-Gram}，容易计算出它
+的两个特征值为$\lambda_{1,2} = 1 \pm |\xi|$。
+根据式\ref{eq:SRM-Pe-GUS}，可得平均错误概率为
+\begin{equation}
+\begin{split}
+P_e  &= 1 - \frac{1}{4}(\sqrt{\lambda_1} + \sqrt{\lambda_2})^2\\
+     & = \frac{1}{2} (1 - \sqrt{1 - |\xi|^2}).
+\label{eq:OOK-BPSK-Pe-Hel}
+\end{split}
+\end{equation}
+
+对于BPSK调制集合$\{\ket{-\alpha}, \ket{\alpha} \}$，
+在1973年的时候，Kennedy提出\cite{kennedy1973near}利用一个本振场，
+对信号进行位移操作$\hat{D}(\alpha)$，
+将信号集合变成OOK调制$\{\ket{0}, \ket{2\alpha} \}$，
+然后进行直接探测，如图\ref{fig:kennedy-receiver}所示。
+如何直接探测没有检测到光子(OFF)，就判决为信号$\ket{-\alpha}$，
+否则(ON)判决为信号$\ket{\alpha}$。
+假设$H_0$代表信号$\ket{-\alpha}$，假设$H_1$代表信号$\ket{\alpha}$。
+那么，理想条件下，探测的条件概率为
+\begin{equation}
+\begin{split}
+P(\text{OFF}|H_0) & = 1, \\
+P(\text{ON}|H_1)  & = 1 - |\bra{0}\ket{2\alpha}|^2 \\
+                  & = 1 - e^{-4|\alpha|^2}.
+\end{split}
+\end{equation}
+在通信系统中，先验概率通常是相同的，为$1/2$，那么这种探测的平均错误概率为
+\begin{equation}
+P_e  = 1 - P(H_0)P(\text{OFF}|H_0) - P(H_1)P(\text{ON}|H_1) = \frac{1}{2}e^{-4|\alpha|^2}.
+\label{eq:BPSK-Kennedy}
+\end{equation}
+
+
+
+经典通信系统中，常采用零差接收来探测BPSK信号。
+这里假定$\alpha$是实数，根据式\ref{eq:HD-alpha}，取$\theta=0$，可知平均错误概率为
+\begin{equation}
+\begin{split}
+P_e & = 1 -\sqrt{\frac{2}{\pi}}\int_0^{\infty} e^{-2(x - \alpha)^2} dx \\
+    & = \frac{1}{2}\erfc(\sqrt{2}\alpha).
+\end{split}
+\end{equation}
+对于BPSK信号，经典的零差接收机性能也叫它的标准量子极限(SQL)。
+当光子数很大时，利用余误差函数$\erfc$的Chernoff界\cite{chang2011chernoff}，
+BPSK零差接收机的渐进性能为
+\begin{equation}
+P_e = \frac{1}{2}\erfc(\sqrt{2}\alpha) \approx \frac{1}{2} e^{-2\alpha^2}.
+\label{eq:BPSK-HD-approx}
+\end{equation}
+对比式\ref{eq:BPSK-Kennedy}和\ref{eq:BPSK-HD-approx}可以看出，
+当光子数较大时，Kennedy接收机的性能比经典的零差接收具有指数倍的增益。
+对式\ref{eq:OOK-BPSK-Pe-Hel}做大信号近似，可得在$|\alpha|^2 \gg 1$时，
+\begin{equation}
+\begin{split}
+P_e &= \frac{1}{2} (1 - \sqrt{1 - e^{-4|\alpha|^2}}) \\
+    &\approx \frac{1}{4} e^{-4|\alpha|^2}.
+\label{eq:BPSK-Hel-approx}
+\end{split}
+\end{equation}
+对比式\ref{eq:BPSK-Kennedy}和\ref{eq:BPSK-Hel-approx}可以看出，
+在大信号时，Kennedy接收机与理想的最优量子检测只相差一个常数因子$1/2$。
+数值仿真结果如图\ref{fig:Kennedy-error}所示，
+可以看到在光子数较小的时候，Kennedy接收机性能没有突破标准量子极限。
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.6\textwidth]{figures/chap2/Kennedy-error}
+  \caption{BPSK信号Kennedy接收机性能曲线}
+  \label{fig:Kennedy-error}
+\end{figure}
 
 
 
