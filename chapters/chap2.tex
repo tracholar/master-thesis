@@ -853,10 +853,77 @@ Bondurant接收机前进了一步。
 
 
 接下来我们回顾一下PPM信号量子接收机研究现状。
+
+首先，我们来计算一下M阶PPM的标准量子极限。
+M阶PPM信号有M个时隙，第$i$个符号只有第$i$个时隙
+有脉冲，其他时隙都没有脉冲。以4-PPM为例，
+4个信号可以用直积态可以表示为
+\begin{equation}
+\ket{\alpha}\ket{0}\ket{0}\ket{0}, \ket{0}\ket{\alpha}\ket{0}\ket{0},\ket{0}\ket{0}\ket{\alpha}\ket{0}, \ket{0}\ket{0}\ket{0}\ket{\alpha}.
+\end{equation}
+在经典光通信中采用直接探测对PPM信号进行检测，
+如果第$k$个时隙探测到光子，就判决为第$k$个符号；
+如果所有的时隙都没探测到光子，那么就随机选择一个符号。
+因此这种接收策略的平均错误概率为
+\begin{equation}
+P_e = \frac{M-1}{M} e^{-|\alpha|^2}.
+\end{equation}
+对于4-PPM信号，平均错误概率为
+\begin{equation}
+P_e = \frac{3}{4} e^{-|\alpha|^2}.
+\end{equation}
+
+接着我们来求M阶PPM信号的Helstrom极限，因为PPM信号
+具有几何均匀对称性，所以平方根检测性能就是其
+最优量子检测的性能，也就是Helstorm极限。
+首先我们计算其Gram矩阵
+\begin{equation}
+G = \left[
+\begin{array}{cccc}
+ 1 & e^{-2 n} & ... & e^{-2 n} \\
+ e^{-2 n} & 1 & ... & e^{-2 n} \\
+ e^{-2 n} & e^{-2 n} & ... & e^{-2 n} \\
+ e^{-2 n} & e^{-2 n} & ... & 1 \\
+\end{array}
+\right]
+\end{equation}
+其中$n=|\alpha|^2$，
+可以看到，Gram矩阵每一行除了对角元为1，其他元素都为$e^{-2n}$。
+它是一个循环矩阵，其特征值是第一行元素对应的$M$点离散傅里叶变换系数\cite{zxd2004matrix}，
+\begin{equation}
+\lambda_1 = 1 + (M-1)e^{-2n}, \lambda_{2...M} = 1-e^{-2n}.
+\end{equation}
+所以M阶PPM最优量子检测的平均错误概率为
+\begin{equation}
+P_e = 1 - (\sqrt{1 + (M-1)e^{-2n}} + (M-1)\sqrt{1-e^{-2n}})^2.
+\end{equation}
+
 早在1982年，Dolinar就提出一种适用于PPM信号的
 条件脉冲归零(CPN)接收机\cite{dolinar1982near}。
 我们接下来以4-PPM信号为例，来简单介绍一下这种接收机。
 
+条件归零接收机所用的器件和结构与图\ref{fig:QPSK-Boundurant-receiver} (\textit{a})
+所示的Boundurant接收机一致，不同的是其反馈控制策略。
+条件归零接收机在PPM信号的每一个时隙中，
+它的本振被调整使得位移操作为$\hat{D}(-\alpha)$或者$\hat{D}(0)$。
+当位移操作选择$\hat{D}(-\alpha)$时，
+接收机在当前时刻归零当前脉冲，然后进行直接探测。
+当位移操作选择$\hat{D}(-\alpha)$时，相当于就是直接检测。
+以4PPM为例，它的决策策略可以用如图\ref{fig:CPN-Decision-Tree}
+所示的决策树表示出来。
+条件归零接收机首先归零第一个时隙，
+如果没有光子计数，后三个时隙都进行直接探测，
+若都没探测到光子，则判决为符号1，
+否则若第$k$个时隙出现光子计数，那么判决为符号$k$。
+如果第一个时隙探测到光子，那么后三个时隙
+当做一个3PPM信号的条件归零接收机。
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap2/CPN-Decision-Tree}
+  \caption{4-PPM信号条件归零接收机反馈控制策略决策树}
+  \label{fig:CPN-Decision-Tree}
+\end{figure}
 
 
 
