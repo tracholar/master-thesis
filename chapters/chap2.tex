@@ -647,19 +647,58 @@ P_e &= \frac{1}{2} (1 - \sqrt{1 - e^{-4|\alpha|^2}}) \\
   \label{fig:Kennedy-error}
 \end{figure}
 
-同年，Kennedy的学生Dolinar在Kennedy接受机的基础上，增加了对本振反馈控制。
-Dolinar接收机采用实时反馈控制，如图  所示。
-在每一个光子到达探测器之前，本振选择两个之间的一个。
 
-对于OOK调制信号，本振选取如下形式
+为了解决Kennedy接收机在小信号时的不足，一种采用最优位移
+的广义Kennedy接收机（也叫最优位移接收机）被提出\cite{takeoka2008discrimination}。
+这种接收机采用与Kennedy接收机相同的结构，但是采用的位移量
+是$\hat{D}(\beta)$，其中位移参数$\beta$通过优化得到。
+在这种参数配置下，易得接收机的错误概率为
 \begin{equation}
-u^*(t)  =  \frac{\alpha}{2} (\frac{e^{j\pi(n_t + 1)}}{\sqrt{1 - e^{-\bar{n}\frac{t}{\tau}}}} - 1).
+\begin{split}
+P_e &= \frac{1}{2} (1 - e^{-|\alpha-\beta|^2} + e^{-|\alpha+\beta|^2}) \\
+    &= \frac{1}{2} - e^{-\alpha^2-\beta^2} \sinh(2\alpha\beta).
+\label{eq:BPSK-Opt-Kennedy}
+\end{split}
 \end{equation}
-这里，$\tau$是符号持续的时间，$n_t$是从符号开始到当前时刻所记录的光子总数目。
+最优位移参数通过求解方程$\frac{\partial P_e}{\partial \beta} = 0$
+得到，即
+\begin{equation}
+\tanh(2\alpha\beta) = \frac{\alpha}{\beta}.
+\end{equation}
+从图\ref{fig:Kennedy-error}中可以看到，
+最优位移接收机在光子数较小的时候也能突破标准量子极限。
+随着光子数增大，最优位移接收机和Kennedy接收机性能越来越接近。
+事实上，当光子数很大时，$\tanh(2\alpha\beta) \rightarrow 1$，
+最优位移量$\beta \rightarrow  \alpha$。
 
 
+1973年，Kennedy的学生Dolinar提出Dolinar接收机。
+在Kennedy接收机的基础上，Dolinar接收机增加了对本振的实时反馈控制\cite{dolinar1973optimum}。
+如图\ref{fig:Dolinar-receiver}所示，位移操作$\hat{D}(\beta)$
+的位移量$\beta$在两个策略$u_1(t)$和$u_2(t)$中选择，
+每一次单光子探测器接收到一个光子，就切换到另一个位移策略上去。
+并且每一个位移策略都是随时间变化的函数。
+这里本振的最优控制策略可以通过最优控制理论优化得到\cite{geremia2004distinguishing}。
+当本振采用最优控制策略的情况下，可以证明Dolinar接收机
+可以达到Helstrom极限，是理论上的最优检测方案\cite{dolinar1973optimum,geremia2004distinguishing}。
+2007年，Cook等人从实验上实现了OOK调制的Dolinar接收机\cite{cook2007optical}。
 
-\subsection{PSK信号量子接收机}
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap2/Dolinar-receiver}
+  \caption{Dolinar接收机原理图}
+  \label{fig:Dolinar-receiver}
+\end{figure}
+
+Dolinar接收机需要实时反馈控制，这对工程实现要求过高。
+一些利用分区检测方案通过将信号在时间上或者能量上分成
+若干份，然后分别采用最优位移接收，弥补了这个不足\cite{vilnrotter2012quantum,li2013optimal,sych2014optimal}。
+当分区数目趋近于无穷大时，这种接收机的理论性能和Dolinar接收机一致\cite{sych2014optimal}。
+
+\subsection{多元调制信号量子接收机}
+上一小节，我们回顾了最简单的调制信号——二元调制。
+这一节我们回顾一下目前研究的比较多的多元调制信号——PSK调制和PPM调制。
+
 
 
 
