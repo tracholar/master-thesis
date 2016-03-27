@@ -699,7 +699,86 @@ Dolinar接收机需要实时反馈控制，这对工程实现要求过高。
 上一小节，我们回顾了最简单的调制信号——二元调制。
 这一节我们回顾一下目前研究的比较多的多元调制信号——PSK调制和PPM调制。
 
+QPSK信号用相干态可以表示为
+\begin{equation}
+\ket{\alpha_i} = \ket{\alpha e^{j \frac{\pi}{2} (i-2)}},i=1,2,3,4.
+\end{equation}
+因为它具有集合均匀对称性，所以平方根检测就是其最优检测。
+QPSK信号对应的Gram矩阵为
+\begin{equation}
+G = \left[
+\begin{array}{cccc}
+ 1 & e^{-n} & e^{-2 n} & e^{-n} \\
+ e^{-n} & 1 & e^{-n} & e^{-2 n} \\
+ e^{-2 n} & e^{-n} & 1 & e^{-n} \\
+ e^{-n} & e^{-2 n} & e^{-n} & 1 \\
+\end{array}
+\right].
+\end{equation}
+这里$n = |\alpha|^2$是信号平均光子数。
+根据Gram矩阵可以计算出它的四个特征值为
+\begin{equation}
+\begin{split}
+\lambda_{1,2,3,4} = & e^{-2 n} \left(e^n-1\right)^2,e^{-2 n} \left(e^n+1\right)^2, \\
+                    & e^{-2 n} \left(e^{2 n}-1\right),e^{-2 n} \left(e^{2 n}-1\right).
+\end{split}
+\end{equation}
+因此，根据式\ref{eq:SRM-Pe-GUS}可得
+\begin{equation}
+P_e = 1-\frac{1}{4} \left(\sqrt{1-e^{-2 n}}+1\right)^2.
+\label{eq:QPSK-Hel-error}
+\end{equation}
+在大光子数$n \gg 1$近似条件下，渐近性能为
+\begin{equation}
+\begin{split}
+P_e &= 1-\frac{1}{4} (2 - e^{-2n} + 2\sqrt{1-e^{-2n}}) \\
+    &\approx 1-\frac{1}{4} (2 - e^{-2n} + 2- e^{-2n}) \\
+    &= \frac{1}{2} e^{-2n} =  \frac{1}{2} e^{-2|\alpha|^2}.
+\label{eq:QPSK-Hel-approx}
+\end{split}
+\end{equation}
 
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap2/QPSK-Bondurant-receiver}
+  \caption{QPSK信号Bondurant接收机原理图及反馈控制策略}
+  \label{fig:QPSK-Boundurant-receiver}
+\end{figure}
+
+
+1993年，MIT林肯实验室的R. S. Bondurant将Dolinar接收机
+的反馈策略推广到QPSK信号，提出两种Bondurant接收机。
+这两种接收机只在反馈策略上有所差异，其它都相同\cite{bondurant1993near}。
+如图\ref{fig:QPSK-Boundurant-receiver} (\textit{a})所示，
+Bondurant接收机由波束分束器、单光子探测器以及一个受反馈控制的本振构成。
+
+第一种Bondurant接收机可以用图\ref{fig:QPSK-Boundurant-receiver} (\textit{b}) 来说明，
+在符号开始的时候，接收机选择假设$H_1$，
+即假设接收到的符号为$\ket{\alpha_1}$，
+反馈策略控制本振将符号1归零，
+即控制位移操作$\hat{D}(\beta) = \hat{D}(-\alpha_1)$。
+如果在整个符号周期都没有光子计数时间发生，那么选择假设$H_1$输出。
+否则，在符号周期中的某个时刻，单光子探测器探测到光子，
+那么假设不成立。接着，反馈策略立即控制本振，归零符号2，
+即选择假设$H_2$。然后重复上一步，如果继续有光子计数，
+则归零符号3，选择假设$H_3$。如果仍然有光子计数，
+那么归零符号4，选择假设$H_4$。理想情况下，最多有3个光子计数时间发生。
+符号周期结束的时候，选择当前的假设输出。
+和Dolinar接收机一样，Bondurant接收机也采用实时反馈控制策略，
+但是在每两个光子到达的时间间隔之间，Bondurant接收机的本振是恒定的。
+
+若先验概率相同，第一种Bondurant接收机的平均错误概率为\cite{bondurant1993near}
+\begin{equation}
+P_e = (\frac{3}{4} + |\alpha|^2) e^{-2|\alpha|^2}.
+\end{equation}
+当平均光子数较大的时候，渐近性能为
+\begin{equation}
+P_e \approx |\alpha|^2 e^{-2|\alpha|^2}.
+\label{eq:QPSK-Bondurant-approx}
+\end{equation}
+对比\ref{eq:QPSK-Hel-approx}和\ref{eq:QPSK-Bondurant-approx}
+可以看出，第一种Bondurant接收机渐近性能的指数项与最优检测相同。
 
 
 
