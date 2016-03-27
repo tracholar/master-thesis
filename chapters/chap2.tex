@@ -74,7 +74,7 @@ $\ket{\alpha}\bra{\alpha}$。
 \end{equation}
 利用位移算符，相干态可以通过对真空态$\ket{0}$位移得到
 \begin{equation}
-\hat{\alpha} = \hat{D}(\alpha) \ket{0}.
+\ket{\alpha} = \hat{D}(\alpha) \ket{0}.
 \end{equation}
 两个相干态之间也可以通过位移操作进行转换
 \begin{equation}
@@ -180,11 +180,14 @@ a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 这两个统计量统计独立，分别服从高斯分布
 \begin{equation}
 \alpha_i \sim N(a_{S_i}, \frac{1}{2}).
+\label{eq:Her-receiver-output}
 \end{equation}
 其中$a_{S_1}=\Re(a_S)$和$a_{S_2}=\Im(a_S)$分别是信号场的两个正交幅度。
-这种测量方案，用量子力学算符湮灭算符可以描述为\cite{yuen1980optical,mandel1995optical}
+这种测量方案，同时测量信号的两个正交幅度，
+用量子力学算符湮灭算符可以描述为\cite{yuen1980optical,mandel1995optical}
 \begin{equation}
 \hat{\alpha}_1 + j \hat{\alpha}_2 = \hat{a}_S.
+\label{eq:Her-receiver-output-2}
 \end{equation}
 
 
@@ -703,7 +706,27 @@ QPSK信号用相干态可以表示为
 \begin{equation}
 \ket{\alpha_i} = \ket{\alpha e^{j \frac{\pi}{2} (i-2)}},i=1,2,3,4.
 \end{equation}
-因为它具有集合均匀对称性，所以平方根检测就是其最优检测。
+我们先来计算一下它的标准量子极限，对于QPSK信号，
+外差接收机的性能及就是它的标准量子极限。
+利用式\ref{eq:Her-receiver-output}或式\ref{eq:Her-receiver-output}，
+可以得外差接收机平均错误概率为\cite{helstrom1976quantum,kato1999quantum}
+\begin{equation}
+\begin{split}
+P_e &= 1 - \frac{1}{\pi}\int_{Q_1} \exp(-|\beta-\alpha|^2) d^2 \beta \\
+    &= 1 - [\erfc(-|\alpha|)]^2.
+\end{split}
+\end{equation}
+上式中$Q_1$代表复平面上的区域 $\{\beta|-\pi/4 \le \arg \beta < \pi/4\}$。
+当光子数很大的时候$|\alpha|^2 \gg 1$，利用余误差函数的Chernoff界\cite{chang2011chernoff}，
+可得其渐近性能为
+\begin{equation}
+\begin{split}
+P_e &= [2 - \erfc(|\alpha|)]\erfc(|\alpha|) \\
+    &\approx 2e^{-|\alpha|^2}.
+\end{split}
+\end{equation}
+
+因为QPSK具有几何均匀对称性，所以平方根检测就是其最优检测。
 QPSK信号对应的Gram矩阵为
 \begin{equation}
 G = \left[
@@ -779,6 +802,60 @@ P_e \approx |\alpha|^2 e^{-2|\alpha|^2}.
 \end{equation}
 对比\ref{eq:QPSK-Hel-approx}和\ref{eq:QPSK-Bondurant-approx}
 可以看出，第一种Bondurant接收机渐近性能的指数项与最优检测相同。
+
+对于第二种Bondurant接收机，
+也是依次归零符号1符号2，但是
+在第2个光子到达的时候，反馈控制策略有所不同。
+设$t_1$和$t_2$分别代表第1个光子和第2个光子达到的时间。
+
+(a) 如果 $t_1 \le t_2 - t_1$，那么归零符号3，
+如果没有光子计数发生了，则选择假设3，否则选择假设4。
+
+(b) 如果 $t_1 > t_2 - t_1$，那么归零符号4，
+如果没有光子计数发生了，则选择假设4，否则选择假设3。
+
+在这种策略配置下，接收机的平均错误概率为\cite{bondurant1993near}
+\begin{equation}
+\begin{split}
+P_e  =& \frac{9}{4} e^{-2n} - 2 e^{-3n} + n e^{-3n} \\
+      &  + \frac{1}{2} e^{-4n} - n e^{-4n}. 
+\end{split}
+\end{equation}
+上式中$n=|\alpha|^2$为信号平均光子数。
+当光子数很大时，略去高阶小量，得到第2中Bondurant接收机渐近性能为
+\begin{equation}
+P_e \approx \frac{9}{4} e^{-2n} = \frac{9}{4} e^{-2|\alpha|^2}.
+\label{eq:QPSK-Bondurant2-approx}
+\end{equation}
+对比\ref{eq:QPSK-Hel-error}和\ref{eq:QPSK-Bondurant2-approx}两式
+可知，第2中Bondurant接收机渐近性能和最优检测只相差一个常数，比第一种
+Bondurant接收机前进了一步。
+
+由于Bondurant接收机也需要实时反馈控制，因此不利于工程实现。
+后续的研究者 Izumi 通过前馈的方式，将一般的PSK信号分成若干份，
+采用Bondurant接收机相似的策略进行前馈\cite{izumi2012displacement}。通过
+这种方式减少了反馈带宽的需求，但是同时却增加了
+资源的消耗。
+
+后面的研究者Becerra将最大后验概率策略加入归零顺序之中，
+在每一次前馈的过程中，选择在当前时刻具有最大后验概率的符号，
+进行归零\cite{becerra2011m}。这种策略，可以有效地降低
+接收机的平均错误概率。2013年，Becerra对这种
+策略用反馈的方式从实验上进行了验证\cite{becerra2013experimental}。
+并且，考虑到非理想因素如暗计数、模式失配的影响，
+可以将接收端的探测器换成具有光子数分辨能力的探测器，
+可以有效的提高接收机的鲁棒性，可以抵抗暗计数和模式失配带来的
+不利影响\cite{izumi2013quantum,li2013suppressing}。
+这个结论也被Becerra在2015年通过实验验证\cite{becerra2015photon}。
+
+至此，原则上可以在实验上实现具有鲁棒性的量子接收机，
+但是理论上的最优检测如何实现，仍然是一个值得研究的问题。
+
+
+接下来我们回顾一下PPM信号量子接收机研究现状。
+早在1982年，Dolinar就提出一种适用于PPM信号的
+条件脉冲归零(CPN)接收机\cite{dolinar1982near}。
+我们接下来以4-PPM信号为例，来简单介绍一下这种接收机。
 
 
 
