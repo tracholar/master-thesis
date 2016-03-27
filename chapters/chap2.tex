@@ -647,6 +647,16 @@ P_e &= \frac{1}{2} (1 - \sqrt{1 - e^{-4|\alpha|^2}}) \\
   \label{fig:Kennedy-error}
 \end{figure}
 
+同年，Kennedy的学生Dolinar在Kennedy接受机的基础上，增加了对本振反馈控制。
+Dolinar接收机采用实时反馈控制，如图  所示。
+在每一个光子到达探测器之前，本振选择两个之间的一个。
+
+对于OOK调制信号，本振选取如下形式
+\begin{equation}
+u^*(t)  =  \frac{\alpha}{2} (\frac{e^{j\pi(n_t + 1)}}{\sqrt{1 - e^{-\bar{n}\frac{t}{\tau}}}} - 1).
+\end{equation}
+这里，$\tau$是符号持续的时间，$n_t$是从符号开始到当前时刻所记录的光子总数目。
+
 
 
 \subsection{PSK信号量子接收机}
