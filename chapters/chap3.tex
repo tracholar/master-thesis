@@ -98,6 +98,59 @@ P_e &\approx 2\frac{L-1}{L} e^{-\alpha^2}.
 \end{figure}
 
 \subsection{Helstrom极限}
+与PSK信号和PPM信号不同的是，QAM信号不再具有几何均匀对称性，
+因此，无法通过平方根检测的方法得到QAM信号Helstrom极限的解析表达式，
+需要通过数值优化的方法，求解优化问题\ref{eq:Hel-SDP}。
+为此，需要将信号用密度矩阵表示出来。
+由于$M$个信号互不正交，因此这$M$个信号张成$M$维Hilbert空间。
+因为是纯态信号，所以每一个信号都可以用一个向量表达。
+为此需要选择一组标准正交基$\ket{e_i}, i=1,2,...,M$。
+一种选取的方法是用Fork态做标准正交基，也可以利用Smit正交化的方法
+生成一组基向量\cite{zxd2004matrix}。
+这里，为方便计我们选用Fork态$\ket{n}$作为标准正交基，在这组基向量下，
+每一个信号都是一个无穷维向量，
+\begin{equation}
+c_n = \bra{n}\ket{\alpha} = e^{-\frac{1}{2}|\alpha|^2} \frac{\alpha^n}{\sqrt{n!}}.
+\end{equation}
+它满足归一化条件
+\begin{equation}
+\sum_{n=0}^{\infty} c_n = 1.
+\end{equation}
+为了便于计算，需要将这个无穷维向量截断成有限维向量。
+这里采用如下准则，给定一个足够小的$\epsilon$，选取截断后向量长度$l$满足
+\begin{equation}
+\sum_{n=0}^{l-1} c_n \ge 1 - \epsilon.
+\label{eq:epsilon-criterion}
+\end{equation}
+例如，当$\alpha=1, \epsilon=10^{-4}$时，信号$\ket{\alpha}$可以近似表达
+为一个7维向量，
+\begin{equation}
+\ket{\alpha} = [0.6065, \\
+    0.6065, \\
+    0.4289, \\
+    0.2476, \\
+    0.1238, \\
+    0.0554, \\
+    0.0226]^T.
+\end{equation}
+对于$M$个QAM信号集合，在计算的时候需要将每一个
+信号向量$\bm{c}_i$截断成维数相同的向量$\tilde{\bm{c}}_i$。
+截断后的向量长度$L$满足
+\begin{equation}
+L = \arg\max_{l_i} \sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon.
+\end{equation}
+这里$c_{in}$代表第$i$个信号向量$\bm{c}_i$的第$n$维。
+上式选取的长度$L$可以保证$M$个信号都满足式\ref{eq:epsilon-criterion}。
+
+将信号表达为$L$维向量$\tilde{\bm{c}}$后，信号的密度矩阵可以表达为
+\begin{equation}
+\hat{\rho}_i = \tilde{\bm{c}} \tilde{\bm{c}}^T.
+\end{equation}
+接下来，我们就可以利用CVX工具箱求解半正定规划问题\ref{eq:Hel-SDP}，
+从而得到Helstrom极限对应的平均错误概率。
+
+
+
 
 
 \section{QAM信号Bondurant接收机}
