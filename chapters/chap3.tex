@@ -17,12 +17,25 @@
 那么$M$阶QAM信号
 可以表示为
 \begin{equation}
+\ket{\alpha_{uv}} = \ket{\alpha(u + j v)}, (u, v) \in \Omega. 
+\end{equation}
+这里$j=\sqrt{-1}$。例如，16-QAM信号就可以用相干态表示为
+\begin{equation}
 \begin{split}
-\ket{\alpha_{uv}} &= \ket{\alpha(u + j v)}, \\
-u, v &\in \Omega.
+\ket{\alpha_{1,1}} &= \ket{\alpha(1 + j )}, \\
+\ket{\alpha_{1,3}} &= \ket{\alpha(1 + j 3)}, \\
+\ket{\alpha_{1,-1}} &= \ket{\alpha(1 - j )}, \\
+                &\vdots                      \\
+\ket{\alpha_{-3,-3}} &= \ket{\alpha(-3 - j 3)}.
 \end{split}
 \end{equation}
-
+这里取$\alpha > 0$，那么M阶QAM信号信号平均光子数为
+\begin{equation}
+\begin{split}
+n &= |\alpha|^2 \frac{1}{M}\sum_{u \in \Omega}\sum_{v \in \Omega} (u^2+v^2)\\
+  &= \frac{2}{3}(M-1) |\alpha|^2.
+\end{split}
+\end{equation}
 
 
 \begin{figure}
@@ -33,10 +46,57 @@ u, v &\in \Omega.
 \end{figure}
 
 
+下面我们来计算一下QAM信号的标准量子极限。
 利用式\ref{eq:Her-receiver-output}可得理想情况下，
-外差接收机的概率密度函数为
+外差接收机的概率密度函数为\cite{kato1999quantum}
+\begin{equation}
+p(x_c, x_s| u, v) = \frac{1}{\pi} \exp[-(x_c - u\alpha)^2 - (x_s - v\alpha)^2]
+\end{equation}
+这里$x_c$和$x_s$对应于式\ref{eq:Her-receiver-output}中的$\alpha_1$和$\alpha_2$，
+是接收机输出的两个正交幅度观测量。
+根据贝叶斯检测理论，最优判决区域为
+\begin{equation}
+D_{u',v'} = \{ (x_c,x_s)| D_L(u') < x_c \le D_U(u'),  D_L(v') < x_s \le D_U(v') \}
+\end{equation}
+这里$D_U$和$D_L$是两个上下界函数，对给定的参数$L$，
+定义为
+\begin{equation}
+\begin{split}
+D_L(u) &= \begin{cases}    
+          -\infty     & u < -(L-2)  \\
+          \alpha(u-1) & otherwise
+         \end{cases}\\
+D_U(u) &= \begin{cases} 
+          \infty     & u > L-2  \\
+          \alpha(u+1) & otherwise
+         \end{cases}
+\end{split}
+\end{equation}
+即将复平面划分成如图\ref{fig:QAM-domain-split}所示的$M$个判决
+区域，将输出统计量落在某个区域的结果判决为在该区域内的符号。
+那么，外差接收机的平均错误概率为
+\begin{equation}
+\begin{split}
+P_e &= 1 - \frac{1}{M} \sum_{u\in\Omega}\sum_{v\in\Omega} \iint_{D_{u,v}} p(x_c,x_s|u,v) dx_c dx_s \\
+    &= 1 - \frac{1}{M}[1+(L-1) \erf(\alpha)]^2.
+\end{split}
+\end{equation}
+因此，当平均光子数很大时，即$|\alpha|^2 \gg 1$，
+利用余误差函数的Chernoff界\cite{chang2011chernoff}，
+可得QAM信号外差接收机的渐近性能为
+\begin{equation}
+\begin{split}
+P_e &\approx 2\frac{L-1}{L} e^{-\alpha^2}.
+\end{split}
+\end{equation}
 
-的平均错误概率
+\begin{figure}
+\centering
+  \includegraphics[height=5cm]{figures/chap3/QAM-domain-split}
+  \caption{16-QAM信号外差接收判决区域划分示意图}
+  \label{fig:QAM-domain-split}
+\end{figure}
+
 \subsection{Helstrom极限}
 
 
