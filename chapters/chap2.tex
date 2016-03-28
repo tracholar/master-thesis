@@ -713,18 +713,18 @@ QPSK信号用相干态可以表示为
 \begin{equation}
 \begin{split}
 P_e &= 1 - \frac{1}{\pi}\int_{Q_1} \exp(-|\beta-\alpha|^2) d^2 \beta \\
-    &= 1 - [\erfc(-|\alpha|)]^2.
+    &= 1 - \frac{1}{\pi}\int_0^{\infty} dr \int_{-\pi/4}^{\pi/4} \exp(-\alpha^2 - r^2 + 2\alpha r \cos \theta) r d\theta .
 \end{split}
 \end{equation}
 上式中$Q_1$代表复平面上的区域 $\{\beta|-\pi/4 \le \arg \beta < \pi/4\}$。
-当光子数很大的时候$|\alpha|^2 \gg 1$，利用余误差函数的Chernoff界\cite{chang2011chernoff}，
-可得其渐近性能为
-\begin{equation}
-\begin{split}
-P_e &= [2 - \erfc(|\alpha|)]\erfc(|\alpha|) \\
-    &\approx 2e^{-|\alpha|^2}.
-\end{split}
-\end{equation}
+%当光子数很大的时候$|\alpha|^2 \gg 1$，利用余误差函数的Chernoff界\cite{chang2011chernoff}，
+%可得其渐近性能为
+%\begin{equation}
+%\begin{split}
+%P_e &= [2 - \erfc(|\alpha|)]\erfc(|\alpha|) \\
+%    &\approx 2e^{-|\alpha|^2}.
+%\end{split}
+%\end{equation}
 
 因为QPSK具有几何均匀对称性，所以平方根检测就是其最优检测。
 QPSK信号对应的Gram矩阵为
@@ -851,6 +851,11 @@ Bondurant接收机前进了一步。
 至此，原则上可以在实验上实现具有鲁棒性的量子接收机，
 但是理论上的最优检测如何实现，仍然是一个值得研究的问题。
 
+与上述思想不同的是，M{\"u}ller等人提出一种利用
+一个零差接收机和一个Kennedy接收机实现QPSK信号的
+混合接收机\cite{muller2012quadrature}。
+这种方案不用反馈控制，简化了QPSK信号接收机的实现。
+这种方案也被K. Li推广到16-QAM信号\cite{李科2014}。
 
 接下来我们回顾一下PPM信号量子接收机研究现状。
 
@@ -880,22 +885,26 @@ P_e = \frac{3}{4} e^{-|\alpha|^2}.
 \begin{equation}
 G = \left[
 \begin{array}{cccc}
- 1 & e^{-2 n} & ... & e^{-2 n} \\
- e^{-2 n} & 1 & ... & e^{-2 n} \\
- e^{-2 n} & e^{-2 n} & ... & e^{-2 n} \\
- e^{-2 n} & e^{-2 n} & ... & 1 \\
+ 1 & e^{-n} & e^{-n} & e^{-n} \\
+ e^{-n} & 1 & e^{-n} & e^{-n} \\
+ e^{-n} & e^{-n} & 1 & e^{-n} \\
+ e^{-n} & e^{-n} & e^{-n} & 1 \\
 \end{array}
 \right]
 \end{equation}
 其中$n=|\alpha|^2$，
-可以看到，Gram矩阵每一行除了对角元为1，其他元素都为$e^{-2n}$。
-它是一个循环矩阵，其特征值是第一行元素对应的$M$点离散傅里叶变换系数\cite{zxd2004matrix}，
+可以看到，Gram矩阵每一行除了对角元为1，其他元素都为$e^{-n}$。
+它是一个循环矩阵，其特征值可以通过对第一行元计算$M$点离散傅里叶变换求得\cite{zxd2004matrix}，
 \begin{equation}
-\lambda_1 = 1 + (M-1)e^{-2n}, \lambda_{2...M} = 1-e^{-2n}.
+\lambda_1 = 1 + (M-1)e^{-n}, \lambda_{2...M} = 1-e^{-n}.
 \end{equation}
 所以M阶PPM最优量子检测的平均错误概率为
 \begin{equation}
-P_e = 1 - (\sqrt{1 + (M-1)e^{-2n}} + (M-1)\sqrt{1-e^{-2n}})^2.
+P_e = 1 - \frac{1}{M^2}(\sqrt{1 + (M-1)e^{-n}} + (M-1)\sqrt{1-e^{-n}})^2.
+\end{equation}
+当光子数很大时，其渐近性能为
+\begin{equation}
+P_e \approx \frac{(M-1)^2}{M^2} e^{-2|\alpha|^2}.
 \end{equation}
 
 早在1982年，Dolinar就提出一种适用于PPM信号的
@@ -925,12 +934,42 @@ P_e = 1 - (\sqrt{1 + (M-1)e^{-2n}} + (M-1)\sqrt{1-e^{-2n}})^2.
   \label{fig:CPN-Decision-Tree}
 \end{figure}
 
+容易求得，条件归零接收机的平均错误概率为\cite{guha2011approaching,dolinar1982near}
+\begin{equation}
+P_e = \frac{1}{M}[(1-e^{-|\alpha|^2})^M + M e^{-|\alpha|^2} - 1].
+\end{equation}
+当光子数很大的时候，其渐近性能为
+\begin{equation}
+P_e \approx \frac{M-1}{2} e^{-2|\alpha|^2}.
+\end{equation}
+
+一种与最优位移接收机思想类似的方法，在条件归零接收机每一个时隙里，
+如果采用不精确归零，则可进一步提升接收机在小信号时的性能\cite{guha2011approaching}。
+2012年，这两种条件归零接收机被实验验证\cite{chen2012optical}。
+Guha等人还提出，可以增加一个相敏放大器(PSA)，
+从而在位移操作上增加一个压缩操作，可以进一步提升
+接收机的性能\cite{guha2011approaching}。
+2014年，P. Dalla等人将条件归零接收机的控制策略
+进一步改进，在每一个时隙里面采用Dolinar接收机
+或者不精确归零接收机，并且每一个时隙的控制参数
+都不相同，这些参数通过动态规划算法进行优化，
+最终将接收机的性能进一步降低到非常接近Helstrom极限\cite{dalla2014adaptive}。
+
 
 
 \subsection{其它类型量子接收机}
+在上一小节，我们介绍了目前已经研究得比较多的
+几种量子接收机实现方案。
+除此之外，还有一些方案也值得借鉴和研究。
+2013年，S. Guha等人提出针对任意相干态检测的量子接收机\cite{da2013achieving}，
+随后该研究组继续提出一种更方便实现的贯序波形归零(SWN)接收机，
+用于实现任意相干态接收\cite{nair2014realizable}。
+另外，K. Blume等人提出一种基于有限资源量子计算的量子接收机\cite{blume2012ideal}，
+为研究量子接收机提供新的思路。
 
-
-
+与最小错误概率准则不同的是，基于最大无歧义概率准则设计的
+无歧义态区分(USD)接收机也被研究人员关注，这种测量方案
+理论上不存在错判的概率\cite{becerra2013implementation}。
 
 
 
