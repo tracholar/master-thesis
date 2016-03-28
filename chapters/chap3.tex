@@ -137,7 +137,10 @@ c_n = \bra{n}\ket{\alpha} = e^{-\frac{1}{2}|\alpha|^2} \frac{\alpha^n}{\sqrt{n!}
 信号向量$\bm{c}_i$截断成维数相同的向量$\tilde{\bm{c}}_i$。
 截断后的向量长度$L$满足
 \begin{equation}
-L = \arg\max_{l_i} \sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon.
+\begin{split}
+L = \max_i l_i  \\
+s.t. \sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon, i=1,2,...,M.
+\end{split}
 \end{equation}
 这里$c_{in}$代表第$i$个信号向量$\bm{c}_i$的第$n$维。
 上式选取的长度$L$可以保证$M$个信号都满足式\ref{eq:epsilon-criterion}。
