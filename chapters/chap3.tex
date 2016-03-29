@@ -228,12 +228,130 @@ P_e & \approx 1 - \frac{1}{M}\sum_{i=1}^M |1 - \frac{1}{8} (\hat{Z}^2)_{ii}|^2 \
 
 \begin{figure}
 \centering
-  \includegraphics[width=0.8\textwidth]{figures/chap3/Bondurant-receiver}
+  \includegraphics[width=\textwidth]{figures/chap3/Bondurant-receiver}
   \caption{QAM信号Bondurant接收机和反馈策略示意图}
   \label{fig:QAM-Bondurant-receiver}
 \end{figure}
 
+为了说明接收机接收过程，我们将$M$阶QAM信号按顺序编号为$\alpha_1,\alpha_2,...,\alpha_M$。
+记符号到来的初始时刻为$t=0$，符号持续的时间为$T$。
+接收机按照图\ref{fig:QAM-Bondurant-receiver}所示的策略
+进行反馈控制，反馈策略可以归纳如下：
 
+1.在$t=0$时刻，控制本振使得位移操作$\hat{D}(\beta) = \hat{D}(-\alpha_1)$，
+  即将符号1归零，同时选择假设$H_1$：当前的符号为$\alpha_1$。
+  
+2.在任意$0<t<T$时刻，如果没有发生光子计数事件，
+  那么保持当前的假设和本振，继续接收信号；
+  如果在$t_i$时刻发生了第$i$个光子计数事件，
+  那么将当前的假设由$H_i$转变为$H_{i+1}$，
+  同时控制本振归零下一个符号，即$\hat{D}(\beta) = \hat{D}(-\alpha_{i+1})$。
+  然后继续接收信号。
+  
+3.重复步奏2直到$t=T$时刻，信号接收完毕，
+  输出当前的假设$H_i$作为对该符号的判决。
+  
+假设发送的信号是$\alpha_k$，
+在该符号周期内，发生了$k'$个光子计数事件，
+这$k'$个光子计数事件发生的时间为$t_i,(i=1,2,...,k')$，
+仅当$k' = k-1$的时候，接收机判决输出的假设为$H_k$，
+它对应的概率分布为
+\begin{equation}
+p(t_1,t_2,...,t_{k-1}|k) = \prod_{i=1}^{k-1} w(t_i|k).
+\end{equation}
+假定$t_0=0$，这里
+\begin{equation}
+w(t_i|k) =  \frac{|\alpha_k - \alpha_i|^2}{T} \exp(-|\alpha_k - \alpha_i|^2 \frac{t_i-t_{i-1}}{T}) .
+\label{eq:w-cond}
+\end{equation}
+代表在发送的信号为$\alpha_k$时，
+在半开时间区间$(t_{i-1}, t_i]$内，
+恰好在$t_i$时刻发生了光子计数
+的概率密度。
+所以，在发送的信号为$\alpha_k$时接收机判决为$\alpha_k$的
+条件概率为
+\begin{equation}
+\Pr{k|k} = \int\int\cdots\int_{0<t_1<t_2<\cdots<t_{k-1}<T} p(t_1,t_2,...,t_{k-1}|k) dt_1 dt_2 \cdots dt_{k-1}.
+\label{eq:QAM-cond-prob}
+\end{equation}
+
+对于第$k$个信号，上述积分为$k-1$重，
+为了便于分析，对给定的符号$\ket{\alpha_k}$定义如下函数
+\begin{equation}
+Q_i^k(t) = \begin{cases}
+            1 & i=1, \\
+            \int_t^1  dt_{i-1}' n_{k,i-1} e^{-n_{k,i-1}(1-t)} Q_{i-1}(t_{i-1}') & 1 < i \e k.
+         \end{cases}
+\label{eq:Q-func}
+\end{equation}
+上式中$n_{k,l} = |\alpha_k - \alpha_l|^2$。
+接下来，我们利用\ref{eq:w-cond}式将\ref{eq:QAM-cond-prob}式进行改写，
+作变量代换$t_i \rightarrow T t_{k-i}'$，那么\ref{eq:QAM-cond-prob}式化为
+\begin{equation}
+\begin{split}
+\Pr{k|k} = & \int_{0}^1 dt_{k-1}' n_{k,1} e^{-n_{k,1} t_{k-1}'}          \int_{t_{k-1}'}^1 dt_{k-2}'   \frac{n_{k,2}}{T} e^{-n_{k,2} (t_{k-2}'-t_{k-1}')} \\
+           & \cdots    \int_{t_1'}^1 dt_1' n_{k,k-1} e^{-n_{k,k-1} (t_1'-t_2')}.
+\end{split}
+\end{equation}
+
+对式\ref{eq:Q-func}反复递归可得$Q_k(t)$表达式，对照上式有$\Pr{k|k} = Q_k(0)$。
+因此，我们可以用递归式\ref{eq:Q-func}来求上述积分。
+
+下面，我们来证明一个断言
+\begin{equation}
+\begin{split}
+Q_m^k(t) = 1 + \sum_{i=1}^{m-1} A_i e^{-n_{k,i}(1-t)}.
+\end{split}
+\end{equation}
+
+
+为了精确求解接收机的平均错误概率，需要计算多重积分\ref{eq:QAM-cond-prob}，
+对于低维情况如16-QAM信号，还能在比较快的时间里计算出来，
+但是对于更高维情况如36-QAM、64-QAM信号，
+计算时间较慢。这里采用Monte Carlo仿真的方法计算接收机的性能，
+这种方法的计算精度与问题的维度无关\cite{mcbook}，
+计算时间只随仿真点数和信号数目线性增长，
+能够有效求解高阶QAM接收机平均错误概率的问题。
+每一次仿真都是一个独立重复事件，用随机变量$\xi$
+表示输出结果，$\xi=0$表示接收机判断错误，
+$\xi=1$表示接收机判断正确。那么有
+\begin{equation}
+\E \xi = p, \Var \xi = p(1-p).
+\end{equation}
+重复该独立事件$N$次，得到估计值
+\begin{equation}
+\tilde{p} = \frac{1}{N} \sum_{i=1}^N \xi_i.
+\end{equation}
+该统计量的期望与方差为
+\begin{equation}
+\E \tilde{p} = p, \Var \tilde{p} = \frac{p(1-p)}{N}.
+\end{equation}
+若$p \ll 1$，那么它的标准差约为$\sqrt{p/N}$，
+为了得到一定精度的仿真结果，可以选取适当的$N$
+和一个小量$\epsilon$，使得$\Delta p / p < \epsilon$。
+当$N$很大时，随机变量$\tilde{p}$可以认为近似服从正态分布，
+可以利用$3\sigma$原则选取$\Delta p = 3 \sqrt{\Var \tilde{p}}$
+因此若取$\epsilon=0.1$计算精度，那么有
+\begin{equation}
+N > \frac{300}{p}.
+\end{equation}
+例如，要在平均错误概率大约在$10^{-5}$的时候，
+保证$\epsilon=0.1$的计算精度，需要的仿真点个数为$3\times10^7$。
+
+我们以16-QAM信号和36-QAM信号位移，
+通过数值仿真分析，得到Bondurant接收机的性能曲线如图\ref{fig:QAM-bondurant-error}
+所示。从图中可以看到，当平均光子数较小的时候，
+Bondurant接收机性能没有突破标准量子极限，
+当平均光子数较大时，Bondurant接收机的性能
+就可以突破标准量子极限，并且随着光子数的增大，
+这种优势就越大。
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap3/QAM-bondurant-error}
+  \caption{QAM信号Bondurant接收机性能曲线}
+  \label{fig:QAM-bondurant-error}
+\end{figure}
 
 
 \section{QAM信号自适应分区检测接收机}
