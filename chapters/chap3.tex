@@ -115,7 +115,7 @@ c_n = \bra{n}\ket{\alpha} = e^{-\frac{1}{2}|\alpha|^2} \frac{\alpha^n}{\sqrt{n!}
 \end{equation}
 它满足归一化条件
 \begin{equation}
-\sum_{n=0}^{\infty} c_n = 1.
+\sum_{n=0}^{\infty} |c_n|^2 = 1.
 \end{equation}
 为了便于计算，需要将这个无穷维向量截断成有限维向量。
 这里采用如下准则，给定一个足够小的$\epsilon$，选取截断后向量长度$l$满足
@@ -221,6 +221,17 @@ P_e & \approx 1 - \frac{1}{M}\sum_{i=1}^M |1 - \frac{1}{8} (\hat{Z}^2)_{ii}|^2 \
 采用量子检测的手段，接收机的性能将有指数倍的增益。
 
 \section{QAM信号Bondurant接收机}
+为了探测QAM信号，我们借鉴了QPSK信号第一种Bondurant接收机的思想，
+将这种接收策略应用到QAM信号的接收。
+如图\ref{fig:QAM-Bondurant-receiver}所示，这种接收机由一个高透过率的波束分束器、
+一个单光子探测器和一个与信号场高相干的本振构成。
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chap3/Bondurant-receiver}
+  \caption{QAM信号Bondurant接收机和反馈策略示意图}
+  \label{fig:QAM-Bondurant-receiver}
+\end{figure}
 
 
 
