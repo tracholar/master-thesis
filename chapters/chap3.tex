@@ -86,7 +86,8 @@ P_e &= 1 - \frac{1}{M} \sum_{u\in\Omega}\sum_{v\in\Omega} \iint_{D_{u,v}} p(x_c,
 可得QAM信号外差接收机的渐近性能为
 \begin{equation}
 \begin{split}
-P_e &\approx 2\frac{L-1}{L} e^{-\alpha^2}.
+P_e &\approx 2(1 - \frac{1}{L}) e^{-\alpha^2}.
+\label{eq:QAM-SQL-approx}
 \end{split}
 \end{equation}
 
@@ -138,8 +139,8 @@ c_n = \bra{n}\ket{\alpha} = e^{-\frac{1}{2}|\alpha|^2} \frac{\alpha^n}{\sqrt{n!}
 截断后的向量长度$L$满足
 \begin{equation}
 \begin{split}
-L = \max_i l_i  \\
-s.t. \sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon, i=1,2,...,M.
+L = \quad  & \max_i l_i  \\
+s.t. \quad &\sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon, i=1,2,...,M.
 \end{split}
 \end{equation}
 这里$c_{in}$代表第$i$个信号向量$\bm{c}_i$的第$n$维。
@@ -149,14 +150,79 @@ s.t. \sum_{n=0}^{l_i-1} c_{in} \ge 1 - \epsilon, i=1,2,...,M.
 \begin{equation}
 \hat{\rho}_i = \tilde{\bm{c}} \tilde{\bm{c}}^T.
 \end{equation}
-接下来，我们就可以利用CVX工具箱求解半正定规划问题\ref{eq:Hel-SDP}，
+接下来，我们就可以利用CVX工具箱\cite{cvx,gb08}求解半正定规划问题\ref{eq:Hel-SDP}，
 从而得到Helstrom极限对应的平均错误概率。
 
+为了得到一些解析结论，我们采用平方根检测来近似QAM信号的最优检测。
+$M$阶QAM信号的Gram矩阵由下式给出
+\begin{equation}
+\begin{split}
+\hat{G}_{ij} &= \bra{\alpha_i}\ket{\alpha_j} \\
+ &= \exp\{-\frac{1}{2} |\alpha|^2 [(u_i-u_j)^2 + (v_i-v_j)^2]\}, (i,j)=1,2,...,M.
+\end{split}
+\end{equation}
+易知当$|\alpha|\gg1$时，除了对角元素为1之外，其他元素都很小，
+我们将Gram矩阵分解为单位阵和一个$\hat{Z}$阵
+\begin{equation}
+\hat{G} = \hat{I} + \hat{Z}.
+\end{equation}
+且$\parallel \hat{Z}  \parallel \ll 1$，那么
+利用矩阵幂级数可以得到Gram矩阵的平方根近似为
+\begin{equation}
+\hat{G}^{1/2} \approx \hat{I} + \frac{1}{2} \hat{Z} - \frac{1}{8} \hat{Z}^2.
+\end{equation}
+因为$\hat{Z}$的对角元素为0，所以
+\begin{equation}
+\hat{G}^{1/2}_{ii} \approx 1 - \frac{1}{8} \hat{Z}^2_{ii}.
+\end{equation}
+
+为了计算$\hat{Z}^2$，我们将信号按照复平面的位置分为角点、边界点、内点三类，如图\ref{fig:QAM-nearbor}(\textit{a})所示。
+易知对于$M$阶QAM信号，三种点对应的数目分别为4,$4(L-2)$,$(L-2)^2$，其中$L^2=M$。
+并且定义一个信号的最近邻点为与该信号在复平面内距离最近的点，
+易知角点有2个最近邻点，边界点有3个最近邻点，而内点有4个最近邻点如图\ref{fig:QAM-nearbor}(\textit{b})所示。
 
 
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chap3/QAM-nearbor}
+  \caption{QAM信号三类点和最近邻点示意图}
+  \label{fig:QAM-nearbor}
+\end{figure}
 
+因为
+\begin{equation}
+\begin{split}
+(\hat{Z}^2)_{ii} &= \sum_k Z_{ik}Z_{ki}    \\
+                 &=\sum_k \exp\{- |\alpha|^2 [(u_i-u_k)^2 + (v_i-v_k)^2]\}.
+\end{split}
+\end{equation}
+如果忽略高阶小量，那么只有最近邻点的值保留下来，所以
+\begin{equation}
+(\hat{Z}^2)_{ii} \approx \begin{cases}
+                            2 e^{- 4|\alpha|^2} & \text{角点} \\
+                            3 e^{- 4|\alpha|^2} & \text{边界点} \\
+                            4 e^{- 4|\alpha|^2} & \text{内点} .
+                         \end{cases}
+\end{equation}
+所以由\ref{eq:SRM-Pe}式，QAM信号的平方根检测渐近错误概率为
+\begin{equation}
+\begin{split}
+P_e & \approx 1 - \frac{1}{M}\sum_{i=1}^M |1 - \frac{1}{8} (\hat{Z}^2)_{ii}|^2 \\
+   & \approx 1 - \frac{1}{M}\sum_{i=1}^M (1 - \frac{1}{4} (\hat{Z}^2)_{ii}) \\
+   & \approx  \frac{1}{4M} [4\times 2e^{- 4|\alpha|^2} + 4(L-2) \times 3e^{- 4|\alpha|^2} \\
+   & \qquad  + (L-2)^2 \times 4e^{- 4|\alpha|^2}] \\
+   & =      (1 - \frac{1}{L})  e^{- 4|\alpha|^2}. 
+\label{eq:QAM-SRM-approx}   
+\end{split}
+\end{equation}
+因为平方根检测在平均光子数较大的时候，与最优检测几乎一致，所以可以认为
+该渐近性能就是Helstrom极限在平均光子数较大时的渐近性能。
+比较\ref{eq:QAM-SQL-approx}式和\ref{eq:QAM-SRM-approx}式可知，
+采用量子检测的手段，接收机的性能将有指数倍的增益。
 
 \section{QAM信号Bondurant接收机}
+
+
 
 
 \section{QAM信号自适应分区检测接收机}
