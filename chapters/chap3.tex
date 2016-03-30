@@ -280,7 +280,7 @@ w(t_i|k) =  \frac{|\alpha_k - \alpha_i|^2}{T} \exp(-|\alpha_k - \alpha_i|^2 \fra
 \begin{equation}
 Q_i^k(t) = \begin{cases}
             1 & i=1, \\
-            \int_t^1  dt_{i-1}' n_{k,i-1} e^{-n_{k,i-1}(1-t)} Q_{i-1}(t_{i-1}') & 1 < i \e k.
+            \int_t^1  dt_{i-1}' n_{k,i-1} e^{-n_{k,i-1}(1-t)} Q_{i-1}(t_{i-1}') & 1 < i \le k.
          \end{cases}
 \label{eq:Q-func}
 \end{equation}
@@ -297,18 +297,89 @@ Q_i^k(t) = \begin{cases}
 对式\ref{eq:Q-func}反复递归可得$Q_k(t)$表达式，对照上式有$\Pr{k|k} = Q_k(0)$。
 因此，我们可以用递归式\ref{eq:Q-func}来求上述积分。
 
-下面，我们来证明一个断言
+下面，我们来证明一个断言，对给定的$k,m$和从充分大的$\alpha$，
+存在一组与$t$无关的，关于$n_0 = |\alpha|^2$的$m-1$阶多项式$A_i^m \ge 0$，
+使得下式成立
 \begin{equation}
 \begin{split}
-Q_m^k(t) = 1 + \sum_{i=1}^{m-1} A_i e^{-n_{k,i}(1-t)}.
+Q_m^k(t) \ge 1 - \sum_{i=1}^{m-1} A_i^m e^{-n_{k,i}(1-t)}, (m=1,2,...,k).
 \end{split}
 \end{equation}
+当$m=1$时，显然成立。假设上式在$m<1$时成立，那么在$m+1$时，有
+\begin{equation}
+\begin{split}
+Q_{m+1}^k(t) &\ge \int_t^1  dt_{m}' n_{k,m} e^{-n_{k,m}(1-t)} (1 - \sum_{i=1}^{m-1} A_i^m e^{-n_{k,i}(1-t_m)} ) \\
+             &\ge 1 - \left( \sum_{\substack{1\le i \le m-1 \\
+                n_{k,i} = n_{k,m}} }  n_{k,m}A_i^{m} -1\right) e^{-n_{k,m}(1-t)}  \\
+             & \quad - \sum_{\substack{1\le i \le m-1 \\
+                n_{k,i} \neq n_{k,m}}} \left(-\frac{n_{k,m}}{n_{k,i} - n_{k,m}} A_i^m e^{-n_{k,i}(1-t)}  + \frac{n_{k,m}}{n_{k,i} - n_{k,m}} A_i^m e^{-n_{k,m}(1-t)}    \right) .
+\end{split}
+\end{equation}
+因此，只要取正$m+1$阶多项式使得
+\begin{equation}
+\begin{split}
+A_i^{m+1} &\ge -\frac{n_{k,m}}{n_{k,i} - n_{k,m}} A_i^m , i<m \text{且} n_{k,i} \neq n_{k,m}\\
+A_i^{m+1} &\ge 0 , i<m \text{且} n_{k,i} = n_{k,m}\\
+A_m^{m+1} &\ge -1 + \sum_{\substack{1\le i \le m-1 \\
+                n_{k,i} = n_{k,m}} }  n_{k,m}A_i^{m} + \sum_{\substack{1\le i \le m-1 \\
+                n_{k,i} \neq n_{k,m}}} \frac{n_{k,m}}{n_{k,i} - n_{k,m}} A_i^m .
+\end{split}
+\end{equation}
+成立即可，于是命题得证。
+利用这个命题，因为$n_{k,i} \ge 4|\alpha|^2,(k \neq i)$，
+所以QAM信号Bondurant接收机的渐近性能上界为
+\begin{equation}
+P_e \le C_{M-1}(|\alpha|^2) e^{-4|\alpha|^2}.
+\label{eq:QAM-Bondurant-approx-err}
+\end{equation}
+其中$C_{M-1}(|\alpha|^2)$是$|\alpha|^2$的$M-1$阶正多项式。
+
+另一方面，对于充分大的$\alpha$，有
+\begin{equation}
+w(t_i|k) \ge \frac{4|\alpha|^2}{T} \exp(-4|\alpha|^2 \frac{t_i-t_{i-1}}{T}) .
+\end{equation}
+所以
+\begin{equation}
+\begin{split}
+\Pr{k|k} \ge & \int_{0}^1 dt_{k-1}' 4|\alpha|^2 e^{-4|\alpha|^2 t_{k-1}'}    \int_{t_{k-1}'}^1 dt_{k-2}'   4|\alpha|^2 e^{-4|\alpha|^2 (t_{k-2}'-t_{k-1}')} \\
+           & \cdots    \int_{t_1'}^1 dt_1' 4|\alpha|^2 e^{-4|\alpha|^2 (t_1'-t_2')} \\
+         = & 1- \left[ 4|\alpha|^2 + (4|\alpha|^2)^2 + \cdots + (4|\alpha|^2)^{k-2} \right] e^{-4|\alpha|^2}  \\
+         = & 1 - \frac{(4|\alpha|^2)^{k-1}-4|\alpha|^2}{4|\alpha|^2-1} e^{-4|\alpha|^2}.
+\end{split}
+\end{equation}
+因此，也可以得到渐近误差上界为式\ref{eq:QAM-Bondurant-approx-err}。
+对比式\ref{eq:QAM-SQL-approx}和\ref{eq:QAM-Bondurant-approx-err}，
+可知QAM信号Bondurant接收机比外差接收具有指数倍增益，它的渐近性能
+与量子最优检测性能只相差一个多项式。
 
 
 为了精确求解接收机的平均错误概率，需要计算多重积分\ref{eq:QAM-cond-prob}，
 对于低维情况如16-QAM信号，还能在比较快的时间里计算出来，
 但是对于更高维情况如36-QAM、64-QAM信号，
 计算时间较慢。这里采用Monte Carlo仿真的方法计算接收机的性能，
+仿真步奏可以归纳如下：
+
+1. 从信号的初始时刻$t=0$开始，选择假设$H_1$，
+   并控制本振使得$\beta=-\alpha_1$。
+   
+2. 设当前$t$时刻发生的光子计数个数为$i$，
+   由于光子到达的过程可以看做一个泊松点过程，
+   因此两个光子到达的时间间隔服从强度为$I$的指数分布\cite{hs2009sjgc}。
+   这里$I=|\alpha_m-\alpha_{i+1}|/T$是当前进入探测器的光强，
+   $\alpha_m$是实际的信号，$\beta = -\alpha_{i+1}$。
+   因此可以通过服从该指数分布的随机数发生器产生一个随机数$\tau$作为
+   下一个光子发生前所经历的时间。
+
+3. 如果$t+\tau<T$，那么将当前时刻更新为$t + \tau$，
+   更新当前的假设为$H_{i+1}$，并利用反馈控制本振使得$\beta = -\alpha_{i+2}$，
+   即归零符号$i+2$，然后继续重复步骤1；
+   如果$t+\tau \ge T$，那么说明在信号剩下的时间
+   里面没有光子计数事件发生，输出当前的假设作为判决输出，
+   判断接收机是否判断错误。
+   
+4. 重复步奏2~3足够多次，记录接收机判断错误的频率作为接收机平均错误
+   概率的估计值。
+   
 这种方法的计算精度与问题的维度无关\cite{mcbook}，
 计算时间只随仿真点数和信号数目线性增长，
 能够有效求解高阶QAM接收机平均错误概率的问题。
@@ -338,14 +409,6 @@ N > \frac{300}{p}.
 例如，要在平均错误概率大约在$10^{-5}$的时候，
 保证$\epsilon=0.1$的计算精度，需要的仿真点个数为$3\times10^7$。
 
-我们以16-QAM信号和36-QAM信号位移，
-通过数值仿真分析，得到Bondurant接收机的性能曲线如图\ref{fig:QAM-bondurant-error}
-所示。从图中可以看到，当平均光子数较小的时候，
-Bondurant接收机性能没有突破标准量子极限，
-当平均光子数较大时，Bondurant接收机的性能
-就可以突破标准量子极限，并且随着光子数的增大，
-这种优势就越大。
-
 \begin{figure}
 \centering
   \includegraphics[width=\textwidth]{figures/chap3/QAM-bondurant-error}
@@ -354,10 +417,253 @@ Bondurant接收机性能没有突破标准量子极限，
 \end{figure}
 
 
+我们以16-QAM信号和36-QAM信号位移，
+通过数值仿真分析，得到Bondurant接收机的性能曲线如图\ref{fig:QAM-bondurant-error}
+所示。从图中可以看到，当平均光子数较小的时候，
+Bondurant接收机性能没有突破标准量子极限，
+当平均光子数较大时，Bondurant接收机的性能
+就可以突破标准量子极限，并且随着光子数的增大，
+这种优势就越大，这与上面的理论分析一致。
+
+
+
+
 \section{QAM信号自适应分区检测接收机}
+
+由于Bondurant接收机需要实时反馈控制，
+对系统反馈带宽和资源消耗要求较高，
+不利于工程实现。因此，可以借鉴用自适应分区检测的方法加以改进。
+我们将QPSK信号的自适应分区检测接收机推广到任意QAM信号，
+研究在QAM信号配置下，这种接收机的性能是否也能突破标准量子极限。
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap3/QAM-ADP-receiver}
+  \caption{QAM信号自适应分区检测接收机和反馈控制策略示意图}
+  \label{fig:QAM-ADP-receiver}
+\end{figure}
+
+如图\ref{fig:QAM-ADP-receiver}所示，
+QAM信号自适应分区检测接收机结构与Bondurant接收机一致，
+所不同的在接收策略上。
+接收机将信号在时间上分成若干个分区，在每一个分区里面，
+不论是否有光子计数事件发生，本振都是恒定的。
+只有分区结束了，才会采用反馈控制策略去更新本振，
+因此对反馈带宽的要求大大降低了。
+
+
+在信号的起始时刻，将每个符号的先验概率设为相同$P_m^{prior} = 1/M$。
+并随机选择一个符号进行归零，即控制本振使得$\hat{D}(\beta)=\hat{D}(-\alpha_{i_0})$。
+设总分区数目为$N$，
+在第$i$个分区时，先验概率为$P_{m,i}^{prior}$，
+控制参数$\beta = -\alpha_{u_i},(u_i \in \{1,2,..,M\})$。
+设第$i$个分区结束了之后，对于ON-OFF探测器，
+探测器则只能判断是否有光子计数发生，对应的条件概率为
+\begin{equation}
+P\{k|\alpha_m, \beta\} = \begin{cases}
+                        1 - e^{-|\alpha_m - \beta|^2/N}, & k>0, \text{ON}\\
+                        e^{-|\alpha_m - \beta|^2/N},     & k=0, \text{OFF}.
+                       \end{cases}
+\end{equation}
+如果是具有光子数分辨能力的探测器(PNRD)，则对应的条件概率为
+\begin{equation}
+P\{k|\alpha_m, \beta\} = e^{-|\alpha_m - \beta|^2/N} \frac{|\alpha_m - \beta|^{2k}}{N k!}.
+\label{eq:QAM-ADP-cond-prob}
+\end{equation}
+那么在第$i$个分区结束的时候，对应的后验概率为
+\begin{equation}
+P_{m,i}^{post} = \frac{P_{m,i}^{prior} P\{k|\alpha_m, \beta=-\alpha_{u_i}\}}{\sum_{m=1}^M P_{m,i}^{prior} P\{k|\alpha_m, \beta=-\alpha_{u_i}\}}.
+\label{eq:QAM-ADP-post-prob}
+\end{equation}
+其中后验概率最大的符号为
+\begin{equation}
+m^* = \arg\max_m P_{m,i}^{post}.
+\end{equation}
+若所有的分区都已经探测完毕，则输出假设$H_{m^*}$。
+否则将下一个分区的先验概率设为$P_{m,i+1}^{prior} = P_{m,i}^{post}$，
+同时通过反馈控制本振使得$\beta = -\alpha_{m^*}$，
+即归零后验概率最大的符号，选择当前的假设为$H_{m^*}$。
+然后重复上述步骤直到所有的分区都探测完毕。
+
+% 对于任意符号$\alpha_k$，我们来计算条件概率$\Pr{k|k}$，
+% 即输出结果也为$\alpha_k$的概率。
+% 在这种情况下，不妨假定$N$个分区中最后发生光子计数
+% 的区间是第$K-1$个，那么最后$K$个分区的
+% 位移参数$\beta = -\alpha_k$，且这$K$个分区
+% 没有发生光子计数事件的概率为1。
+% 而在前$N-K$个分区里面，发生光子计数的分区数目不超过$M-1$，
+% 设$N$个分区发生光子计数数目分别为$o_i$，
+% 对应的控制参数分别为$\beta_i$。
+% 定义集合
+% \begin{equation}
+% \Omega_k = \{o_1,o_2,...,o_N,\beta_1,\beta_2,...,\beta_N \}$
+% \end{equation}
+% 那么
+% \begin{equation}
+% \Pr{k|k} = \sum_{K=0}^{M} \sum_{o_1,o_2,...,o_N} \sum_{\beta_1,\beta_2,...,\beta_{K-1},\beta_{K}=-\alpha_k,...,\beta_{M}=-\alpha_k} P\{K, o_1,o_2,..,o_N,\beta_1,\beta_2,...,\beta_N | \alpha_k\}
+% \end{equation}
+
+
+
+可以预计随着分区数目增大，接收机的性能会越来越好，
+当$N\rightarrow\infty$时，就与Bondurant接收机的实时
+反馈控制一致了。
+在这种极限下，如果一个分区没有光子计数事件发生，
+那么条件概率
+\begin{equation}
+P\{k=0|\alpha_m, \beta=\alpha_{u_i}\} = e^{-|\alpha_m - \alpha_{u_i}|^2/N} \frac{1}{N}.
+\end{equation}
+中最大的仍然是$\alpha_{u_i}$，即最大的仍然是当前选择的符号。
+因此接收机只在有光子计数事件发生的时候，才更改本振。
+所以在$N\rightarrow\infty$的极限情况，
+只需要修改Bondurant接收机的第3步即可。
+蒙特卡洛仿真步奏可以归纳如下：
+
+1. 从信号的初始时刻$t=0$开始，选择假设$H_1$，
+   并控制本振使得$\beta=-\alpha_1$，
+   此时$M$个先验概率为$P_{m,1}^{prior} = 1/M,(m=1,2,...,M)$。
+
+2. 设当前$t$时刻发生的光子计数个数为$i-1$，
+   当前位移参数$\beta = \alpha_{u_i}$，
+   由于光子到达的过程可以看做一个泊松点过程，
+   所以距下一个光子计数事件发生的时间间隔服从强度为$I_{m,u_i}$的指数分布\cite{hs2009sjgc}。
+   这里$I_{m,u_i}=|\alpha_m-\alpha_{u_i}|/T$是当前进入探测器的光强，
+   $\alpha_m$是实际的信号，$\beta = -\alpha_{u_i}$是当前的控制参数。
+   因此可以通过服从该指数分布的随机数发生器产生一个随机数$\tau$作为
+   下一个光子发生前所经历的时间。
+
+3. 如果$t+\tau<T$，那么将当前时刻更新为$t + \tau$，
+   该事件对应的条件概率为
+   \begin{equation}
+    P\{\Delta t = \tau|\alpha_m, \beta=\alpha_{u_i}\} = e^{-I_{m ,u_i}\tau/T} \frac{I_{m ,u_i}}{T}.
+    \label{eq:QAM-ADP-cond-prob-2}
+   \end{equation}
+   根据上式和\ref{eq:QAM-ADP-post-prob}可以计算出该事件发生后$M$个后验概率
+   $P_{m,i}^{post}$，从从选择出最大后验概率对应的符号$\alpha_{u_{i+1}}$，
+   然后更新当前的假设为$H_{u_{i+1}}$，并利用反馈控制本振使得$\beta = -\alpha_{u_{i+1}}$，
+   即归零符号$u_{i+1}$，然后继续重复步骤1；
+   如果$t+\tau \ge T$，那么说明在信号剩下的时间
+   里面没有光子计数事件发生，输出当前的假设作为判决输出，
+   判断接收机是否判断错误。
+   
+4. 重复步奏2~3足够多次，记录接收机判断错误的频率作为接收机平均错误
+   概率的估计值。
+   
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap3/QAM-ADP-error}
+  \caption{QAM信号自适应分区检测接收机性能曲线}
+  \label{fig:QAM-ADP-error}
+\end{figure}
+ 
+ 
+我们选取了16-QAM和36-QAM信号进行仿真分析，
+并且针对不同分区数目和不同的探测器进行了研究。
+Monte Carlo仿真结果如图\ref{fig:QAM-ADP-error}所示。
+对比ON-OFF探测器不同分区的曲线，
+可以看出随着分区数目的增大，
+接收机的平均错误概率都在降低，
+当分区数目趋近于无穷时，
+错误概率达到最低，从图中可以看到，
+它可以在任意光子数都能突破标准量子极限。
+但是分区数目较少的时候，比如只有10各分区，
+可以看到16-QAM信号和36-QAM信号的
+自适应分区检测接收机都没能突破标准量子极限。
+并且随着光子数增加，接收机性能出现了饱和现象。
+而这种现象可以通过具有光子数分辨能力的探测器
+解决。对比都采用10个分区的情况下，
+ON-OFF探测器和PNRD探测器，
+采用PNRD探测器都能够突破标准量子极限，
+没有出现饱和的现象，这是因为每一个分区
+发生的光子计数数目也携带信息，
+当光子数较强的时候，每个分区发生多个光子
+计数时间的概率大大增加，而这些信息
+采用ON-OFF探测器是无法获取的。
+从图中还可以看到，对于16-QAM信号，
+10分区的PNRD和20分区的ON-OFF的性能接近，
+对于36-QAM信号，
+10分区的PNRD和30分区的ON-OFF的性能接近，
+因此PNRD可以在达到相同的错误概率的情况下
+减少分区数目。此外，采用PNRD能够有效地
+克服暗计数、模式适配等非理想因素也被报道\cite{izumi2013quantum, li2013suppressing}。
+通过仿真分析，我们可以认为对于一般的QAM信号，
+这种接收机都能突破标准量子极限。
+在工程实现的时候，可以通过PNRD增加系统鲁棒性
+减少分区数目，从而减少反馈带宽。
+
+
+
+
 
 
 \section{QAM信号混合接收机}
+另外一种实现多元调制量子接收机的方法是利用
+一个混合接收方案\cite{muller2012quadrature,李科2014}。
+对于一般的QAM信号，混合接收机该如何设计
+是这一节的主要内容。
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.7\textwidth]{figures/chap3/QAM-Hybrid-receiver}
+  \caption{QAM信号混合接收机示意图}
+  \label{fig:QAM-Hybrid-receiver}
+\end{figure}
+
+对于QAM信号，混合接收机可以用如图\ref{fig:QAM-Hybrid-receiver}所示的
+结构实现。它包含两个部分——零差接收和Bondurant接收机。
+下面以16-QAM信号为例进行描述，
+接收机接收到的信号首先经过一个透过率为$T$的分束器(BS)分成两部分，一部分给零差接收机(HD)，
+零差接收机通过一组POVM测量进行探测，
+\begin{equation}
+\hat{\Pi}_i^{HD} = \int_{D_i} dp \ket{p}\bra{p}, i=1,2,3,4.
+\end{equation}
+其中积分区域定义如下
+\begin{equation}
+\begin{split}
+D_1 = \{p| p>2|r \alpha|\}, D_2 = \{p| 0 < p \le 2|r \alpha|\}, \\
+D_3 = \{p| -2|r \alpha| p \le 0\}, D_4 = \{p| p \le -2|r \alpha|\}.
+\end{split}
+\end{equation}
+其中$r=\sqrt{1-T}$是反射系数。
+可以看到，不同的判定区域对应一个按照P分量分割的分区，。那么经过零差接收后，
+就可以知道信号所在的区域，如图\ref{fig:QAM-Hybrid-HD-split}所示。
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.5\textwidth]{figures/chap3/QAM-Hybrid-HD-split}
+  \caption{零差接收机对QAM信号区域划分示意图}
+  \label{fig:QAM-Hybrid-HD-split}
+\end{figure}
+
+正确探测出信号所在区域的概率可以用下式计算出来
+\begin{equation}
+P_c^{HD}(r \alpha_{uv}) = \int_{D(\alpha)}|\bra{p}\ket{r\alpha_{uv}}|^2 dp = \frac{1}{2} \erf(\sqrt{2}p)\arrowvert_{D_L(v) \alpha}^{D_U(v) \alpha}.
+\end{equation}
+这里$D_L$和$D_U$与前面的定义一致。
+
+零差接收机探测的结果前馈给后面的位移接收机，
+用于位移接收机调整位移操作的策略控制。
+如果零差探测得到正确的结果，那么后面就变成一个
+4态区分问题，这个4态区分可以用Boundrant接收机实现。
+依次假设为某个符号，并调整位移量归零该符号。
+如果假设正确，那么不再发生光子计数，如果假设错误，
+那么存在一定概率发生光子技术事件，
+然后将假设替换成下一个符号，并重复上述步奏。
+这个过程可以用下图来表示出来，在理想情况下，
+下图的第四步的情况不可能出现，因为在第三步的时候，
+不会再发生光子计数事件。
+该4态区分的Bondurant接收机
+的条件概率可以通过\ref{eq:QAM-cond-prob}式计算得到。
+
+最终，两个接收机联合探测的正确概率为
+\begin{equation}
+P_c = \frac{1}{16} \sum_{u,v} P_c^{HD}(r\alpha) P_c^{DR}(t\alpha).
+\end{equation}
+这里$P_c^{HD}$和$P_c^{DR}$分别是零差接收机正确探测函数和Bondurant接收机的正确探测函数。
+
+
+
 
 
 \section{三种接收机的对比}
