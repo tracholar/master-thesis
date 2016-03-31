@@ -763,6 +763,7 @@ P_c &= \frac{1}{M} \sum_{u,v} P^{HD}\{v| \alpha_{uv}\} P^{DR}\{u|\alpha_{uv}\} \
 可得这种混合接收机的平均错误概率渐近性能为
 \begin{equation}
 \begin{split}
+<<<<<<< HEAD
 P_e & \approx \left(1 - (1-\frac{1}{L}) e^{-2r^2\alpha^2} \right) \left( 1 - C e^{-4t^2\alpha^2} \right)  \\
     & \approx (1-\frac{1}{L}) e^{-2r^2\alpha^2} +C e^{-4t^2\alpha^2} .
 \end{split}
@@ -772,6 +773,10 @@ P_e & \approx \left(1 - (1-\frac{1}{L}) e^{-2r^2\alpha^2} \right) \left( 1 - C e
 \begin{equation}
 \begin{split}
 P_e & \approx (1-\frac{1}{L}) e^{-\alpha^2}  .
+=======
+P_e & \approx 1 - \left(1 - (1-\frac{1}{L}) e^{-\alpha^2} \right) \left( 1 - C_{L-1} e^{-2\alpha^2} \right)  \\
+    & \approx (1-\frac{1}{L}) e^{-\alpha^2}.
+>>>>>>> 5149c2e71fbd6cf75858b116c9f94f3d5d91806f
 \end{split}
 \end{equation}
 与经典外差接收机\ref{eq:QAM-SQL-approx}式相比，

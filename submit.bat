@@ -5,7 +5,7 @@ git add .
 if "%1"=="" (
 set DAY=date /T
 set TM=time /T
-git commit -am "%DAY% %TM% 自动提交"
+git commit -am "%DAY% %TM%"
 ) else (
 git commit -am %1
 )
