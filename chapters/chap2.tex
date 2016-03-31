@@ -985,10 +985,59 @@ Guha等人还提出，可以增加一个相敏放大器(PSA)，
 在经典信息论中，用Shannon熵来度量一个经典概率分布的不确定度\cite{jd2001xxlybm}，
 在量子信息论中，描述系统不确定度的是von Neumann熵，定义为\cite{nielsen2005qcqi,nielsen2010quantum}
 \begin{equation}
-S(\ket{\rho}) = -tr\left( \ket{\rho} \ln \ket{\rho}\right).
+S(\hat{\rho}) = -\Tr\left( \hat{\rho} \log_2 \hat{\rho} \right).
 \end{equation}
+$\hat{\rho}$是密度矩阵，若$\hat{\rho}$的特征值为$\lambda_x$，
+那么上式可以改写为
+\begin{equation}
+S(\ket{\rho}) = -\sum_x \lambda_x \log_2 \lambda_x.
+\end{equation}
+这与Shannon熵的形式一致，
+为方便记，可以定义$0\log_2 0=0$，便于后续表达。
+
+通过量子信道传递经典信息
+需要在发送端将要发送的符号$x \in X$
+映射到对应的量子态$\hat{\rho}_x$，然后
+将它发送出去，设该信道为$\mathcal{H}$，
+每一个量子态对应的先验概率为$p_x$。
+这些量子态构成一个混合量子态$\sum_x p_x\hat{\rho}_x$，它的熵满足如下不等式\cite{nielsen2005qcqi}
+\begin{equation}
+\sum_x p_x S(\hat{\rho}_x) \le S(\sum_x p_x\hat{\rho}_x) \le \sum_x p_x S(\hat{\rho}_x) + H(p_x).
+\end{equation}
+其中$H(p_x)$表示先验分布$p_i$的Shannnon熵。
+
+在接收端，接收机采用一组POVM测量$\hat{\Pi}_y$
+进行探测，每一个测量对应的输出为$y \in Y$，
+探测的条件概率为
+\begin{equation}
+P(x|y) = \Tr(\Pi_x \hat{\rho}_y ).
+\end{equation}
+那么该系统传递的交互信息量为
+\begin{equation}
+I_1(p_x, \hat{\Pi}_x) = \sum_x p_x \sum_y P(y|x) \log_2  \frac{P(y|x)}{\sum_z p_z P(y|z)}.
+\end{equation}
+对于给定的符号集合，记交互信息量的最大值为
+\begin{equation}
+C_1= \sup_{p_x,\hat{\Pi}_y} I_1(p_x, \hat{\Pi}_x).
+\end{equation}
+它是通过该符号集合对应的单个量子信道$\mathcal{H}$
+所能获取的最大信息量。
 
 
+与上述类似的讨论，我们考虑该单个量子信道的直积信道
+$\mathcal{H}^{\otimes n}=\mathcal{H}\otimes\cdots \otimes \mathcal{H}$，
+此时输入符号集合为$X^n$，对于其中的每一个符号序列$u = (x_1, x_2, ..., x_n)$，
+我们将它映射到直积态
+\begin{equation}
+\hat{\rho}_u = \hat{\rho}_{x_1}\otimes \hat{\rho}_{x_2}\otimes \cdots \otimes \hat{\rho}_{x_n}.
+\end{equation}
+设$p_u$是该序列的先验概率，接收端采用POVM测量$\hat{\Pi}_u$进行探测，
+我们可以得到交互信息量$I_n(p_u, \hat{\rho}_u)$，
+记交互信息量最大值为
+\begin{equation}
+C_n= \sup_{p_u,\hat{\Pi}_u} I_n(p_u, \hat{\Pi}_u).
+\end{equation}
+它满足超加性
 
 
 
