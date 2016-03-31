@@ -50,11 +50,13 @@ for f in fs:
     ch_word_count += len(chap)
     
     
-print '''
-EQU: %d
-IEQ: %d
-FIG: %d 
-EWD: %d 
-CWD: %d 
-WD : %d 
+output = '''
+块级方程: %d
+行内方程: %d
+图片数目: %d 
+英文单词: %d 
+中文汉字: %d 
+总的词数: %d 
 ''' % (eq_count, inline_eq_count, fig_count, en_word_count, ch_word_count, en_word_count + ch_word_count)
+
+print output.decode('utf-8')
