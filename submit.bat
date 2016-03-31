@@ -3,7 +3,7 @@
 @cd /D %~dp0%
 git add . 
 if "%1"=="" (
-for /f "tokens=*" %%i in ('date /T') do set DAY=%%i
+@for /f "tokens=*" %%i in ('date /T') do @set DAY=%%i
 git commit -am "%DAY%自动提交"
 ) else (
 git commit -am %1
