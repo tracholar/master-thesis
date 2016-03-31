@@ -1,4 +1,4 @@
-@if not exist "%HOME%" @set %HOME%="%SystemDrive%%HOMEPATH%"
+@if not exist "%HOME%" @set HOME=%SystemDrive%%HOMEPATH%
 @cd /D %~dp0%
 git add .
 git commit -am %1
