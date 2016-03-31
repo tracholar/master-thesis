@@ -638,7 +638,7 @@ D_v = \{p| D_L(v)r\alpha < p \le D_U(v) r\alpha\}.
 
 \begin{figure}
 \centering
-  \includegraphics[width=0.8\textwidth]{figures/chap3/Q-Bondurant-displacemet}
+  \includegraphics[width=\textwidth]{figures/chap3/Q-Bondurant-displacemet}
   \caption{四态区分的Bondurant接收机位移操作示意图}
   \label{fig:Q-Bondurant-displacemet}
 \end{figure}
@@ -694,13 +694,13 @@ Bondurant接收机利用前馈得到的$P$值，
 按照$1\rightarrow 2 \rightarrow ... \rightarrow L$顺序
 依次归零对应符号。
 理想情况下，对于图中信号3，由于最多发生
-2个光子计数事件，图\ref{fig:Q-Bondurant-displacemet-strategy} (4)
+2个光子计数事件，图\ref{fig:Q-Bondurant-displacemet-strategy} (\textit{a}.4)
 的情况是不能到达的。
 
 \begin{figure}
 \centering
   \includegraphics[width=\textwidth]{figures/chap3/Q-Bondurant-displacemet-strategy}
-  \caption{四态区分的Bondurant接收机接收策略示意图}
+  \caption{四态区分的Bondurant接收机接收策略和不精确归零策略示意图}
   \label{fig:Q-Bondurant-displacemet-strategy}
 \end{figure}
 
@@ -741,22 +741,19 @@ P_c &= \frac{1}{M} \sum_{u,v} P^{HD}\{v| \alpha_{uv}\} P^{DR}\{u|\alpha_{uv}\} \
 当光子数很大时，利用式\ref{eq:QAM-Hybrid-approx-1}和\ref{eq:QAM-Hybrid-approx-2}
 可得这种混合接收机的平均错误概率渐近性能为
 \begin{equation}
-P_e \approx (1-\frac{1}{L}) e^{-\alpha^2}.
+\begin{split}
+P_e & \approx \left(1 - (1-\frac{1}{L}) e^{-\alpha^2} \right) \left( 1 - C_{L-1} e^{-2\alpha^2} \right)  \\
+    & \approx (1-\frac{1}{L}) e^{-\alpha^2}.
+\end{split}
 \end{equation}
 与经典外差接收机\ref{eq:QAM-SQL-approx}式相比，
 这种混合接收机性能低3dB。
 
 
-\begin{figure}
-\centering
-  \includegraphics[width=0.5\textwidth]{figures/chap3/Opti-displacement}
-  \caption{四态区分的Bondurant接收机不精确归零策略示意图}
-  \label{fig:Opti-displacement}
-\end{figure}
 
 
 正如最优位移接收机那样，我们也可以在Bondurant接收机位移操作时，
-采用不精确归零如图\ref{fig:Opti-displacement}所示。
+采用不精确归零如图\ref{fig:Q-Bondurant-displacemet-strategy}(\textit{b})所示。
 由于采用不精确归零，所以对于M阶QAM信号，
 存在一定概率发生$L$个甚至超过$L$个光子计数事件，
 在这种策略当中，我们将这种情形都判定为第$L$个符号。
@@ -778,6 +775,14 @@ P^{DR}\{u|\alpha_{uv}\} = & \int_0^1 dt_1 n_{u,1} e^{n_{u,1} t_1} \int_{t_1}^1 d
 \beta^* = \arg\max_{\beta} P^{DR}(\beta).
 \end{equation}
 
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap3/QAM-Hybrid-error}
+  \caption{QAM信号混合接收机性能}
+  \label{fig:QAM-Hybrid-error}
+\end{figure}
+
+
 我们对16-QAM信号和36-QAM信号进行数值仿真，
 仿真结果如\ref{fig:QAM-Hybrid-error}图所示，可以看到随着光子数的增大，
 两种策略都能突破标准量子极限，但是采用精确归零策略的接收机，
@@ -787,16 +792,54 @@ P^{DR}\{u|\alpha_{uv}\} = & \int_0^1 dt_1 n_{u,1} e^{n_{u,1} t_1} \int_{t_1}^1 d
 
 
 
+
+
+
+\section{总结}
+
 \begin{figure}
 \centering
-  \includegraphics[width=\textwidth]{figures/chap3/QAM-Hybrid-error}
-  \caption{QAM信号混合接收机性能}
-  \label{fig:QAM-Hybrid-error}
+  \includegraphics[width=0.6\textwidth]{figures/chap3/QAM-error}
+  \caption{QAM信号三种接收机性能对比}
+  \label{fig:QAM-error}
 \end{figure}
 
+在这一章，我们系统地分析了三种QAM信号量子接收机方案，
+Bondurant接收机、自适应分区检测接收机以及混合接收机，
+图\ref{fig:QAM-error}显示对于16-QAM信号，这三种接收机性能的一个对比。
+首先，这三种接收机在光子数较大的时候都能突破标准量子极限，
+Bondurant接收机在小信号的时候性能很差，混合接收机通过
+最优位移策略改善了小信号时的性能。
+其次，混合接收机性能最差，通过前面分析可知，
+其大信号渐近平均错误概率与标准量子极限仅相差3dB，
+而另外两种接收机都比标准量子极限低一个指数项，
+也就是具有指数倍的增益，
+由于对于高阶调制，采用混合接收机所减少的资源消耗
+很少，因此对于QAM调制信号，不建议采用混合接收机进行探测。
+最后，通过自适应分区检测的方法，
+Bondurant接收机需要实时反馈控制以及小信号时的缺陷
+都被解决了，因此自适应分区检测接收机具有非常高
+的使用价值，并且通过前面的理论分析，
+它的大信号渐近性能与Helstrom极限非常接近，
+可以认为它是一种可实用化的近最优检测方案。
 
 
-\section{三种接收机的对比}
 
 
 
+通过对现有的量子接收机的观察，
+我们可以发现，对本振的反馈控制策略是导致接收机最终性能的关键。
+在我们的分析中，Bondurant接收在两个光子到达的时间间隔期间，
+采用恒定的位移量，而当一个光子到达探测器的时候，
+立即调整本振。自适应分区检测接收在每一个分区，
+也采用的是恒定的位移量。因此，如果不采用恒定的位移量，
+而是随时间变化的位移量，能否找到这样一种最优的控制策略
+是一个数学难题。
+到目前为止，Dolinar接收机解决了二元信号的最优控制策略问题，
+令人惊喜的是这种最优控制策略给出了最优量子检测的接收性能。
+但是对于更高阶的问题，如QPSK、QAM信号，这个数学难题
+尚未解决，需要进一步的研究工作。
+另外，这种最优控制策略是否能够达到Helstrom极限也不不知道，
+如果最优控制策略不能达到这个极限，
+那么对于高阶调制信号，如何设计接收机使得接收性能达到Helstrom
+极限也是一个有待研究的问题。
