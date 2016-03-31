@@ -13,7 +13,11 @@
 设$M$阶QAM信号由$M$个相干态构成，如图\ref{fig:QAM-signals}所示，
 显示的是16-QAM和36-QAM星座图。假设$M$阶QAM信号每一个
 正交幅度$X$或$P$都可以取$L$个不同的值，那么$M=L^2, L=3,4,5...$。
-设这$L$元基本符号集合为$\Omega = \{-(L-1) + 2(i-1) | i=1,2,...,L\}$，
+设这$L$元基本符号集合为
+\begin{equation}
+\Omega = \{-(L-1) + 2(i-1) | i=1,2,...,L\}.
+\label{eq:QAM-omega}
+\end{equation}
 那么$M$阶QAM信号
 可以表示为
 \begin{equation}
@@ -56,7 +60,7 @@ p(x_c, x_s| u, v) = \frac{1}{\pi} \exp[-(x_c - u\alpha)^2 - (x_s - v\alpha)^2]
 是接收机输出的两个正交幅度观测量。
 根据贝叶斯检测理论，最优判决区域为
 \begin{equation}
-D_{u',v'} = \{ (x_c,x_s)| D_L(u') < x_c \le D_U(u'),  D_L(v') < x_s \le D_U(v') \}
+D_{u',v'} = \{ (x_c,x_s)| D_L(u')\alpha < x_c \le D_U(u')\alpha,  D_L(v')\alpha < x_s \le D_U(v')\alpha \}
 \end{equation}
 这里$D_U$和$D_L$是两个上下界函数，对给定的参数$L$，
 定义为
@@ -64,12 +68,13 @@ D_{u',v'} = \{ (x_c,x_s)| D_L(u') < x_c \le D_U(u'),  D_L(v') < x_s \le D_U(v') 
 \begin{split}
 D_L(u) &= \begin{cases}    
           -\infty     & u < -(L-2)  \\
-          \alpha(u-1) & otherwise
+          (u-1) & otherwise
          \end{cases}\\
 D_U(u) &= \begin{cases} 
           \infty     & u > L-2  \\
-          \alpha(u+1) & otherwise
+          (u+1) & otherwise
          \end{cases}
+\label{eq:LU-fun}
 \end{split}
 \end{equation}
 即将复平面划分成如图\ref{fig:QAM-domain-split}所示的$M$个判决
@@ -612,59 +617,186 @@ ON-OFF探测器和PNRD探测器，
 
 对于QAM信号，混合接收机可以用如图\ref{fig:QAM-Hybrid-receiver}所示的
 结构实现。它包含两个部分——零差接收和Bondurant接收机。
-下面以16-QAM信号为例进行描述，
-接收机接收到的信号首先经过一个透过率为$T$的分束器(BS)分成两部分，一部分给零差接收机(HD)，
+M阶QAM信号首先经过一个透过率为$T=0.5$的分束器(BS)分成两部分，一部分给零差接收机(HD)，
 零差接收机通过一组POVM测量进行探测，
 \begin{equation}
-\hat{\Pi}_i^{HD} = \int_{D_i} dp \ket{p}\bra{p}, i=1,2,3,4.
+\hat{\Pi}_v^{HD} = \int_{D_v} dp \ket{p}\bra{p}, v\in \Omega.
 \end{equation}
-其中积分区域定义如下
+其中符号$\Omega$与式\ref{eq:QAM-omega}定义一致，
+积分区域定义如下
 \begin{equation}
 \begin{split}
-D_1 = \{p| p>2|r \alpha|\}, D_2 = \{p| 0 < p \le 2|r \alpha|\}, \\
-D_3 = \{p| -2|r \alpha| p \le 0\}, D_4 = \{p| p \le -2|r \alpha|\}.
+D_v = \{p| D_L(v)r\alpha < p \le D_U(v) r\alpha\}.
 \end{split}
 \end{equation}
-其中$r=\sqrt{1-T}$是反射系数。
-可以看到，不同的判定区域对应一个按照P分量分割的分区，。那么经过零差接收后，
-就可以知道信号所在的区域，如图\ref{fig:QAM-Hybrid-HD-split}所示。
+其中$r=\sqrt{1-T}$是反射系数，$D_L$和$D_U$是式\ref{eq:LU-fun}
+定义的两个上下界函数。
+如图\ref{fig:Q-Bondurant-displacemet}所示，
+零差检测不同的判定区域对应一个按照P分量分割的分区，
+经过零差接收后，就可以知道信号所在的区域。
+
 
 \begin{figure}
 \centering
-  \includegraphics[width=0.5\textwidth]{figures/chap3/QAM-Hybrid-HD-split}
-  \caption{零差接收机对QAM信号区域划分示意图}
-  \label{fig:QAM-Hybrid-HD-split}
+  \includegraphics[width=0.8\textwidth]{figures/chap3/Q-Bondurant-displacemet}
+  \caption{四态区分的Bondurant接收机位移操作示意图}
+  \label{fig:Q-Bondurant-displacemet}
 \end{figure}
 
 正确探测出信号所在区域的概率可以用下式计算出来
 \begin{equation}
-P_c^{HD}(r \alpha_{uv}) = \int_{D(\alpha)}|\bra{p}\ket{r\alpha_{uv}}|^2 dp = \frac{1}{2} \erf(\sqrt{2}p)\arrowvert_{D_L(v) \alpha}^{D_U(v) \alpha}.
+\begin{split}
+P^{HD}\{v|\alpha_{uv}\} &= \int_{D_v}|\bra{p}\ket{r\alpha_{uv}}|^2 dp  \\
+   &= \frac{1}{2} \left( \erf(\sqrt{2} (D_U(v)-v) r\alpha) -  \erf(\sqrt{2} (D_L(v)-v) r\alpha) \right).
+\end{split}
 \end{equation}
-这里$D_L$和$D_U$与前面的定义一致。
-
-零差接收机探测的结果前馈给后面的位移接收机，
-用于位移接收机调整位移操作的策略控制。
-如果零差探测得到正确的结果，那么后面就变成一个
-4态区分问题，这个4态区分可以用Boundrant接收机实现。
-依次假设为某个符号，并调整位移量归零该符号。
-如果假设正确，那么不再发生光子计数，如果假设错误，
-那么存在一定概率发生光子技术事件，
-然后将假设替换成下一个符号，并重复上述步奏。
-这个过程可以用下图来表示出来，在理想情况下，
-下图的第四步的情况不可能出现，因为在第三步的时候，
-不会再发生光子计数事件。
-该4态区分的Bondurant接收机
-的条件概率可以通过\ref{eq:QAM-cond-prob}式计算得到。
-
-最终，两个接收机联合探测的正确概率为
+代入上下界得到
 \begin{equation}
-P_c = \frac{1}{16} \sum_{u,v} P_c^{HD}(r\alpha) P_c^{DR}(t\alpha).
+\begin{split}
+P^{HD}\{v|\alpha_{uv}\} = \begin{cases}
+                            \frac{1}{2}\left( 1 + \erf(\alpha) \right)  & v \neq \pm (L-1), \\
+                            \erf(\alpha) & v = \pm (L-1).
+                          \end{cases}
+\end{split}
 \end{equation}
-这里$P_c^{HD}$和$P_c^{DR}$分别是零差接收机正确探测函数和Bondurant接收机的正确探测函数。
+所以该零差接收机的平均正确概率为
+\begin{equation}
+P_c^{HD} = \frac{1}{L}\left(1 + (L-1)\erf(\alpha) \right)
+\end{equation}
+当光子数很大时，利用余误差函数的Chernoff界\cite{chang2011chernoff}可得
+\begin{equation}
+\begin{split}
+P_c^{HD} \approx 1 - (1-\frac{1}{L}) e^{-\alpha^2}.
+\end{split}
+\label{eq:QAM-Hybrid-approx-1}
+\end{equation}
 
 
+
+零差接收机探测的结果将前馈给后面的位移接收机，
+用于位移接收机调整位移操作的策略控制。
+如图\ref{fig:Q-Bondurant-displacemet} 所示，
+如果零差探测得到正确的结果，那么后面就变成一个
+$L$态区分问题，这个$L$态区分可以用Boundrant接收机实现。
+为了进行位移操作，Bondurant接收需要知道
+位移参数$\gamma = X + jP$的$P$分量，
+对于不同的分区，这个分量值不同，
+对于该$L$态区分问题，这个分量的值是相同的，
+这个值通过前面的零差接收机前馈得到。
+
+
+
+Bondurant接收机的接收策略如图\ref{fig:Q-Bondurant-displacemet-strategy}  所示，
+在信号到达Boundrant接收机时，
+Bondurant接收机利用前馈得到的$P$值，
+开始调整本振归零符号1，
+接着在每一个光子计数时间发生的时候，
+按照$1\rightarrow 2 \rightarrow ... \rightarrow L$顺序
+依次归零对应符号。
+理想情况下，对于图中信号3，由于最多发生
+2个光子计数事件，图\ref{fig:Q-Bondurant-displacemet-strategy} (4)
+的情况是不能到达的。
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap3/Q-Bondurant-displacemet-strategy}
+  \caption{四态区分的Bondurant接收机接收策略示意图}
+  \label{fig:Q-Bondurant-displacemet-strategy}
+\end{figure}
+
+按照上述策略，
+该$L$态区分的Bondurant接收机
+的条件概率可以通过\ref{eq:QAM-cond-prob}式计算得到。
+具体而言对信号$\alpha_{uv}$有
+\begin{equation}
+\begin{split}
+P^{DR}\{u|\alpha_{uv}\} = & \int_0^1 dt_1 n_{u,1} e^{n_{u,1} t_1} \int_{t_1}^1 dt_2 n_{u,2} e^{n_{u,2} (t_2-t_1)}   \\
+                          &\qquad \cdots \int_{t_{k-2}}^1 dt_{k-1} n_{u,k-1} e^{n_{u,k-1} (t_{k-1}-t_{k-2})}, u \in \Omega.
+\end{split}
+\label{eq:DR-cond-p}
+\end{equation}
+这里我们将时间对符号周期$T$归一化了，
+其中$k$为信号$\alpha_{uv}$探测正确时，
+符号周期结束时刻接收机对应的归零符号序数，
+满足$v = (L-1) - 2k$，且正确探测时，发生的光子计数事件数目为$k-1$个。
+上式中$n_{v,i} = 4r|\alpha(k-i)|^2 $。
+
+利用Bondurant接收机的渐近性能可得当光子数很大时
+\begin{equation}
+P_c^{DR} \approx 1 - C_{L-1} e^{-2\alpha^2}.
+\label{eq:QAM-Hybrid-approx-2}
+\end{equation}
+
+所以，两个接收机联合探测的正确概率为
+\begin{equation}
+\begin{split}
+P_c &= \frac{1}{M} \sum_{u,v} P^{HD}\{v| \alpha_{uv}\} P^{DR}\{u|\alpha_{uv}\} \\
+    &= \frac{1}{M} \sum_v P^{HD}\{v| \alpha_{uv}\} \sum_u P^{DR}\{u|\alpha_{uv}\} \\
+    &= \left( \frac{1}{L} \sum_v P^{HD}\{v| \alpha_{uv}\} \right) \left( \frac{1}{L} \sum_u P^{DR}\{u|\alpha_{uv}\} \right) \\
+    &= P_c^{HD} P_c^{DR}.
+\end{split}
+\end{equation}
+这里$P_c^{HD}$和$P_c^{DR}$分别是
+零差接收机平均正确探测概率和Bondurant接收机的平均正确探测概率。
+当光子数很大时，利用式\ref{eq:QAM-Hybrid-approx-1}和\ref{eq:QAM-Hybrid-approx-2}
+可得这种混合接收机的平均错误概率渐近性能为
+\begin{equation}
+P_e \approx (1-\frac{1}{L}) e^{-\alpha^2}.
+\end{equation}
+与经典外差接收机\ref{eq:QAM-SQL-approx}式相比，
+这种混合接收机性能低3dB。
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.5\textwidth]{figures/chap3/Opti-displacement}
+  \caption{四态区分的Bondurant接收机不精确归零策略示意图}
+  \label{fig:Opti-displacement}
+\end{figure}
+
+
+正如最优位移接收机那样，我们也可以在Bondurant接收机位移操作时，
+采用不精确归零如图\ref{fig:Opti-displacement}所示。
+由于采用不精确归零，所以对于M阶QAM信号，
+存在一定概率发生$L$个甚至超过$L$个光子计数事件，
+在这种策略当中，我们将这种情形都判定为第$L$个符号。
+假定这个附加的位移量恒定为$\beta$，那么对应的条件概率为
+\begin{equation}
+\begin{split}
+P^{DR}\{u|\alpha_{uv}\} = & \int_0^1 dt_1 n_{u,1} e^{n_{u,1} t_1} \int_{t_1}^1 dt_2 n_{u,2} e^{n_{u,2} (t_2-t_1)} \\
+                          & \cdots \int_{t_{k-2}}^1 dt_{k-1} n_{u,k-1} e^{n_{u,k-1} (t_{k-1}-t_{k-2})} \left( e^{n_{u,k} (1-t_{k-1})}\right), \\
+                          & \qquad \qquad u \in \Omega \text{且} u \neq -(L-1);   \\
+P^{DR}\{u|\alpha_{uv}\} = & \int_0^1 dt_1 n_{u,1} e^{n_{u,1} t_1} \int_{t_1}^1 dt_2 n_{u,2} e^{n_{u,2} (t_2-t_1)} \\
+                          & \cdots \int_{t_{k-3}}^1 dt_{k-2} n_{u,k-2} e^{n_{u,k-2} (t_{k-2}-t_{k-3})} \left( 1 - e^{n_{u,k-1} (1-t_{k-2})}\right),  \\
+                          & \qquad \qquad u = -(L-1).
+\end{split}
+\label{eq:DR-cond-p-2}
+\end{equation}
+在这里$n_{v,i} = 4r|\alpha(k-i)|^2 + |\beta|^2$是存在附加位移量时实际的平均光子数。
+为了得到最优的附加位移量$\beta$，我们对$P^{DR}$进行数值优化，
+\begin{equation}
+\beta^* = \arg\max_{\beta} P^{DR}(\beta).
+\end{equation}
+
+我们对16-QAM信号和36-QAM信号进行数值仿真，
+仿真结果如\ref{fig:QAM-Hybrid-error}图所示，可以看到随着光子数的增大，
+两种策略都能突破标准量子极限，但是采用精确归零策略的接收机，
+在小信号时性能比较差，而不精确归零策略则可以改善小信号时接收机的性能。
+并且，随着光子数的增大，附加位移量迅速减小，
+因此不精确归零策略的混合接收机渐近性能与精确归零一致。
+
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.5\textwidth]{figures/chap3/QAM-Hybrid-error}
+  \caption{QAM信号混合接收机性能}
+  \label{fig:QAM-Hybrid-error}
+\end{figure}
 
 
 
 \section{三种接收机的对比}
+
+
 
