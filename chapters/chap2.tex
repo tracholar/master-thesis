@@ -981,7 +981,6 @@ Guha等人还提出，可以增加一个相敏放大器(PSA)，
 
 \section{量子信道编码理论}
 
-\subsection{Holevo容量}
 在经典信息论中，用Shannon熵来度量一个经典概率分布的不确定度\cite{jd2001xxlybm}，
 在量子信息论中，描述系统不确定度的是von Neumann熵，定义为\cite{nielsen2005qcqi,nielsen2010quantum}
 \begin{equation}
@@ -1054,6 +1053,7 @@ C = \lim_{n \rightarrow \infty} C_n / n
 \begin{equation}
 C = \max_{p_x}\left[ S(\sum_x p_x \hat{\rho}_x) - \sum_x p_x S( \hat{\rho}_x) \right].
 \end{equation}
+这个容量也称为量子信道$\mathcal{H}$的Holevo容量。
 利用式\ref{eq:QI-low-up-bound}，可知
 \begin{equation}
 C \le \max_{p_x}H(p_x).
@@ -1072,12 +1072,24 @@ $\hat{\rho}_n = \ket{n}\bra{n}$为Fork态，
 C(N) = (N+1)\log_2(N+1) -N \log_2 N.
 \label{eq:Boson-capacity}
 \end{equation}
-  
 
 
-\subsection{常见的量子编码方案}
-
-
+量子信道编码定理指出，可以通过对某些特定的长度为$N$的编码码字，
+进行联合检测，就有可能随着长度$N$的增大，交互信息量
+可以任意逼近Holevo容量\cite{hausladen1996classical, holevo1996capacity}。
+因此，两个重要的任务就是找到合适的编码以及
+有效的联合检测方案。
+1996年，Hausladen采用随机编码和平方根检测的方案
+证实对纯态信号集合可以逼近Holevo容量。
+近年来，结构化光学接收机\cite{guha2011structured}、
+序贯测量方案\cite{giovannetti2012achieving}
+以及无歧义态区分方案\cite{takeoka2013achieving}
+逼近Holevo容量已被报道。
+此外通过极化编码和平方根检测的方案也
+被证明可以逼近Holevo容量\cite{guha2012polar}。
+但是这些接收机实现都还比较复杂，
+不利于工程实现，因此探索方便工程实现的
+联合检测接收机是一件十分重要的事情。
 
 
 
