@@ -990,7 +990,7 @@ S(\hat{\rho}) = -\Tr\left( \hat{\rho} \log_2 \hat{\rho} \right).
 $\hat{\rho}$是密度矩阵，若$\hat{\rho}$的特征值为$\lambda_x$，
 那么上式可以改写为
 \begin{equation}
-S(\ket{\rho}) = -\sum_x \lambda_x \log_2 \lambda_x.
+S(\hat{\rho}) = -\sum_x \lambda_x \log_2 \lambda_x.
 \end{equation}
 这与Shannon熵的形式一致，
 为方便记，可以定义$0\log_2 0=0$，便于后续表达。
@@ -1003,6 +1003,7 @@ S(\ket{\rho}) = -\sum_x \lambda_x \log_2 \lambda_x.
 这些量子态构成一个混合量子态$\sum_x p_x\hat{\rho}_x$，它的熵满足如下不等式\cite{nielsen2005qcqi}
 \begin{equation}
 \sum_x p_x S(\hat{\rho}_x) \le S(\sum_x p_x\hat{\rho}_x) \le \sum_x p_x S(\hat{\rho}_x) + H(p_x).
+\label{eq:QI-low-up-bound}
 \end{equation}
 其中$H(p_x)$表示先验分布$p_i$的Shannnon熵。
 
@@ -1038,6 +1039,40 @@ $\mathcal{H}^{\otimes n}=\mathcal{H}\otimes\cdots \otimes \mathcal{H}$，
 C_n= \sup_{p_u,\hat{\Pi}_u} I_n(p_u, \hat{\Pi}_u).
 \end{equation}
 它满足超加性
+\begin{equation}
+C_n + C_m \le C_{n+m}
+\end{equation}
+在经典的无记忆信道中，只能取等号，
+在量子信道中，可以取不等号，
+它存在极限
+\begin{equation}
+C = \lim_{n \rightarrow \infty} C_n / n
+\end{equation}
+被称为信道$\mathcal{H}$的信道容量。
+经过A. S. Holevo, P. Hausladen,W. K. Wootters等人的努力，
+证明了对任意量子态$\{\hat{\rho}_x\}$，信道$\mathcal{H}$的容量为\cite{holevo1973bounds,hausladen1996classical, holevo1996capacity}
+\begin{equation}
+C = \max_{\p_x}\left[ S(\sum_x p_x \hat{\rho}_x) - \sum_x p_x S( \hat{\rho}_x) \right].
+\end{equation}
+利用式\ref{eq:QI-low-up-bound}，可知
+\begin{equation}
+C \le \max_{p_x}H(p_x).
+\end{equation}
+当且仅当各量子态之间互相正交时取等号。
+
+如果将量子态放宽到任意量子态，
+可以证明，对于能量和带宽受限的条件下，
+玻色子场可以最大化信道容量\cite{yuen1993ultimate}。
+取符号集合$X = \mathcal{N}$，
+$\hat{\rho}_n = \ket{n}\bra{n}$为Fork态，
+且先验分布$p_n= N^n(1+N)^{-(n+1)}$，
+其中$N$为发送的平均光子数。
+此时具有的最大容量
+\begin{equation}
+C(N) = (N+1)\log_2(N+1) -N \log_2 N.
+\label{eq:Boson-capacity}
+\end{equation}
+
 
 
 
