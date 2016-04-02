@@ -138,13 +138,13 @@ P_e & \approx L\left(1 - \frac{1}{M-L+1} \right)e^{-n} \\
 所以这里我们采用Smit正交化的方法\cite{lzw2010LA,zyh2007szjsff}，
 构造一组新的基向量$\ket{e_i}$。
 为方便计，我们用矢量$\ket{\psi_i}$表示这$\binom{M}{L}$个直积态信号，
-那么基向量可以表达为
+那么基向量$\ket{e_i}$可以表达为
 \begin{equation}
 \begin{split}
-\ket{e_1} &= \ket{\psi_1}, \\
-\ket{e_2} &= \ket{\psi_2} - \bra{e_1}\ket{\psi_2}\ket{e_1}, \\
-          &\vdots \\
-\ket{e_n} &= \ket{\psi_n} - \sum_{k=1}^{n-1} \bra{e_k}\ket{\psi_n}\ket{e_k}.
+\ket{u_1} &= \ket{\psi_1}, \ket{e_1} = \frac{\ket{u_1}}{\sqrt{\bra{u_1}\ket{u_1}}}\\
+\ket{u_2} &= \ket{\psi_2} - \bra{e_1}\ket{\psi_2}\ket{e_1}, \ket{e_2} = \frac{\ket{u_2}}{\sqrt{\bra{u_2}\ket{u_2}}}\\
+          &\qquad\qquad \vdots \\
+\ket{u_n} &= \ket{\psi_n} - \sum_{k=1}^{n-1} \bra{e_k}\ket{\psi_n}\ket{e_k}, \ket{e_k} = \frac{\ket{u_n}}{\sqrt{\bra{u_n}\ket{u_n}}}.
 \end{split}
 \end{equation}
 设在该基向量上，$\ket{\psi_i} =\bm{c}_i = (c_{i1} \quad c_{i2} \dots c_{in})^T$，
@@ -152,16 +152,17 @@ P_e & \approx L\left(1 - \frac{1}{M-L+1} \right)e^{-n} \\
 \begin{equation}
 \begin{split}
 c_{11} &= 1, c_{1k}=0 \quad k>1; \\
-c_{ii} &= 1, c_{ik}=0 \quad k>i, \\
+c_{ii} &= \sqrt{G_{ii} - \sum_{k=1}^{i-1} |c_{ik}|^2 }, c_{ik}=0 \quad k>i, \\
 c_{ij} &= \bra{e_j}\ket{\psi_i} \\
-       &= \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} \bra{\psi_j}\ket{e_k} \bra{e_k}\ket{\psi_i} \\
-       &= \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} c_{jk}^* c_{ik}, j<i.
+       &= \frac{1}{\sqrt{\bra{u_j}\ket{u_j}}} \left( \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} \bra{\psi_j}\ket{e_k} \bra{e_k}\ket{\psi_i} \right)\\
+       &= \frac{1}{c_{jj}} \let( G_{ji} - \sum_{k=1}^{j-1} c_{jk}^* c_{ik} \right), \quad j<i.
 \end{split}
 \end{equation}
+这里$G_{ji}=\bra{\psi_j}\ket{\psi_i}$为Gram矩阵元素，
 对L-M-PPM信号，
 这里两个信号之间的内积为
 \begin{equation}
-\bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j)^2 n}$
+\bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j)^2 n}
 \end{equation}
 这里$d(\bm{c}_i, \bm{c}_j)$这这两个码字的Hamming距离。
 利用上述结果，可以得到密度矩阵为
@@ -170,6 +171,7 @@ c_{ij} &= \bra{e_j}\ket{\psi_i} \\
 \end{equation}
 这里$\bm{c}_i^\dagger$表示$\bm{c}_i$的共轭转置。
 一旦将密度矩阵表达为有限维矩阵之后，就可以利用CVX工具箱\cite{cvx,gb08}进行数值求解了。
+
 
 
 
