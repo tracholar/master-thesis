@@ -155,7 +155,7 @@ c_{11} &= 1, c_{1k}=0 \quad k>1; \\
 c_{ii} &= \sqrt{G_{ii} - \sum_{k=1}^{i-1} |c_{ik}|^2 }, c_{ik}=0 \quad k>i, \\
 c_{ij} &= \bra{e_j}\ket{\psi_i} \\
        &= \frac{1}{\sqrt{\bra{u_j}\ket{u_j}}} \left( \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} \bra{\psi_j}\ket{e_k} \bra{e_k}\ket{\psi_i} \right)\\
-       &= \frac{1}{c_{jj}} \let( G_{ji} - \sum_{k=1}^{j-1} c_{jk}^* c_{ik} \right), \quad j<i.
+       &= \frac{1}{c_{jj}} \left( G_{ji} - \sum_{k=1}^{j-1} c_{jk}^* c_{ik} \right), \quad j<i.
 \end{split}
 \end{equation}
 这里$G_{ji}=\bra{\psi_j}\ket{\psi_i}$为Gram矩阵元素，
@@ -182,7 +182,7 @@ c_{ii} & \ge 1 - A_i e^{-1/2 d_{\min} n}, \\
 c_{ij} & \le A_i e^{-1/2 d_{\min} n}, i\neq j.
 \end{split}
 \end{equation}
-其中$d_{\min} = \min_{i,j}|\bm{c}_i - \bm{c}_j|$
+其中$d_{\min} = \min_{i \neq j} d(|\bm{c}_i , \bm{c}_j)$
 是码符号集合的最小汉明距离，容易验证$G_{ij} \le e^{-1/2 d_{\min} n}$。
 
 当$i=1$时，显然成立。
@@ -192,9 +192,9 @@ c_{ij} & \le A_i e^{-1/2 d_{\min} n}, i\neq j.
 \begin{split}
 c_{m+1,j} & \le \frac{G_{j,m+1}}{c_{jj}} \\
        & \le \frac{e^{-1/2 d_{\min} n}}{1 - A_j e^{-1/2 d_{\min} n}}   \\
-       & \le e^{-1/2 d_{\min}^2 n} \left(  1 + 2 A_j e^{-1/2 d_{\min} n} \right)  \\
+       & \le e^{-1/2 d_{\min} n} \left(  1 + 2 A_j e^{-1/2 d_{\min} n} \right)  \\
        & \le A_{m+1} A_j e^{-1/2 d_{\min} n}. \\
-c_{m+1,m+1} &\ge \sqrt{1 - \sum_{k=1}^{m} A_k e^{-1/2 d_{\min} n} \\
+c_{m+1,m+1} &\ge \sqrt{1 - \sum_{k=1}^{m} A_k e^{-1/2 d_{\min} n} } \\
             &\ge 1 - \frac{1}{2}\sum_{k=1}^{m} A_{m+1} e^{-1/2 d_{\min} n} \\
             &\ge 1 - A_{m+1} A_{m+1} e^{-1/2 d_{\min} n}.
 \end{split}
@@ -202,17 +202,17 @@ c_{m+1,m+1} &\ge \sqrt{1 - \sum_{k=1}^{m} A_k e^{-1/2 d_{\min} n} \\
 所以上述命题成立，根据式\ref{eq:Hel-SDP}，可得
 \begin{equation}
 \begin{split}
-X_{ii} = \bra{e_i} \hat{X} \ket{e_i} \ge \bra{e_i} \hat{rho}_i' \ket{e_i} = \frac{1}{N} c_{ii}  .
+X_{ii} = \bra{e_i} \hat{X} \ket{e_i} \ge \bra{e_i} \hat{\rho}_i' \ket{e_i} = \frac{1}{N} c_{ii}  .
 \end{split}
 \end{equation}
 所以平均错误概率
 \begin{equation}
 \begin{split}
-P_e &= 1 - \Tr(\hat{X}) =  1 - \sum_x X_{ii} \\
-    \le \frac{1}{N} \sum_i A_i e^{- d_{\min}^2 n}.
+P_e &= 1 - \Tr(\hat{X}) =  1 - \sum_i X_{ii} \\
+    &\le \frac{1}{N} \sum_i A_i e^{- d_{\min} n}.
 \end{split}
 \end{equation}
-即最优量子检测具有不高于$e^{- d_{\min}^2 n}$形式的渐近性能上界。
+即最优量子检测具有不高于$e^{- d_{\min} n}$形式的渐近性能上界。
 事实上，上述结论可以推广到任意量子态集合，
 采用最优检测其平均错误概率的渐近性能上界不高于
 $e^{-n_{\min}}$，其中$n_{\min} = \min_{ij} \bra{\psi_i}\ket{\psi_j}$。
@@ -243,6 +243,8 @@ P_e &= 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
 
 
 \subsection{MPPM条件归零接收机}
+
+
 
 
 \section{编码后OOK调制信号条件归零接收机}
