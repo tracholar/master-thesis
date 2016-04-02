@@ -21,8 +21,9 @@
 \subsection{MPPM信号标准量子极限}
 首先，我们先来从数学上定义MPPM信号符号集合。
 设每一个MPPM信号符号有$M$个时隙，对每一个符号，
-都有$L$个时隙有脉冲，而其他$M-K$个时隙没有脉冲，
+都有$L$个时隙有脉冲，而其他$M-L$个时隙没有脉冲，
 我们称这种MPPM信号为L-M-PPM信号，如图\ref{fig:MPPM-DD}(\textit{a})所示。
+一般的，我们只考虑$L \ge 2$的情形，$L=1$时就退化为单脉冲PPM的情形。
 容易知道，这样的L-M-PPM信号的符号集合个数为
 \begin{equation}
 \binom{M}{L} = \frac{M(M-1)\cdots(M-L+1)}{L!}.
@@ -68,6 +69,7 @@ $o_i=1$，否则$o_i=0$。
 构成输出序列$\bm{o} = (o_1,o_2,\cdots,o_M)$。
 当所有的$M$个时隙都探测完毕，
 然后通过最大似然准则进行译码判决\cite{simon2003multi}。
+如果所有码字的先验概率是相同的（通信中通常都满足），这种判决准则使得平均错误概率最低。
 对于给定的码字$\bm{c}_i$，输出序列为$\bm{o}$的条件概率为
 \begin{equation}
 \Pr{\bm{o} | \bm{c}_i} = \prod_{k=1}^M \left(1 - e^{-c_{ik}n} \right)^{o_{k}} \left(e^{-c_{ik}n} \right)^{1-o_{k}} .
@@ -81,11 +83,95 @@ $n=|\alpha|^2$是一个脉冲的平均光子数。
 选择出条件概率最大的符号进行判决，
 该条件概率也称似然函数。
 
+理想情况下，实际检测到脉冲数目$K \le L$，此时上述
+条件概率也即是似然函数变为
+\begin{equation}
+\Lambda_i = \Pr{\bm{o} | \bm{c}_i} = \begin{cases} 
+                                        \left(1 - e^{-n} \right)^{K} \left(e^{-n} \right)^{L-K}, & o_k \le c_{ik} \forall k,\\
+                                        0,                                                       & \text{otherwise}.
+                                    \end{cases}
+\end{equation}
+对于给定的码符号集合，$L$是相同的，
+所以根据最大似然准则，对给定的输出序列$\bm{o}$，
+只要满足$o_k \le c_{ik} \forall k$的码字对应的
+似然函数是相同的。此时随机选择一个判决输出。
+因此，对给定的码字$\bm{c}_i$，
+在探测到$K$个光子时接收机正确探测的概率为
+\begin{equation}
+\Pr{\bm{c}_i | \bm{c}_i} = \frac{1}{\binom{M-K}{L-K}} \binom{L}{K} \left(1 - e^{-n} \right)^{K} \left(e^{-n} \right)^{L-K}.
+\end{equation}
+所以，这种检测方案的平均错误概率为
+\begin{equation}
+\begin{split}
+P_e &= \frac{1}{\binom{M}{L}}\sum_{i=1}^{\binom{M}{L}} \sum_{K=0}^{L} \Pr{\bm{c}_i | \bm{c}_i, K}  \\
+    &= \sum_{K=0}^{L} \frac{1}{\binom{M-K}{L-K}} \binom{L}{K} \left(1 - e^{-n} \right)^{K} \left(e^{-n} \right)^{L-K}.
+\end{split}
+\end{equation}
+下面我们考虑大信号近似，即当$n \gg 1$时，可以忽略少检测到的脉冲数目大于1个的情况的概率，
+即
+\begin{equation}
+\begin{split}
+\Pr{\bm{c}_i | \bm{c}_i} &\approx (1-e^{-n})^L + \frac{L}{M-L+1} (1-e^{-n})^{L-1} e^{-n} \\
+                            &\approx 1 - L\left(1 - \frac{1}{M-L+1} \right)e^{-n}.
+\end{split}
+\end{equation}
+因此，这种检测方案的渐近性能为
+\begin{equation}
+\begin{split}
+P_e & \approx L\left(1 - \frac{1}{M-L+1} \right)e^{-n} \\
+    & = L\left(1 - \frac{1}{M-L+1} \right)e^{-|\alpha|^2}.
+\end{split}
+\end{equation}
 
-   
 
 
-\subsection{MPPM信号平方根检测极限}
+\subsection{MPPM信号Helstrom极限}
+一般而言，MPPM信号并不具有几何均匀对称性，
+为了求得这种信号的最优量子检测的性能，
+需要如QAM信号那样求解半正定规划问题\ref{eq:Hel-SDP}。
+因此，我们需要得到密度矩阵。
+与QAM信号不同的是，MPPM信号是直积态，
+如果采用QAM信号那种将每一个时隙的信号在Fork态中展开，
+然后截取长度为$l$的向量，那么要表达整个直积态信号，
+所需要的向量维度为$l^M$，将随着时隙数目$M$指数增长，
+这将为计算带来困难。
+所以这里我们采用Smit正交化的方法\cite{lzw2010LA,zyh2007szjsff}，
+构造一组新的基向量$\ket{e_i}$。
+为方便计，我们用矢量$\ket{\psi_i}$表示这$\binom{M}{L}$个直积态信号，
+那么基向量可以表达为
+\begin{equation}
+\begin{split}
+\ket{e_1} &= \ket{\psi_1}, \\
+\ket{e_2} &= \ket{\psi_2} - \bra{e_1}\ket{\psi_2}\ket{e_1}, \\
+          &\vdots \\
+\ket{e_n} &= \ket{\psi_n} - \sum_{k=1}^{n-1} \bra{e_k}\ket{\psi_n}\ket{e_k}.
+\end{split}
+\end{equation}
+设在该基向量上，$\ket{\psi_i} =\bm{c}_i = (c_{i1} \quad c_{i2} \dots c_{in})^T$，
+那么有
+\begin{equation}
+\begin{split}
+c_{11} &= 1, c_{1k}=0 \quad k>1; \\
+c_{ii} &= 1, c_{ik}=0 \quad k>i, \\
+c_{ij} &= \bra{e_j}\ket{\psi_i} \\
+       &= \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} \bra{\psi_j}\ket{e_k} \bra{e_k}\ket{\psi_i} \\
+       &= \bra{\psi_j}\ket{\psi_i} - \sum_{k=1}^{j-1} c_{jk}^* c_{ik}, j<i.
+\end{split}
+\end{equation}
+对L-M-PPM信号，
+这里两个信号之间的内积为
+\begin{equation}
+\bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j)^2 n}$
+\end{equation}
+这里$d(\bm{c}_i, \bm{c}_j)$这这两个码字的Hamming距离。
+利用上述结果，可以得到密度矩阵为
+\begin{equation}
+\hat{\rho_i} = \ket{\psi_i}\bra{\psi_i} = \bm{c}_i \bm{c}_i^\dagger.
+\end{equation}
+这里$\bm{c}_i^\dagger$表示$\bm{c}_i$的共轭转置。
+一旦将密度矩阵表达为有限维矩阵之后，就可以利用CVX工具箱\cite{cvx,gb08}进行数值求解了。
+
+
 
 \subsection{MPPM条件归零接收机}
 
