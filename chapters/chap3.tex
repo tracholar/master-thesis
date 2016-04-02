@@ -111,7 +111,7 @@ P_e &\approx 2(1 - \frac{1}{L}) e^{-\alpha^2}.
 由于$M$个信号互不正交，因此这$M$个信号张成$M$维Hilbert空间。
 因为是纯态信号，所以每一个信号都可以用一个向量表达。
 为此需要选择一组标准正交基$\ket{e_i}, i=1,2,...,M$。
-一种选取的方法是用Fork态做标准正交基，也可以利用Smit正交化的方法
+一种选取的方法是用Fork态做标准正交基，也可以利用Schmidt正交化的方法
 生成一组基向量\cite{zxd2004matrix}。
 这里，为方便计我们选用Fork态$\ket{n}$作为标准正交基，在这组基向量下，
 每一个信号都是一个无穷维向量，
@@ -179,6 +179,7 @@ $M$阶QAM信号的Gram矩阵由下式给出
 因为$\hat{Z}$的对角元素为0，所以
 \begin{equation}
 \hat{G}^{1/2}_{ii} \approx 1 - \frac{1}{8} \hat{Z}^2_{ii}.
+\label{eq:Gram-approx}
 \end{equation}
 
 为了计算$\hat{Z}^2$，我们将信号按照复平面的位置分为角点、边界点、内点三类，如图\ref{fig:QAM-nearbor}(\textit{a})所示。
