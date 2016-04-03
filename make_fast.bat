@@ -1,3 +1,3 @@
 xelatex main
 latexmk -c
-main.pdf
+start main.pdf

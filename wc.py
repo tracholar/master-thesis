@@ -12,6 +12,7 @@ inline_eq_count = 0
 fig_count = 0
 ch_word_count = 0
 en_word_count = 0
+all_count = 0
 
 eq_re = re.compile(r'\\begin\{equation\}.+?\\end\{equation\}', re.M | re.U | re.S)
 inline_eq_re = re.compile(r'\$.+?\$', re.M | re.U | re.S)
@@ -22,6 +23,7 @@ ctrl_re = re.compile(r'\\[a-zA-Z]+\{.+?\}', re.M | re.U | re.S)
 for f in fs:
     chap = open(f).read().decode('utf-8','ignore')
     
+    all_count += len(chap)
     #处理方程
     obj = eq_re.findall(chap)
     eq_count += len(obj)
@@ -57,6 +59,8 @@ output = '''
 英文单词: %d 
 中文汉字: %d 
 总的词数: %d 
-''' % (eq_count, inline_eq_count, fig_count, en_word_count, ch_word_count, en_word_count + ch_word_count)
+总的字符: %d
+''' % (eq_count, inline_eq_count, fig_count, en_word_count,\
+    ch_word_count, en_word_count + ch_word_count, all_count)
 
 print output.decode('utf-8')
