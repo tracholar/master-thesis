@@ -270,9 +270,10 @@ P_e &= 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
 那么
 \begin{equation}
 \begin{split}
-p_{0|0} = \Tr[\hat{\Pi}_0 \ket{0}\bra{0}] = 1,\\
-p_{1|1} = \Tr[\hat{\Pi}_1 \ket{\alpha}\bra{\alpha}] = 1-e^{-n}.
+p_{0|0} &= \Tr[\hat{\Pi}_0 \ket{0}\bra{0}] = 1,\\
+p_{1|1} &= \Tr[\hat{\Pi}_1 \ket{\alpha}\bra{\alpha}] = 1-e^{-n}.
 \end{split}
+\label{eq:CPN-cond-1}
 \end{equation}
 这里$n=|\alpha|^2$是脉冲的平均光子数，
 $p_{0|0}$代表信号在该时隙里没有光脉冲输出为0的条件概率，
@@ -287,9 +288,10 @@ P_e^{A} = p_1 e^{-n}.
 那么
 \begin{equation}
 \begin{split}
-p_{0|0} = \Tr[\hat{\Pi}_0 \hat{D}(-\alpha)\ket{0}\bra{0}\hat{D}^\dagger(-\alpha)] = e^{-n},\\
-p_{1|1} = \Tr[\hat{\Pi}_1 \hat{D}(-\alpha)\ket{\alpha}\bra{\alpha}\hat{D}^\dagger(-\alpha)] = 0.
+p_{0|0} &= \Tr[\hat{\Pi}_0 \hat{D}(-\alpha)\ket{0}\bra{0}\hat{D}^\dagger(-\alpha)] = e^{-n},\\
+p_{1|1} &= \Tr[\hat{\Pi}_1 \hat{D}(-\alpha)\ket{\alpha}\bra{\alpha}\hat{D}^\dagger(-\alpha)] = 0.
 \end{split}
+\label{eq:CPN-cond-2}
 \end{equation}
 此时单个符号探测的平均错误概率为
 \begin{equation}
@@ -356,11 +358,12 @@ m_k^*(\zeta_{k-1}) &=\arg\max_i p_{i,[z_1,...,z_{k-1}]}.
 为了得到最优策略，我们首先来定义优化目标函数\cite{dalla2014adaptive}
 \begin{equation}
 \begin{split}
-J_k(s_k, \beta_k) & = \sum_{z' \in \mathcal{Z}_{M-K+1}} p_{h([\zeta_{k-1}, z']), [\zeta_{k-1}, z']}, (k=0,1,...,M) \\
-J_{M+1}(s_{M+1}, \beta_{M+1}) & =  p_{h(\zeta_M), \zeta_M} = p_{h(\bm{z}), \bm{z}}.
+J_k(s_k, \beta_{k+1}) & = \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k}, z']), [\zeta_{k}, z']}, (k=0,1,...,M-1) \\
+J_{M}(s_{M}, \beta_{M+1}) & =  p_{h(\zeta_M), \zeta_M} = p_{h(\bm{z}), \bm{z}}.
 \end{split}
+\label{eq:reward-to-go-function}
 \end{equation}
-这里$s_k =s_k(\zeta_{k-1}) = [p_{1,\zeta_{k-1}},...,p_{M,\zeta_{k-1}} ]$是状态向量，
+这里$s_k =s_k(\zeta_{k}) = [p_{1,\zeta_{k}},...,p_{M,\zeta_{k}} ]$是状态向量，
 与前面的输出序列有关，
 且初始状态$s_0 = [p_1,  ..., p_M] = [1/M, ..., 1/M]$对应于$M$个先验概率。
 $\mathcal{Z}_{K} = \{0, 1\}^{\otimes K}$，是$K$维输出序列的状态空间。
@@ -372,22 +375,76 @@ J_0 = \sum_{z\in \mathcal{Z}_M} p_{h(z),z} = P_c.
 进一步，我们可以验证$J_k$具有递归关系
 \begin{equation}
 \begin{split}
-J_k(s_k, \beta_k) & = \sum_{z' \in \mathcal{Z}_{M-K+1}} p_{h([\zeta_{k-1}, z']), [\zeta_{k-1}, z']} \\
-                  & = \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k-1}, 0 , z']), [\zeta_{k-1}, 0 , z']} + \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k-1}, 1 , z']), [\zeta_{k-1}, 1 , z']} \\
-                  & = J_{k+1}(s_{k+1}([\zeta_{k-1} 0]), \beta_k([\zeta_{k-1} 0])) + J_{k+1}(s_{k+1}([\zeta_{k-1} 1]), \beta_k([\zeta_{k-1} 1])).
+J_k(s_k, \beta_k) & = \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k}, z']), [\zeta_{k}, z']} \\
+                  & = \sum_{z' \in \mathcal{Z}_{M-K-1}} p_{h([\zeta_{k}, 0 , z']), [\zeta_{k}, 0 , z']} + \sum_{z' \in \mathcal{Z}_{M-K-1}} p_{h([\zeta_{k}, 1 , z']), [\zeta_{k}, 1 , z']} \\
+                  & = J_{k+1}(s_{k+1}([\zeta_{k} 0]), \beta_{k+1}([\zeta_{k} 0])) + J_{k+1}(s_{k+1}([\zeta_{k} 1]), \beta_{k+1}([\zeta_{k} 1])).
 \end{split}
 \end{equation}
 并且状态向量具有如下更新方程
 \begin{equation}
 \begin{split}
-s_{k+1}([\zeta_{k-1} z_k]) = s_k \odot [p_{z_k|1}, p_{z_k|2}, \cdots p_{z_k|M}].
+s_{k+1}([\zeta_{k} z_{k+1}]) = s_k \odot [p_{z_{k+1}|1}, p_{{k+1}|2}, \cdots p_{{k+1}|M}]. 
 \end{split}
+\label{eq:state-transform}
 \end{equation}
-其中$\odot$是按照元素相乘的哈达马积，$p_{z_k|i}$表示在发送
-码字为第$i$个码字时，第$k$个时隙输出为$z_k$的概率。
+其中$\odot$是按照元素相乘的哈达马积，$p_{z_{k+1}|i}$表示在发送
+码字为第$i$个码字时，第$k+1$个时隙输出为$z_{k+1}$的概率。
 
+为了最大化$P_c$，我们需要优化$J_0$，
+原则上我们可以让$\beta_k$取任意复数，
+这里我们限定它只能取$\{0, -\alpha\}$中
+的一个。根据上述递归关系，我们可以将
+该优化问题分解为两个子问题，记$J_k^* = \max_{\beta_{k+1}} J_k(s_k, \beta_{k+1})$，
+那么有
+\begin{equation}
+J_k^*(s_k(\zeta_{k})) = J_{k+1}^*(s_k([\zeta_{k} 0])) + J_{k+1}^*(s_k([\zeta_{k} 0])) 
+\end{equation}
+因此，可以利用动态规划算法进行优化，
+从最后一层进行计算，每一步都对状态空间中的所有
+状态进行一次计算，计算完毕后再计算前面一层，直到第0层\cite{dalla2014adaptive}。
+但是由于状态空间过大，对$N$个信号，为了得到足够的精度，
+需要将状态中每一个元素离散化至少$10^3$个点，
+因而每一层需要计算的状态数目为$10^{3N}$个。
+由于控制参数被我们限定在两个数范围内取值，
+所以对于时隙数目不是很大的情况下，
+我们直接进行计算会更加有效。
+我们的算法可以归纳如下：
 
+1. 设置初始状态向量 $s_0=[1/M,1/M, ..., 1/M]$。
 
+2. 对每一个$\beta_{1} \in \{0, -\alpha \}$，计算$J_0(s_0, \beta_1)$，
+   那么最优正确检测概率和第一个时隙的最优控制策略为
+   \begin{equation}
+   \begin{split}
+   P_c &= \max_{\beta_1 \in \{0, 1 \} } J_0(s_0, \beta_1), \\
+   \beta_1^* &= \arg \max_{\beta_1 \in \{0, 1 \} } J_0(s_0, \beta_1).
+   \end{split}
+   \end{equation}
+
+我们在计算$J_k$的时候，需要计算它的两个子问题。
+对给定的$k, s_k, \beta_{k+1}$，
+$J_k$可以通过如下算法进行计算：
+
+1. 如果$k=M$，根据\ref{eq:reward-to-go-function}
+   式，我们直接返回$s_k$中的最大值作为结果。
+   对于其他情况，我们进入步骤2。
+   
+2. 对当前的状态$s_k$和控制参数$\beta_{k+1}$，
+   利用条件概率\ref{eq:CPN-cond-1}式
+   和\ref{eq:CPN-cond-2}式，代入状态转移方程\ref{eq:state-transform}
+   中计算出新的状态$s_{k+1}([\zeta_k, 0])$
+   和$s_{k+1}([\zeta_k, 1])$。
+   
+3. 然后计算递归两个子问题，对每一个$\beta_{k+2}$，
+   分别计算$J_{k+1}([s_{k+1},0], \beta_{k+2})$
+   和$J_{k+1}([s_{k+1},1], \beta_{k+2})$，
+   设他们的最大值分别为$J_{k+1}^0$和$J_{k+1}^1$，
+   那么返回$J_{k+1}^0 + J_{k+1}^1$作为当前函数的计算结果。
+   同时可以得到下一个时隙的最优控制策略$\beta_{k+2}^0$
+   和 $\beta_{k+2}^1$，分别对应$z_k=0$和$z_k=1$时的
+   最优控制参数。
+   
+   
 
 
 \section{编码后OOK调制信号条件归零接收机}
