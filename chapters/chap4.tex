@@ -243,8 +243,148 @@ P_e &= 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
 
 
 \subsection{MPPM条件归零接收机}
+在第二章，我们简单地介绍了Dolinar在1982年提出的，
+针对PPM信号设计的条件归零(CPN)接收机。
+我们将该接收机推广到更一般的情况，
+用来接收MPPM信号。
 
 
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chap4/CPN}
+  \caption{条件归零接收机及接收过程示意图}
+  \label{fig:CPN}
+\end{figure}
+
+如图\ref{fig:CPN}所示，在每一个时隙，
+信号通过一个高透过率分束器
+与本振发生干涉，即对信号进行了位移操作，
+对MPPM信号而言，位移操作被限定在$\hat{D}(0)$和$\hat{D}(-\alpha)$
+中选择一个。
+位移后的信号进入单光子探测器或者ON-OFF探测器，
+它对应于一个二元POVM测量
+\begin{equation}
+\hat{\Pi}_0 = \ket{0}\bra{0}, \hat{\Pi}_1 = \hat{I} - \ket{0}\bra{0}.
+\end{equation}
+如果采用$\hat{D}(0)$位移操作，即该时隙采用直接探测，我们记为A类探测，
+那么
+\begin{equation}
+\begin{split}
+p_{0|0} = \Tr[\hat{\Pi}_0 \ket{0}\bra{0}] = 1,\\
+p_{1|1} = \Tr[\hat{\Pi}_1 \ket{\alpha}\bra{\alpha}] = 1-e^{-n}.
+\end{split}
+\end{equation}
+这里$n=|\alpha|^2$是脉冲的平均光子数，
+$p_{0|0}$代表信号在该时隙里没有光脉冲输出为0的条件概率，
+$p_{1|1}$代表信号在该时隙里没有光脉冲输出为0的条件概率。
+此时单个符号探测的平均错误概率为
+\begin{equation}
+P_e^{A} = p_1 e^{-n}.
+\label{eq:DD-A-error}
+\end{equation}
+这里$p_1$代表有脉冲的先验概率。
+如果采用$\hat{D}(-\alpha)$位移操作，即该时隙归零脉冲后再采用直接探测，我们记为B类探测，
+那么
+\begin{equation}
+\begin{split}
+p_{0|0} = \Tr[\hat{\Pi}_0 \hat{D}(-\alpha)\ket{0}\bra{0}\hat{D}^\dagger(-\alpha)] = e^{-n},\\
+p_{1|1} = \Tr[\hat{\Pi}_1 \hat{D}(-\alpha)\ket{\alpha}\bra{\alpha}\hat{D}^\dagger(-\alpha)] = 0.
+\end{split}
+\end{equation}
+此时单个符号探测的平均错误概率为
+\begin{equation}
+P_e^{B} = p_0 e^{-n}.
+\label{eq:DD-B-error}
+\end{equation}
+这里$p_0$代表没有脉冲的先验概率。
+
+
+
+反馈策略通过探测器接收到的历史结果和当前结果
+来决定下一个时隙采用哪一种位移操作，
+即下一个时隙的位移量可以表示为历史的输出和当前的输出的函数。
+设当前时刻为$k$，历史输出为$\zeta_{k-1}=(z_1,z_2,...,z_{k-1})$，那么
+下一时刻的位移量为
+\begin{equation}
+\beta_{k+1} = \beta_{k+1}([\zeta_{k-1} , z_k]) = \beta_{k+1}(\zeta_k).
+\end{equation}
+如果当前时刻的输出为$z_k=0$，即没有光子计数时间发生，
+那么下一个时刻的位移量为$\beta([\zeta_{k-1} 0]) = \beta^{z_1...z_{k-1}0}$，
+如果$z_k=1$，则$\beta([\zeta_{k-1} 1]) = \beta^{z_1...z_{k-1}1}$，
+整个策略可以表示为一颗决策树如图\ref{fig:CPN-strategy}所示。
+
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap4/CPN-strategy}
+  \caption{条件归零接收机反馈策略决策树}
+  \label{fig:CPN-strategy}
+\end{figure}
+
+
+当$M$个时隙都探测完毕，设探测器的输出序列为
+$\bm{z}=[z_1,z_2,...,z_M]$，我们采用最大后验概率准则(MAP)进行判决，判决函数
+\begin{equation}
+h(\bm{z}) = \arg\max_i p_{i,\bm{z}}.
+\end{equation}
+这里$p_{i,\bm{z}}$代表发送第$i$个符号，同时输出序列为$\bm{z}$的联合概率。
+那么对所有的符号，平均正确探测的概率为
+\begin{equation}
+P_c = \sum_z p_{h(\bm{z}),\bm{z}} = \sum_{\bm{z}} \max_i p_{i,\bm{z}}.
+\end{equation}
+当$M$个符号的先验概率一致时，最大后验概率准则与最大似然准则的结果一致。
+
+现在，我们需要确定函数$\beta_k(\zeta_k)$的形式。
+一种简单的取法是$\beta_k \equiv 0$，即每一个时隙都采用直接探测，
+此时就是经典的检测方案。
+通过观察\ref{eq:DD-A-error}式和\ref{eq:DD-B-error}式
+我们可以知道$p_1 < p_0$时，即有脉冲的先验概率
+比较大，适合采用B类探测，反之适合采用A类探测。
+我们可以取位移策略为最大后验概率策略
+\begin{equation}
+\begin{split}
+\beta_k(\zeta_{k-1}) &= \begin{cases}
+                                0, & \text{符号} m_k^*(\zeta_{k-1}) \text{的第} k \text{个时隙没有脉冲}, \\
+                                -\alpha, & \text{符号} m_k^*(\zeta_{k-1}) \text{的第} k \text{个时隙有脉冲}.
+                             \end{cases} \\
+m_k^*(\zeta_{k-1}) &=\arg\max_i p_{i,[z_1,...,z_{k-1}]}.   
+\end{split}                          
+\end{equation}
+
+一般地，采用最大后验概率策略设计的反馈策略并不一定是最优策略。
+为了得到最优策略，我们首先来定义优化目标函数\cite{dalla2014adaptive}
+\begin{equation}
+\begin{split}
+J_k(s_k, \beta_k) & = \sum_{z' \in \mathcal{Z}_{M-K+1}} p_{h([\zeta_{k-1}, z']), [\zeta_{k-1}, z']}, (k=0,1,...,M) \\
+J_{M+1}(s_{M+1}, \beta_{M+1}) & =  p_{h(\zeta_M), \zeta_M} = p_{h(\bm{z}), \bm{z}}.
+\end{split}
+\end{equation}
+这里$s_k =s_k(\zeta_{k-1}) = [p_{1,\zeta_{k-1}},...,p_{M,\zeta_{k-1}} ]$是状态向量，
+与前面的输出序列有关，
+且初始状态$s_0 = [p_1,  ..., p_M] = [1/M, ..., 1/M]$对应于$M$个先验概率。
+$\mathcal{Z}_{K} = \{0, 1\}^{\otimes K}$，是$K$维输出序列的状态空间。
+容易验证，目标函数具有如下性质
+\begin{equation}
+J_0 = \sum_{z\in \mathcal{Z}_M} p_{h(z),z} = P_c.
+\end{equation}
+即$J_0$就是我们最终需要优化的最大平均正确概率。
+进一步，我们可以验证$J_k$具有递归关系
+\begin{equation}
+\begin{split}
+J_k(s_k, \beta_k) & = \sum_{z' \in \mathcal{Z}_{M-K+1}} p_{h([\zeta_{k-1}, z']), [\zeta_{k-1}, z']} \\
+                  & = \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k-1}, 0 , z']), [\zeta_{k-1}, 0 , z']} + \sum_{z' \in \mathcal{Z}_{M-K}} p_{h([\zeta_{k-1}, 1 , z']), [\zeta_{k-1}, 1 , z']} \\
+                  & = J_{k+1}(s_{k+1}([\zeta_{k-1} 0]), \beta_k([\zeta_{k-1} 0])) + J_{k+1}(s_{k+1}([\zeta_{k-1} 1]), \beta_k([\zeta_{k-1} 1])).
+\end{split}
+\end{equation}
+并且状态向量具有如下更新方程
+\begin{equation}
+\begin{split}
+s_{k+1}([\zeta_{k-1} z_k]) = s_k \odot [p_{z_k|1}, p_{z_k|2}, \cdots p_{z_k|M}].
+\end{split}
+\end{equation}
+其中$\odot$是按照元素相乘的哈达马积，$p_{z_k|i}$表示在发送
+码字为第$i$个码字时，第$k$个时隙输出为$z_k$的概率。
 
 
 
