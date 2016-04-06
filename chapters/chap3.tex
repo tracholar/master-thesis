@@ -163,7 +163,7 @@ $M$阶QAM信号的Gram矩阵由下式给出
 \begin{equation}
 \begin{split}
 \hat{G}_{ij} &= \bra{\alpha_i}\ket{\alpha_j} \\
- &= \exp\{-\frac{1}{2} |\alpha|^2 [(u_i-u_j)^2 + (v_i-v_j)^2]\}, (i,j)=1,2,...,M.
+ &= \exp\left(-\frac{1}{2} |\alpha|^2 [(u_i-u_j)^2 + (v_i-v_j)^2]\right), (i,j)=1,2,...,M.
 \end{split}
 \end{equation}
 易知当$|\alpha|\gg1$时，除了对角元素为1之外，其他元素都很小，
@@ -199,7 +199,7 @@ $M$阶QAM信号的Gram矩阵由下式给出
 \begin{equation}
 \begin{split}
 (\hat{Z}^2)_{ii} &= \sum_k Z_{ik}Z_{ki}    \\
-                 &=\sum_k \exp\{- |\alpha|^2 [(u_i-u_k)^2 + (v_i-v_k)^2]\}.
+                 &=\sum_{k \neq i} \exp\{- |\alpha|^2 [(u_i-u_k)^2 + (v_i-v_k)^2]\}.
 \end{split}
 \end{equation}
 如果忽略高阶小量，那么只有最近邻点的值保留下来，所以
