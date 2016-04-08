@@ -99,7 +99,20 @@ PBS的极化矢量为$\vec{p} = [\sqrt{T} \quad \sqrt{1-T}]$，$T$为透过率�
 在接收端由于采用的是恒定的位移场，所以接收端不需要电光调制器。
 在发送端，由于只需要产生$0$和$\pi$相位的相移量，
 所以可以用一个半波片替代调制器。
-最终实验光路如图所示。
+最终实验光路示意图如图\ref{fig:Kennedy-receiver-diagram}所示。
+信号光通过一个半波片进行调制，在接收端，没有加半波片，
+意味着位移操作为$\hat{D}(-\alpha)$。
+三个圆形渐变衰减片提供最大到100dB的衰减量，
+以保证每个光脉冲中平均光子数到单光子量级。
+通过条件最后一个衰减片，可以得到不同光强下的信号，
+从而得到不同平均光子数下的平均错误概率。
 
 
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap5/Kennedy-receiver-diagram}
+  \caption{Kennedy接收机实验光路示意图}
+  \label{fig:Kennedy-receiver-diagram}
+\end{figure}
 
