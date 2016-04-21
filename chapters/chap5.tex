@@ -99,13 +99,7 @@ PBS的极化矢量为$\vec{p} = [\sqrt{T} \quad \sqrt{1-T}]$，$T$为透过率�
 在接收端由于采用的是恒定的位移场，所以接收端不需要电光调制器。
 在发送端，由于只需要产生$0$和$\pi$相位的相移量，
 所以可以用一个半波片替代调制器。
-最终实验光路示意图如图\ref{fig:Kennedy-receiver-diagram}所示。
-信号光通过一个半波片进行调制，在接收端，没有加半波片，
-意味着位移操作为$\hat{D}(-\alpha)$。
-三个圆形渐变衰减片提供最大到100dB的衰减量，
-以保证每个光脉冲中平均光子数到单光子量级。
-通过条件最后一个衰减片，可以得到不同光强下的信号，
-从而得到不同平均光子数下的平均错误概率。
+
 
 
 
@@ -114,5 +108,60 @@ PBS的极化矢量为$\vec{p} = [\sqrt{T} \quad \sqrt{1-T}]$，$T$为透过率�
   \includegraphics[width=\textwidth]{figures/chap5/Kennedy-receiver-diagram}
   \caption{Kennedy接收机实验光路示意图}
   \label{fig:Kennedy-receiver-diagram}
+\end{figure}
+
+实验光路示意图如图\ref{fig:Kennedy-receiver-diagram}所示，
+实验照片如图\ref{fig:experiment-photo}所示。
+线偏振的信号光通过一个半波片进行调制，
+激光器采用JSDU公司生产的型号为1508P-2的氦氖激光器，
+它输出0.5mW的532.8nm的线偏光，偏振度高达500:1。 
+如果没有半波片意味着相移为$0$，
+对应于符号$\ket{\alpha}$；
+如果发送光路插入了半波片意味着相移为$\pi$，
+对应于符号$\ket{-\alpha}$。
+而在接收端，没有加半波片，
+意味着位移操作为$\hat{D}(-\alpha)$。
+实验光路取夹角为$45 \deg$，因此系统效率最高为50\%。
+通过采用一个偏振度高达1000:1的偏振分束器，
+可以使得接收端最大光强与最小光强之比达到1:0.55\%，对应的条纹可见度为98.9\% 。
+三个圆形渐变衰减片提供最大到100dB的衰减量，
+以保证每个光脉冲中平均光子数到单光子量级。
+实验中取每个光脉冲宽度为5us，每次试验对符号$\ket{\alpha}$
+和$\ket{-\alpha}$各重复$2\times 10^4$次。
+在实验过程中，可以通过调节其中一个最大衰减系数为20dB的衰减片，
+得到不同光强下的信号，
+从而得到不同平均光子数下的平均错误概率。
+最后进行光强探测的是Excelitas公司生产的型号为SPCM-AQRH16的单光子探测器。
+该探测器探测效率为65\%，初步实验中没有计入该探测效率和耦合损耗的影响。
+该探测器暗计数标称为25cps，实验当中由于环境杂散光等原因使得实际暗计数比该数值要大。
+实测的暗计数为35.9cps，因此一个光脉冲内的暗计数为$1.795\times 10^{-4}$个。
+系统由于采用空间光路耦合，因此对环境光干扰很敏感，实验中通过将接收端
+放入一个只有一个开孔的黑色纸盒中，以减少环境光干扰和激光器的散射光干扰。
+这个技巧可以将环境光干扰降低至少10dB。
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/chap5/experiment-photo}
+  \caption{Kennedy接收机实验照片}
+  \label{fig:experiment-photo}
+\end{figure}
+
+
+通过改变可变衰减片，
+可以制备不同光强下的相干光脉冲。
+实验结果如图\ref{fig:kennedy-experiment-error}所示，
+其中实验结果用方块表示出来，可以看到，
+实验中的Kennedy接收机虽然没能突破效率为1的标准量子极限(SQL)，
+但是突破了效率为50\%的标准量子极限，最大的收益达到1dB。
+
+
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.6\textwidth]{figures/chap5/kennedy-experiment-error}
+  \caption{Kennedy接收机实验结果}
+  \label{fig:kennedy-experiment-error}
 \end{figure}
 
