@@ -4,7 +4,9 @@
 \documentclass[master]{ustcthesis}
 % bachelor|master|doctor
 
-%\hypersetup{colorlinks=false}  %打印版去掉该注释，链接变黑色
+\ifdefined\printversion 
+\hypersetup{colorlinks=false}  %打印版去掉该注释，链接变黑色
+\fi
 \usepackage{ustcextra}
 \usepackage{physics}
 \usepackage{bm}
