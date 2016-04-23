@@ -10,7 +10,7 @@
 \subsection{标准量子极限}
 在经典通信系统中，常用外差接收机检测QAM信号，
 这种接收机的性能也叫QAM信号的标准量子极限(SQL)\cite{kato1999quantum}。
-设$M$阶QAM信号由$M$个相干态构成，如图\ref{fig:QAM-signals}所示，
+设$M$阶QAM信号由$M$个相干态构成，图\ref{fig:QAM-signals}
 显示的是16-QAM和36-QAM星座图。假设$M$阶QAM信号每一个
 正交幅度$X$或$P$都可以取$L$个不同的值，那么$M=L^2, L=3,4,5...$。
 设这$L$元基本符号集合为
@@ -68,11 +68,11 @@ D_{u',v'} = \{ (x_c,x_s)| D_L(u')\alpha < x_c \le D_U(u')\alpha,  D_L(v')\alpha 
 \begin{split}
 D_L(u) &= \begin{cases}    
           -\infty     & u < -(L-2)  \\
-          (u-1) & otherwise
+          (u-1) & \text{其他}
          \end{cases}\\
 D_U(u) &= \begin{cases} 
           \infty     & u > L-2  \\
-          (u+1) & otherwise
+          (u+1) & \text{其他}
          \end{cases}
 \label{eq:LU-fun}
 \end{split}
@@ -167,7 +167,7 @@ $M$阶QAM信号的Gram矩阵由下式给出
 \end{split}
 \end{equation}
 易知当$|\alpha|\gg1$时，除了对角元素为1之外，其他元素都很小，
-我们将Gram矩阵分解为单位阵和一个$\hat{Z}$阵
+我们将Gram矩阵分解为一个单位阵和一个$\hat{Z}$阵
 \begin{equation}
 \hat{G} = \hat{I} + \hat{Z}.
 \end{equation}
@@ -183,9 +183,10 @@ $M$阶QAM信号的Gram矩阵由下式给出
 \end{equation}
 
 为了计算$\hat{Z}^2$，我们将信号按照复平面的位置分为角点、边界点、内点三类，如图\ref{fig:QAM-nearbor}(\textit{a})所示。
-易知对于$M$阶QAM信号，三种点对应的数目分别为4,$4(L-2)$,$(L-2)^2$，其中$L^2=M$。
+易知对于$M$阶QAM信号，三种点对应的数目分别为$4$、$4(L-2)$、$(L-2)^2$，其中$L^2=M$。
 并且定义一个信号的最近邻点为与该信号在复平面内距离最近的点，
-易知角点有2个最近邻点，边界点有3个最近邻点，而内点有4个最近邻点如图\ref{fig:QAM-nearbor}(\textit{b})所示。
+易知角点有2个最近邻点，边界点有3个最近邻点，而内点有4个最近邻点，
+如图\ref{fig:QAM-nearbor}(\textit{b})所示。
 
 
 \begin{figure}
@@ -239,7 +240,7 @@ P_e & \approx 1 - \frac{1}{M}\sum_{i=1}^M |1 - \frac{1}{8} (\hat{Z}^2)_{ii}|^2 \
   \label{fig:QAM-Bondurant-receiver}
 \end{figure}
 
-为了说明接收机接收过程，我们将$M$阶QAM信号按顺序编号为$\alpha_1,\alpha_2,...,\alpha_M$。
+为了说明接收机接收过程，我们将$M$个$M$阶QAM信号按顺序依次编号为$\alpha_1$, $\alpha_2$,$...$,$\alpha_M$。
 记符号到来的初始时刻为$t=0$，符号持续的时间为$T$。
 接收机按照图\ref{fig:QAM-Bondurant-receiver}所示的策略
 进行反馈控制，反馈策略可以归纳如下：
@@ -587,7 +588,7 @@ Monte Carlo仿真结果如图\ref{fig:QAM-ADP-error}所示。
 当分区数目趋近于无穷时，
 错误概率达到最低，从图中可以看到，
 它可以在任意光子数都能突破标准量子极限。
-但是分区数目较少的时候，比如只有10各分区，
+但是分区数目较少的时候，比如只有10个分区，
 可以看到16-QAM信号和36-QAM信号的
 自适应分区检测接收机都没能突破标准量子极限。
 并且随着光子数增加，接收机性能出现了饱和现象。
@@ -618,8 +619,8 @@ ON-OFF探测器和PNRD探测器，
 
 
 \section{QAM信号混合接收机}
-另外一种实现多元调制量子接收机的方法是利用
-一个混合接收方案\cite{muller2012quadrature,李科2014}。
+另外一种实现多元调制量子接收机的方法是采用
+混合接收方案\cite{muller2012quadrature,李科2014}。
 对于一般的QAM信号，混合接收机该如何设计
 是这一节的主要内容。
 

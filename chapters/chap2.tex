@@ -2,8 +2,8 @@
 
 \section{电磁场的量子态描述}
 \subsection{相干态}
-通信中常用相干光来传递信息，它可以用一个正弦波来表示。
-不失一般性，可以用线偏振的电场来实现\cite{djordjevic2010fundamentals}，
+通信中常用相干光来传递信息，在数学上，它可以用一个正弦波来表示。
+在物理实现上，它可以用线偏振的电场来实现\cite{djordjevic2010fundamentals}，
 \begin{equation}
 \bm{E}(t) = \bm{p} A e^{j\omega t + \phi}.
 \end{equation}
@@ -14,7 +14,7 @@
 \begin{equation}
 \alpha = A e^{j\phi}.
 \end{equation}
-也可以用相空间复平面中的一个点来表示该复振幅，这种图像称作星座图。
+该复振幅也可以用相空间复平面中的一个点来表示，这种相空间图像被称作星座图。
 图\ref{fig:signals}展示了OOK、BPSK、QPSK、16-QAM四种常见的调制信号的星座图。
 
 \begin{figure}
@@ -25,7 +25,7 @@
 \end{figure}
 
 在量子力学中，电磁场被量子化为若干个不同模式、不同频率的光子\cite{gerry2005introductory,helstrom1976quantum,mandel1995optical}。
-单模电磁场的哈密顿量可以表示为
+单模电磁场的哈密顿量可以表示为无穷个Fork态的线性叠加
 \begin{equation}
 \hat{H} = \hbar \omega (\hat{a}^\dagger \hat{a} + \frac{1}{2}).
 \end{equation}
@@ -54,8 +54,17 @@ P_n = |\bra{n}\ket{\alpha}|^2 = \exp(-|\alpha|^2) \frac{|\alpha|^{2n}}{n!} .
 \end{equation}
 给出。相干态参数${\alpha}$可以是任何复数，具有复振幅的意义\cite{glauber1963coherent}。
 
+任意两个相干态互不正交，两个相干态的内积为
+\begin{equation}
+\begin{split}
+\bra{\alpha}\ket{\beta} &= \exp(-\frac{1}{2}|\alpha|^2 - \frac{1}{2} |\beta|^2) \sum_{n=0}^\infty \frac{(\alpha^*\beta)^n}{n!} \\
+                         &= \exp(\alpha^*\beta -\frac{1}{2}|\alpha|^2 - \frac{1}{2} |\beta|^2).
+\end{split}
+\end{equation}
+恒大于0。相干态互不正交是使得相干态无法完美区分的关键原因。
+
 数学上也常常用密度矩阵来表示信号\cite{wt2001qm}，相干态$\ket{\alpha}$也可以用密度矩阵表示为
-$\ket{\alpha}\bra{\alpha}$。
+$\hat{\rho} = \ket{\alpha}\bra{\alpha}$。
 
 
 
@@ -76,7 +85,7 @@ $\ket{\alpha}\bra{\alpha}$。
 \begin{equation}
 \ket{\alpha} = \hat{D}(\alpha) \ket{0}.
 \end{equation}
-两个相干态之间也可以通过位移操作进行转换
+两个相干态之间也可以通过位移操作进行变换
 \begin{equation}
 \hat{D}(\beta) \ket{\alpha} = \ket{\alpha + \beta} .
 \end{equation}
@@ -97,6 +106,16 @@ $\ket{\alpha}\bra{\alpha}$。
 接下来，我们简单介绍一下每一种接收方案的具体实现方案。
 
 \subsection{直接检测}
+
+
+
+\begin{figure}
+\centering
+  \includegraphics[scale=1]{figures/chap2/DD.pdf}
+  \caption{直接检测示意图}
+  \label{fig:DD}
+\end{figure}
+
 
 在所有的调制方案中，有一类采用脉冲的有无对信息进行编码，
 比如开关键控(OOK)和脉冲位置调制(PPM)。
@@ -119,14 +138,6 @@ OOK调制将符号0编码为没有光脉冲，
 
 
 
-\begin{figure}
-\centering
-  \includegraphics[scale=1]{figures/chap2/DD.pdf}
-  \caption{直接检测示意图}
-  \label{fig:DD}
-\end{figure}
-
-
 \subsection{零差接收}
 零差接收机是一种相干检测方案，如图\ref{fig:HD}所示，
 是一种平衡零差接收方案\cite{gagliardi1976optical,gagliardi1998optical}。
@@ -139,7 +150,7 @@ OOK调制将符号0编码为没有光脉冲，
 a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 \end{equation}
 这两路信号被光电探测器接收，得到两路光电流$i_\pm$。
-这两路电流通过一个放大系数为$\frac{1}{K}=\frac{1}{2q\sqrt{N_{LO}}}$的差分放大器，
+这两路电流通过一个放大系数为$1/K=1/2q\sqrt{N_{LO}}$的差分放大器，
 最后通过一个低通滤波器积分得到输出统计量
 \begin{equation}
 \alpha_\theta = \frac{N_+ - N_-}{2\sqrt{N_{LO}}}.
@@ -173,7 +184,7 @@ a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 与频率为$\omega - \omega_{IF}$的强本振场$a_{LO}$
 通过一个50:50的分束器混合。
 混合后经过光电探测器，得到两路以中频$\omega_{IF}$震荡的电流$i_\pm$。
-这两路电流经过一个放大系数为$\frac{1}{K'}=\frac{1}{q\sqrt{N_{LO}}}$的差分放大器，
+这两路电流经过一个放大系数为$1/K'=1/q\sqrt{N_{LO}}$的差分放大器，
 最后解调出两个正交幅度$\alpha_1$和$\alpha_2$。
 假定所有的器件都是理想的，当$N_{LO} \rightarrow \infty$时，
 这两个统计量统计独立，分别服从高斯分布
@@ -202,21 +213,21 @@ a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 \section{量子检测与估计理论}
 \subsection{经典最优检测}
 通信系统通常由发送端、信道和接收端三个部分组成。
-对某种特定的通信方案，发送端通常从$M$个符号中选择一个发送出去。
-我们称一个假设$H_j (j=1,2,...,M)$是指发送的是第$j$个符号。
-对于这$M$个符号，我们赋予它们一个先验概率$\zeta_j$，
+对某种特定的通信方案，发送端从$M$个符号中以先验概率分布$\zeta_j(j=1,2,...,M)$选择一个发送出去。
 先验概率满足归一化条件
 \begin{equation}
 \sum_{j=1}^M \zeta_j = 1.
 \end{equation}
+我们称一个假设$H_j (j=1,2,...,M)$是指发送的是第$j$个符号。
+
 
 
 在通信的接收端，接收机对电磁场进行探测，可以得到一些统计量。
 例如在前面介绍的三种经典监测方案，输出的统计量分别是光子数目、
 $\alpha_\theta$、$\{\alpha_1, \alpha_2\}$。
-由于量子涨落或者噪声的影响，对于给定的发送信号，
+由于量子涨落和噪声的影响，对于给定的发送信号，
 这些统计量通常不是一个固定的值，而是一个随机变量。
-一般的，我们假设输出统计量是一个随即向量$\bm{v} = (v_1, v_2, ..., v_n)$。
+一般的，我们假设输出统计量是一个实随机向量$\bm{v} = (v_1, v_2, ..., v_n)$。
 当发送第$j$个符号时，
 假定它的联合分布为
 $p_j(\bm{v}) = p_j(v_1, v_2, ..., v_n)$。
@@ -226,7 +237,7 @@ $p_j(\bm{v}) = p_j(v_1, v_2, ..., v_n)$。
 
 我们定义决策代价$C_{ij}$为，
 当假设$H_j$是正确的情况下，选择了假设$H_i$所需要的代价。
-我们期望一个决策是最优的是指该决策所需要的代价最小。
+我们期望一个决策是最优的是指该决策所需要的平均代价最小。
 
 我们再来将决策数学化\cite{yzf2002tjxhcl,helstrom1976quantum}，
 定义在观测到的统计量为$\bm{v}$时，
@@ -243,13 +254,14 @@ $p_j(\bm{v}) = p_j(v_1, v_2, ..., v_n)$。
 在上述符号的约定下，我们可以得到在假设$H_j$是正确的情况下，
 策略选择了假设$H_i$的条件概率为
 \begin{equation}
-\Pr\{i|j\} = \int_R \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
+\Pr\{i|j\} = \int_{\mathbb{R}^n} \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
 \end{equation}
+这里$\mathbb{R}$代表实数集合，$\mathbb{R}^n$代表$n$维实欧几里得空间。
 那么，对所有的观测结果，平均代价为
 \begin{equation}
 \begin{split}
 \bar{C} &= \sum_{i=1}^M \sum_{j=1}^M \zeta_j C_{ij} \Pr{i|j} \\
- &= \sum_{i=1}^M \sum_{j=1}^M \zeta_j C_{ij} \int_R \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
+ &= \sum_{i=1}^M \sum_{j=1}^M \zeta_j C_{ij} \int_{\mathbb{R}^n} \pi_i(\bm{v}) p_j(\bm{v}) d^n \bm{v}.
 \end{split}
 \end{equation}
 对于每一个假设$H_i$，我们定义它的风险函数
@@ -258,7 +270,7 @@ W_i(\bm{v}) = \sum_{j=1}^M \zeta_j C_{ij} p_j(\bm{v})。
 \end{equation}
 那么决策的平均代价可以改写为
 \begin{equation}
-\bar{C} =  \int_R \sum_{i=1}^M W_i(\bm{v}) \pi_i(\bm{v}) d^n \bm{v}.
+\bar{C} =  \int_{\mathbb{R}^n} \sum_{i=1}^M W_i(\bm{v}) \pi_i(\bm{v}) d^n \bm{v}.
 \label{eq:avg-C}
 \end{equation}
 
@@ -295,12 +307,12 @@ W_i(\bm{v}) - \Upsilon(\bm{v}) &\ge 0.
 \end{equation}
 因此，可以得到最小平均代价为
 \begin{equation}
-\bar{C}_{min} = \int_R \Upsilon(\bm{v}) d^n \bm{v}. 
+\bar{C}_{min} = \int_{\mathbb{R}^n} \Upsilon(\bm{v}) d^n \bm{v}. 
 \end{equation}
 容易验证，这样得到的平均代价确实是最小平均代价，
 即对任意其他的决策函数$\{\pi_i'(\bm{v})\}$，有
 \begin{equation}
-\bar{C}' - \bar{C}_{min} = \sum_{i=1}^M \int_R [W_i(\bm{v}) - \Upsilon] \pi_i'(\bm{v}) d^n \bm{v} \ge 0. 
+\bar{C}' - \bar{C}_{min} = \sum_{i=1}^M \int_{\mathbb{R}^n} [W_i(\bm{v}) - \Upsilon] \pi_i'(\bm{v}) d^n \bm{v} \ge 0. 
 \end{equation}
 
 
@@ -354,7 +366,7 @@ P_e = 1 - \sum_{j=1}^M \zeta_j \Pr{j|j} = \sum_{j=1}^M \zeta_j \sum_{k\neq j}\Pr
 \begin{equation}
 \hat{\Pi}_n^2 = \hat{\Pi}_n, n=0,1,2,...
 \end{equation}
-如果直接检测采用On-Off探测器，即只能探测到有光子还是没有光子，
+如果直接检测采用ON-OFF探测器，即只能探测到有光子还是没有光子，
 那么直接检测对应于一个二元测量
 \begin{equation}
 \hat{\Pi}_0 = \ket{0}\bra{0}, \hat{\Pi}_1 = \hat{I} - \ket{0}\bra{0}.
@@ -429,10 +441,10 @@ s.t.          \quad & \hat{X} \ge \hat{\rho}_i', i=1,2,...,M.
 需要利用数值优化工具进行数值计算，
 只有很少数情况下可以得到解析表达式。
 因此，这不利于理论研究。
-而平方根检测是一种解析方法，通过信号矢量的Gram矩阵的平方根
+而平方根检测是一种解析方法，它利用通过信号矢量的Gram矩阵的平方根
 构造出来的一组POVM算符进行测量\cite{hausladen1994pretty,hausladen1996classical}。
 在最小错率概率准则下，它是一种近最优的检测方案，
-但是在最小均方误差准则下，它是最优的。
+但是在最小均方误差准则下，它是最优测量。
 并且，在信号具有几何均匀对称性的情况下，
 它也是最小错误概率准则下的最优检测\cite{kato1999quantum,eldar2001quantum,cariolaro2010performance,cariolaro2010theory}。
 在很多理论问题的研究中，由于平方根检测具有良好的解析表达式，
@@ -528,7 +540,7 @@ $\hat{I}_H$是一个$H=n^{M-1}$阶单位矩阵。
 
 \begin{figure}
 \centering
-  \includegraphics[width=0.5\textwidth]{figures/chap2/QAM-SRM-vs-Helstrom}
+  \includegraphics[width=0.6\textwidth]{figures/chap2/QAM-SRM-vs-Helstrom}
   \caption{QAM信号平方根检测与Helstrom极限}
   \label{fig:SRM-vs-Hel}
 \end{figure}
@@ -540,9 +552,9 @@ $\hat{I}_H$是一个$H=n^{M-1}$阶单位矩阵。
 首先对二元调制进行探究，分别提出利用线性光学元件实现的Kennedy接收机
 和Dolinar接收机\cite{kennedy1973near,dolinar1973optimum}。
 后来，经过后续研究者的进一步探索，更多的接收方案
-也被提出来了。在本章中，我们回顾一下历史上被提出的一些重要的接收机
+也被提出来了。在本章中，我们回顾一下已被提出的一些重要的接收机
 实现方案。
-\subsection{二进制信号量子接收机}
+\subsection{二元调制信号量子接收机}
 首先，我们来看一些最简单的调制方案——二元调制。
 它包括被广泛应用的两种调制方案——OOK和BPSK。
 图\ref{fig:signals}显示了他们在星座图上的图像。
@@ -576,7 +588,7 @@ $\hat{I}_H$是一个$H=n^{M-1}$阶单位矩阵。
 \begin{equation}
 \begin{split}
 P_e  &= 1 - \frac{1}{4}(\sqrt{\lambda_1} + \sqrt{\lambda_2})^2\\
-     & = \frac{1}{2} (1 - \sqrt{1 - |\xi|^2}).
+     & = \frac{1}{2} \left(1 - \sqrt{1 - |\xi|^2} \right).
 \label{eq:OOK-BPSK-Pe-Hel}
 \end{split}
 \end{equation}
@@ -586,7 +598,7 @@ P_e  &= 1 - \frac{1}{4}(\sqrt{\lambda_1} + \sqrt{\lambda_2})^2\\
 对信号进行位移操作$\hat{D}(\alpha)$，
 将信号集合变成OOK调制$\{\ket{0}, \ket{2\alpha} \}$，
 然后进行直接探测，如图\ref{fig:kennedy-receiver}所示。
-如何直接探测没有检测到光子(OFF)，就判决为信号$\ket{-\alpha}$，
+如果没有检测到光子(OFF)，就判决为信号$\ket{-\alpha}$，
 否则(ON)判决为信号$\ket{\alpha}$。
 假设$H_0$代表信号$\ket{-\alpha}$，假设$H_1$代表信号$\ket{\alpha}$。
 那么，理想条件下，探测的条件概率为
@@ -622,7 +634,8 @@ P_e & = 1 -\sqrt{\frac{2}{\pi}}\int_0^{\infty} e^{-2(x - \alpha)^2} dx \\
 \end{equation}
 对于BPSK信号，经典的零差接收机性能也叫它的标准量子极限(SQL)。
 当光子数很大时，利用余误差函数$\erfc$的Chernoff界\cite{chang2011chernoff}，
-BPSK零差接收机的渐进性能为
+当$x \gg 1$时，$\erfc(x) \approx e^{-x^2}$，
+可以得到BPSK零差接收机的渐进性能为
 \begin{equation}
 P_e = \frac{1}{2}\erfc(\sqrt{2}\alpha) \approx \frac{1}{2} e^{-2\alpha^2}.
 \label{eq:BPSK-HD-approx}
@@ -638,9 +651,11 @@ P_e &= \frac{1}{2} (1 - \sqrt{1 - e^{-4|\alpha|^2}}) \\
 \end{split}
 \end{equation}
 对比式\ref{eq:BPSK-Kennedy}和\ref{eq:BPSK-Hel-approx}可以看出，
-在大信号时，Kennedy接收机与理想的最优量子检测只相差一个常数因子$1/2$。
+在大信号时，Kennedy接收机与理想的最优量子检测只相差一个常数因子$1/2$，
+即Kenendy接收机距最优量子检测只相差3dB。
 数值仿真结果如图\ref{fig:Kennedy-error}所示，
-可以看到在光子数较小的时候，Kennedy接收机性能没有突破标准量子极限。
+可以看到在光子数较小的时候，Kennedy接收机性能没有突破标准量子极限，
+只在大信号时能够突破标准量子极限。
 
 
 \begin{figure}
@@ -653,7 +668,7 @@ P_e &= \frac{1}{2} (1 - \sqrt{1 - e^{-4|\alpha|^2}}) \\
 
 为了解决Kennedy接收机在小信号时的不足，一种采用最优位移
 的广义Kennedy接收机（也叫最优位移接收机）被提出\cite{takeoka2008discrimination}。
-这种接收机采用与Kennedy接收机相同的结构，但是采用的位移量
+这种接收机采用与Kennedy接收机相同的结构，但是采用的位移操作
 是$\hat{D}(\beta)$，其中位移参数$\beta$通过优化得到。
 在这种参数配置下，易得接收机的错误概率为
 \begin{equation}
@@ -663,7 +678,7 @@ P_e &= \frac{1}{2} (1 - e^{-|\alpha-\beta|^2} + e^{-|\alpha+\beta|^2}) \\
 \label{eq:BPSK-Opt-Kennedy}
 \end{split}
 \end{equation}
-最优位移参数通过求解方程$\frac{\partial P_e}{\partial \beta} = 0$
+最优位移参数通过求解方程$\partial P_e / \partial \beta  = 0$
 得到，即
 \begin{equation}
 \tanh(2\alpha\beta) = \frac{\alpha}{\beta}.
@@ -694,7 +709,7 @@ P_e &= \frac{1}{2} (1 - e^{-|\alpha-\beta|^2} + e^{-|\alpha+\beta|^2}) \\
 \end{figure}
 
 Dolinar接收机需要实时反馈控制，这对工程实现要求过高。
-一些利用分区检测方案通过将信号在时间上或者能量上分成
+一些分区检测方案通过将信号在时间上或者能量上分成
 若干份，然后分别采用最优位移接收，弥补了这个不足\cite{vilnrotter2012quantum,li2013optimal,sych2014optimal}。
 当分区数目趋近于无穷大时，这种接收机的理论性能和Dolinar接收机一致\cite{sych2014optimal}。
 
@@ -707,7 +722,7 @@ QPSK信号用相干态可以表示为
 \ket{\alpha_i} = \ket{\alpha e^{j \frac{\pi}{2} (i-2)}},i=1,2,3,4.
 \end{equation}
 我们先来计算一下它的标准量子极限，对于QPSK信号，
-外差接收机的性能及就是它的标准量子极限。
+外差接收机的性能就是它的标准量子极限。
 利用式\ref{eq:Her-receiver-output}或式\ref{eq:Her-receiver-output}，
 可以得外差接收机平均错误概率为\cite{helstrom1976quantum,kato1999quantum}
 \begin{equation}
@@ -835,34 +850,35 @@ Bondurant接收机前进了一步。
 但是在小信号的时候，并没有突破标准量子极限。
 后来M{\"u}ller借鉴最优位移接收机的思想，
 采用不精确归零的方法，改进了小信号时的
-性能，使得接收机可以在任意光子数都能突破标准量子极限\cite{muller2014qpsk,muller2014m}。
+性能，使得Bondurant接收机可以在任意光子数都能突破标准量子极限\cite{muller2014qpsk,muller2014m}。
 
 由于Bondurant接收机也需要实时反馈控制，因此不利于工程实现。
-后续的研究者 Izumi 通过前馈的方式，将一般的PSK信号分成若干份，
+后续的研究者 Izumi 通过前馈的方式，将每一个PSK信号分成若干份，
 采用Bondurant接收机相似的策略进行前馈\cite{izumi2012displacement}。通过
 这种方式减少了反馈带宽的需求，但是同时却增加了
 资源的消耗。
 
-后面的研究者Becerra将最大后验概率策略加入归零顺序之中，
+后面的研究者Becerra将最大后验概率归零策略加入归零顺序之中，
 在每一次前馈的过程中，选择在当前时刻具有最大后验概率的符号，
 进行归零\cite{becerra2011m}。这种策略，可以有效地降低
-接收机的平均错误概率。2013年，Becerra对这种
-策略用反馈的方式从实验上进行了验证\cite{becerra2013experimental}。
+接收机的平均错误概率。2013年，Becerra用反馈的方式
+从实验上对这种策略进行了验证\cite{becerra2013experimental}。
 并且，考虑到非理想因素如暗计数、模式失配的影响，
-可以将接收端的探测器换成具有光子数分辨能力的探测器，
-可以有效的提高接收机的鲁棒性，可以抵抗暗计数和模式失配带来的
+将接收端的探测器换成具有光子数分辨能力的探测器，
+可以有效的提高接收机的鲁棒性，可以降低暗计数和模式失配带来的
 不利影响\cite{izumi2013quantum,li2013suppressing}。
-这个结论也被Becerra在2015年通过实验验证\cite{becerra2015photon}。
+这个结论也在2015年被Becerra通过实验验证\cite{becerra2015photon}。
 
 至此，原则上可以在实验上实现具有鲁棒性的量子接收机，
-但是理论上的最优检测如何实现，仍然是一个值得研究的问题。
+但是理论上的最优检测如何实现，仍然是一个需要继续研究的问题。
 
 与上述思想不同的是，M{\"u}ller等人提出一种利用
-一个零差接收机和一个Kennedy接收机实现QPSK信号的
+一个零差接收机和一个Kennedy接收机实现QPSK信号接收的
 混合接收机\cite{muller2012quadrature}。
 这种方案不用反馈控制，简化了QPSK信号接收机的实现。
-这种方案也被K. Li推广到16-QAM信号\cite{李科2014}。
+这种结构也被K. Li推广到16-QAM信号\cite{李科2014}。
 
+在前面我们回顾了PSK信号的量子接收机，
 接下来我们回顾一下PPM信号量子接收机研究现状。
 
 首先，我们来计算一下M阶PPM的标准量子极限。
@@ -874,7 +890,7 @@ M阶PPM信号有M个时隙，第$i$个符号只有第$i$个时隙
 \end{equation}
 在经典光通信中采用直接探测对PPM信号进行检测，
 如果第$k$个时隙探测到光子，就判决为第$k$个符号；
-如果所有的时隙都没探测到光子，那么就随机选择一个符号。
+如果所有的时隙都没探测到光子，那么就随机选择一个符号输出。
 因此这种接收策略的平均错误概率为
 \begin{equation}
 P_e = \frac{M-1}{M} e^{-|\alpha|^2}.
@@ -914,16 +930,16 @@ P_e \approx \frac{(M-1)^2}{M^2} e^{-2|\alpha|^2}.
 \end{equation}
 
 早在1982年，Dolinar就提出一种适用于PPM信号的
-条件脉冲归零(CPN)接收机\cite{dolinar1982near}。
+条件归零(CPN)接收机\cite{dolinar1982near}。
 我们接下来以4-PPM信号为例，来简单介绍一下这种接收机。
 
 条件归零接收机所用的器件和结构与图\ref{fig:QPSK-Boundurant-receiver} (\textit{a})
 所示的Boundurant接收机一致，不同的是其反馈控制策略。
-条件归零接收机在PPM信号的每一个时隙中，
-它的本振被调整使得位移操作为$\hat{D}(-\alpha)$或者$\hat{D}(0)$。
+在PPM信号的每一个时隙中，
+条件归零接收机调整它的本振使得位移操作为$\hat{D}(-\alpha)$或者$\hat{D}(0)$。
 当位移操作选择$\hat{D}(-\alpha)$时，
-接收机在当前时刻归零当前脉冲，然后进行直接探测。
-当位移操作选择$\hat{D}(-\alpha)$时，相当于就是直接检测。
+接收机在当前时刻归零脉冲，然后进行直接探测。
+当位移操作选择$\hat{D}(0)$时，相当于就是直接检测。
 以4PPM为例，它的决策策略可以用如图\ref{fig:CPN-Decision-Tree}
 所示的决策树表示出来。
 条件归零接收机首先归零第一个时隙，
@@ -949,8 +965,8 @@ P_e = \frac{1}{M}[(1-e^{-|\alpha|^2})^M + M e^{-|\alpha|^2} - 1].
 P_e \approx \frac{M-1}{2} e^{-2|\alpha|^2}.
 \end{equation}
 
-一种与最优位移接收机思想类似的方法，在条件归零接收机每一个时隙里，
-如果采用不精确归零，则可进一步提升接收机在小信号时的性能\cite{guha2011approaching}。
+与最优位移接收机思想类似，如果在条件归零接收机每一个时隙里，
+采用不精确归零，则可进一步提升接收机在小信号时的性能\cite{guha2011approaching}。
 2012年，这两种条件归零接收机被实验验证\cite{chen2012optical}。
 Guha等人还提出，可以增加一个相敏放大器(PSA)，
 从而在位移操作上增加一个压缩操作，可以进一步提升
@@ -1063,7 +1079,7 @@ C \le \max_{p_x}H(p_x).
 如果将量子态放宽到任意量子态，
 可以证明，对于能量和带宽受限的条件下，
 玻色子场可以最大化信道容量\cite{yuen1993ultimate}。
-取符号集合$X = \mathcal{N}$，
+取符号集合$X = \mathbb{N}$，
 $\hat{\rho}_n = \ket{n}\bra{n}$为Fork态，
 且先验分布$p_n= N^n(1+N)^{-(n+1)}$，
 其中$N$为发送的平均光子数。
