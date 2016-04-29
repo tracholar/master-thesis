@@ -19,7 +19,7 @@ latexmk -c
 @if exist print.pdf (
     del print.pdf
 )
-ren main.pdf print.pdf
+copy main.pdf print.pdf
 start print.pdf
 python wc.py
 @goto end
