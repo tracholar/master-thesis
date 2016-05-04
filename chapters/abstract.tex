@@ -1,16 +1,16 @@
 ﻿\begin{abstract}
 在经典光通信系统中，由于受到散粒噪声的影响，
 通信系统接收机性能存在着经典极限——标准量子极限(standard quantum limit, SQL)。
-近年来，随着量子技术的发展，利用光的量子特性设计新型的光接收机方案逐渐引起学术界的关注。
-这是因为，采用量子探测和测量的技术可以获取之前使用经典探测所不能获得的信息，
+近年来，随着量子信息技术的发展，利用光的量子特性设计新型的光接收机方案逐渐引起学术界的关注。
+这是因为，采用量子探测和测量的技术可以获取之前使用经典探测所不能获得的信息。
 这种方案可以让系统的性能突破标准量子极限，
 从而获得经典检测方案所不能达到的更低的误码率和更高的信道容量。
-当前对量子接收机的研究进展还比较缓慢，尚停留在理论研究和实验演示验证阶段，
+当前对量子接收机的研究进展还比较缓慢，尚停留在理论研究和初步实验验证阶段，
 仍然有许多值得研究的理论和实验课题。
 
 
-在本论文中，我们首先回顾一下自上个世纪六十年代以来的研究进展，
-然后就其中的几个问题进行深入探究。本文主要分为以下三个部分：
+在本论文中，我们首先回顾一下自上个世纪六十年代量子接收机只提出以来的研究进展，
+然后就以下三个问题进行深入探究：
 
 
 1. QAM信号量子接收机理论研究。
@@ -20,7 +20,7 @@
 本文将目前几种接收机方案推广到QAM信号，对QAM信号的量子接收机
 进行系统的研究。这些接收机包括Bondurant接收机、
 自适应分区检测接收机和混合接收机等三种接收机方案。
-通过对三种接收机方案进行对比，可以为工程上可实现的量子接收机设计
+通过对三种接收机方案进行对比，可以为工程上可实现的量子接收机方案设计
 提供参考。
 
 2. 二元调制多符号信号条件归零接收机理论研究。
@@ -28,14 +28,13 @@
 更具有研究价值。在本文中，我们将条件归零接收机的方案
 应用到多脉冲脉冲位置调制(MPPM)、编码后的OOK调制、
 编码后的BPSK调制信号。在此基础上，通过对接收机接收策略的优化，
-我们将接收机的性能降低到经典检测方案以下。
+我们将接收机的误码率降低到经典检测方案的标准量子极限以下。
 
-3. 量子接收机实验平台的搭建。
-为了后续实验方案的研究，我们开始进行量子接收机的实验平台搭建工作。
-作为初期工作，本文以BPSK的Kennedy接收机为例，进行初步的实验验证工作。
-实验结果表明，在相同的系统效率的情况下，我们的Kennedy接收机能够突破标准量子极限。
-通过替换态制备阶段的调制和接收阶段的调制器，
-原则上这种方案可以实现任意PSK信号的量子接收机。
+3. 量子接收机初步实验研究。
+作为初步实验验证工作，本文对BPSK的Kennedy接收机，进行初步的实验验证工作。
+实验结果表明，在相同的系统效率的情况下，我们的Kennedy接收机性能能够突破标准量子极限。
+通过替换发射端的态制备光调制器和接收端的光调制器，
+原则上这种方案可以用于任意PSK信号的量子接收机的实验研究。
 
 
 
@@ -54,7 +53,7 @@ In the classical optical communication systems,
 due to the influence of shot noise,
 the receiver performances of the communication system  
 are limited by the standard quantum limit (SQL).
-In recent years, with the development of quantum technology, 
+In recent years, with the development of quantum information technology, 
 the optical receivers using quantum properties of light 
 are concerned by researchers.
 Because the quantum detection and measurement  technology can extract the information 
@@ -66,9 +65,8 @@ It stays in the theoretical study and experimental demonstration stage,
 There are still many theoretical and experimental problems worthy of study.
 
 
-In this paper, we first review the research progress since the 1960's,
-then focus on a few of these issues deeply. 
-This paper is divided into these three parts:
+In this paper, we first review the research progress since the 1960's when the quantum receivers were proposed ,
+then focus on following three issues:
 
 
 1. The theory of quantum receiver for QAM signals.
@@ -79,19 +77,17 @@ This article will present several receivers for the QAM signals and compare thes
 These receivers include a  Bondurant receiver, 
 adaptive partitioning detection receiver and hybrid receivers.
 By comparing three receivers, some information can be applied to 
-design engineering achievable quantum receiver for reference.
+design engineering achievable quantum receiver scheme for reference.
 
 2. Theoretical study of conditional nulling receivers for binary modulation multi-symbol signals.
 Compared to a single symbol detection scheme, conditional nulling receivers using joint detection  
 are more valuable to research. In this article, we will applied the conditional nulling receiver schemes
 to the multi-pulse pulse position modulation (MPPM), coding OOK modulation signals,
 coding BPSK modulation signals. On this basis, through optimizing the receive policy,
-the performance of the receivers are reduced below which of the classic detection scheme.
+the error probabilities of the receivers are reduced below the SQL of the classic detection scheme.
 
-3. Building the quantum receiver experiment platform.
-In order to study the follow-up experiments,
-we started to build a experimental platform quantum receiver.
-As an initial working, we implement the Kennedy BPSK receiver in this paper 
+3. Initial experiment research of  the quantum receivers .
+As an initial experimently demostration work, we implement the Kennedy BPSK receiver in this paper 
 to preliminary validate the Kennedy receiver theory.
 Experiment results show that our Kenendy receiver can outperform the SQL in the same system effiency codition.
 By replace the modulator in the phase of the preparation stage and the receive stage,
