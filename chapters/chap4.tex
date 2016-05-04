@@ -630,8 +630,8 @@ p_e \approx \frac{1}{2} e^{-2\alpha^2}.
 它的概率近似为 $Ae^{-f n}$，其中$A$为某个常数，参数
 \begin{equation}
 n = \begin{cases}
-        |\alpha|^2 & OOK, \\
-        2|\alpha|^2 & BPSK.
+        |\alpha|^2 & \text{OOK}, \\
+        2|\alpha|^2 & \text{BPSK}.
     \end{cases}
 \end{equation}
 因为发生更多比特错误的概率是它的高阶小量，可以忽略，
@@ -694,8 +694,8 @@ G_{i,j} = e^{1/2 d(c_i, c_j) n}.
 然后直接探测，它对应于二元POVM测量
 \begin{equation}
 \begin{split}
-\Pi_0 &= \hat{D}(\alpha)^\dagger \ket{0}\bra{0} \hat{D}(\alpha) ,\\
-\Pi_1 &= \hat{D}(\alpha)^\dagger (\hat{I} - \ket{0}\bra{0}) \hat{D}(\alpha) .
+\hat{\Pi}_0 &= \hat{D}(\alpha)^\dagger \ket{0}\bra{0} \hat{D}(\alpha) ,\\
+\hat{\Pi}_1 &= \hat{D}(\alpha)^\dagger (\hat{I} - \ket{0}\bra{0}) \hat{D}(\alpha) .
 \end{split}
 \end{equation}
 在这组POVM测量下，探测的条件概率为
