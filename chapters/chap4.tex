@@ -145,7 +145,7 @@ P_e & \approx L\left(1 - \frac{1}{M-L+1} \right)e^{-n} \\
 \ket{u_1} &= \ket{\psi_1}, \ket{e_1} = \frac{\ket{u_1}}{\sqrt{\bra{u_1}\ket{u_1}}}\\
 \ket{u_2} &= \ket{\psi_2} - \bra{e_1}\ket{\psi_2}\ket{e_1}, \ket{e_2} = \frac{\ket{u_2}}{\sqrt{\bra{u_2}\ket{u_2}}}\\
           &\qquad\qquad \vdots \\
-\ket{u_N} &= \ket{\psi_N} - \sum_{k=1}^{N-1} \bra{e_k}\ket{\psi_N}\ket{e_k}, \ket{e_k} = \frac{\ket{u_N}}{\sqrt{\bra{u_N}\ket{u_N}}}.
+\ket{u_N} &= \ket{\psi_N} - \sum_{k=1}^{N-1} \bra{e_k}\ket{\psi_N}\ket{e_k}, \ket{e_N} = \frac{\ket{u_N}}{\sqrt{\bra{u_N}\ket{u_N}}}.
 \end{split}
 \end{equation}
 设在该基向量上，$\ket{\psi_i} =\bm{c}_i = (c_{i1} \quad c_{i2} \dots c_{in})^T$，
@@ -163,7 +163,7 @@ c_{ij} &= \bra{e_j}\ket{\psi_i} \\
 对L-M-PPM信号，
 这里两个信号之间的内积为
 \begin{equation}
-\bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j)^2 n}
+\bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j) n}
 \end{equation}
 这里$d(\bm{c}_i, \bm{c}_j)$这这两个码字的Hamming距离。
 利用上述结果，可以得到密度矩阵为
@@ -184,7 +184,7 @@ c_{ij} & \le A_i e^{-1/2 d_{\min} n}, i\neq j.
 \end{split}
 \end{equation}
 其中$d_{\min} = \min_{i \neq j} d(\bm{c}_i , \bm{c}_j)$
-是码符号集合的最小汉明距离，容易验证$G_{ij} \le e^{-1/2 d_{\min} n}$。
+是码符号集合的最小汉明距离，容易验证当$i \neq j$时，有$G_{ij} \le e^{-1/2 d_{\min} n}$。
 
 当$i=1$时，显然成立。
 我们假设当$i\le m$时成立，那么当$i=m+1$时，
