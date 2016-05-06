@@ -101,10 +101,10 @@ $n=|\alpha|^2$是一个脉冲的平均光子数。
 \begin{equation}
 \Pr{\bm{c}_i | \bm{c}_i} = \frac{1}{\binom{M-K}{L-K}} \binom{L}{K} \left(1 - e^{-n} \right)^{K} \left(e^{-n} \right)^{L-K}.
 \end{equation}
-所以，这种检测方案的平均错误概率为
+所以，这种检测方案的平均正确概率为
 \begin{equation}
 \begin{split}
-P_e &= \frac{1}{\binom{M}{L}}\sum_{i=1}^{\binom{M}{L}} \sum_{K=0}^{L} \Pr{\bm{c}_i | \bm{c}_i, K}  \\
+P_c &= \frac{1}{\binom{M}{L}}\sum_{i=1}^{\binom{M}{L}} \sum_{K=0}^{L} \Pr{\bm{c}_i | \bm{c}_i, K}  \\
     &= \sum_{K=0}^{L} \frac{1}{\binom{M-K}{L-K}} \binom{L}{K} \left(1 - e^{-n} \right)^{K} \left(e^{-n} \right)^{L-K}.
 \end{split}
 \end{equation}
