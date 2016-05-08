@@ -14,13 +14,13 @@
 具有很高的能量效率，这在深空通信中具有潜在的应用价值\cite{hemmati2006deep}。
 与PPM信号不同的是，它的每一个符号通常采用两个或者两个以上的脉冲
 来加载信息。采用这种方式，
-可以在保证的较高能量效率的同时，
+可以在保证较高能量效率的同时，
 还能有效的克服PPM信号低频谱效率的缺点\cite{sugiyama1989mppm}。
 这在深空通信如地月通信、卫星到卫星通信等场景
 具有潜在的优势\cite{hemmati2006deep,waseda2011numerical}。
 
 \subsection{MPPM信号标准量子极限}
-首先，我们先来从数学上定义MPPM信号符号集合。
+首先，我们从数学上定义MPPM信号符号集合。
 设每一个MPPM信号符号有$M$个时隙，对每一个符号，
 都有$L$个时隙有脉冲，而其他$M-L$个时隙没有脉冲，
 我们称这种MPPM信号为L-M-PPM信号，如图\ref{fig:MPPM-DD}(\textit{a})所示。
@@ -161,12 +161,12 @@ c_{ij} &= \bra{e_j}\ket{\psi_i} \\
 \end{equation}
 这里$G_{ji}=\bra{\psi_j}\ket{\psi_i}$为Gram矩阵元素，
 对L-M-PPM信号，
-这里两个信号之间的内积为
+任意两个信号之间的内积为
 \begin{equation}
 \bra{\psi_j}\ket{\psi_i}=e^{-1/2 d(\bm{c}_i, \bm{c}_j) n}
 \end{equation}
 这里$d(\bm{c}_i, \bm{c}_j)$这这两个码字的Hamming距离。
-利用上述结果，可以得到密度矩阵为
+利用上述结果，可以得到信号的密度矩阵为
 \begin{equation}
 \hat{\rho_i} = \ket{\psi_i}\bra{\psi_i} = \bm{c}_i \bm{c}_i^\dagger.
 \end{equation}
@@ -174,8 +174,8 @@ c_{ij} &= \bra{e_j}\ket{\psi_i} \\
 一旦将密度矩阵表达为有限维矩阵之后，就可以利用CVX工具箱\cite{cvx,gb08}进行数值求解了。
 
 进一步，利用\ref{eq:Hel-SDP}式，
-我们可以求得一个平均错误概率的近似上界。
-我们接下来证明一般地，当信号光强很大时$n \gg 1$，
+我们可以得到一个平均错误概率的近似上界。
+我们接下来要证明，一般地，当信号光强很大时即$n \gg 1$，
 存在非负实数$A_i$使得下式成立
 \begin{equation}
 \begin{split}
@@ -194,12 +194,13 @@ c_{ij} & \le A_i e^{-1/2 d_{\min} n}, i\neq j.
 c_{m+1,j} & \le \frac{G_{j,m+1}}{c_{jj}} \\
        & \le \frac{e^{-1/2 d_{\min} n}}{1 - A_j e^{-1/2 d_{\min} n}}   \\
        & \le e^{-1/2 d_{\min} n} \left(  1 + 2 A_j e^{-1/2 d_{\min} n} \right)  \\
-       & \le A_{m+1} A_j e^{-1/2 d_{\min} n}. \\
+       & \le A_{m+1} e^{-1/2 d_{\min} n}. \\
 c_{m+1,m+1} &\ge \sqrt{1 - \sum_{k=1}^{m} A_k e^{-1/2 d_{\min} n} } \\
-            &\ge 1 - \frac{1}{2}\sum_{k=1}^{m} A_{m+1} e^{-1/2 d_{\min} n} \\
-            &\ge 1 - A_{m+1} A_{m+1} e^{-1/2 d_{\min} n}.
+            &\ge 1 - \frac{1}{4}\sum_{k=1}^{m} A_{k} e^{-1/2 d_{\min} n} \\
+            &\ge 1 - A_{m+1} e^{-1/2 d_{\min} n}.
 \end{split}
 \end{equation}
+这里取$A_{m+1} = \max(1+2 \max_j A_j, \frac{1}{4} \sum_{k=1}^m A_k) $即可，
 所以上述命题成立，根据式\ref{eq:Hel-SDP}，可得
 \begin{equation}
 \begin{split}
@@ -216,13 +217,14 @@ P_e &= 1 - \Tr(\hat{X}) =  1 - \sum_i X_{ii} \\
 即最优量子检测具有不高于$e^{- d_{\min} n}$形式的渐近性能上界。
 事实上，上述结论可以推广到任意量子态集合，
 采用最优检测其平均错误概率的渐近性能上界不高于
-$e^{-n_{\min}}$，其中$n_{\min} = \min_{ij} |\bra{\psi_i}\ket{\psi_j}|^2$。
+$e^{-n_{\min}}$，其中$n_{\min} = \min_{ij} |\alpha_i - \alpha_j|^2$，
+这里$\alpha_i$对应于相干态$\ket{\alpha_i}$。
 
 利用平方根检测，我们可以得到MPPM大信号时精确渐近性能。
 因为
 \begin{equation}
 \begin{split}
-\hat{Z}^2_{ii} \approx \sum_{d=d_{\min}} e^{-1/2 d_{\min} n} = B_i e^{-1/2 d_{\min} n}.
+\hat{Z}^2_{ii} \approx \sum_{d=d_{\min}} e^{-d_{\min} n} = B_i e^{- d_{\min} n}.
 \end{split}
 \end{equation}
 这里$Z = I -G$，
@@ -231,20 +233,21 @@ $e^{-n_{\min}}$，其中$n_{\min} = \min_{ij} |\bra{\psi_i}\ket{\psi_j}|^2$。
 所以由\ref{eq:Gram-approx}式，我们有
 \begin{equation}
 \begin{split}
-P_e &= 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
+P_e &\approx 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
     &\approx \frac{1}{4M} \sum_{i=1}^M \hat{Z}^2_{ii} \\
-    &\approx \frac{1}{4} \sum_i B_i e^{-d_{\min} n} \\
-    &\approx \frac{1}{2} D e^{-d_{\min} n}.
+    &\approx \frac{1}{4M} \sum_i B_i e^{-d_{\min} n} \\
+    &\approx \frac{1}{2M} D e^{-d_{\min} n}.
 \end{split}
 \end{equation}
 这里$D$是码间距离等于最小距离的码字对数。
 例如，对单脉冲PPM信号，任意两个码字间距离都是最小距离2，
-所以它的渐近误差性能为$\frac{M(M-1)}{4} e^{-2 n}$.
+所以它的渐近误差性能为$\frac{(M-1)}{4} e^{-2 n}$。
+与式\ref{eq:PPM-Hel-error}对比可以看到，两种方法求得的结果一致。
 
 
 
 \subsection{MPPM条件归零接收机}
-在第二章，我们简单地介绍了Dolinar在1982年提出的，
+在第二章中，我们简单地介绍了Dolinar在1982年提出的，
 针对PPM信号设计的条件归零(CPN)接收机。
 我们将该接收机推广到更一般的情况，
 用来接收MPPM信号。
@@ -409,7 +412,7 @@ J_k^*(s_k(\zeta_{k})) = J_{k+1}^*(s_k([\zeta_{k} 0])) + J_{k+1}^*(s_k([\zeta_{k}
 因而每一层需要计算的状态数目为$10^{3N}$个。
 由于控制参数被我们限定在两个数范围内取值，
 所以对于时隙数目不是很大的情况下，
-我们直接进行计算会更加有效。
+我们直接进行递归计算会更加有效。
 我们的算法可以归纳如下：
 
 1. 设置初始状态向量 $s_0=[1/M,1/M, ..., 1/M]$。
@@ -418,8 +421,8 @@ J_k^*(s_k(\zeta_{k})) = J_{k+1}^*(s_k([\zeta_{k} 0])) + J_{k+1}^*(s_k([\zeta_{k}
    那么最优正确检测概率和第一个时隙的最优控制策略为
    \begin{equation}
    \begin{split}
-   P_c &= \max_{\beta_1 \in \{0, 1 \} } J_0(s_0, \beta_1), \\
-   \beta_1^* &= \arg \max_{\beta_1 \in \{0, 1 \} } J_0(s_0, \beta_1).
+   P_c &= \max_{\beta_1 \in \{0, -\alpha \} } J_0(s_0, \beta_1), \\
+   \beta_1^* &= \arg \max_{\beta_1 \in \{0, -\alpha \} } J_0(s_0, \beta_1).
    \end{split}
    \end{equation}
 
@@ -450,7 +453,7 @@ $J_k$可以通过如下算法进行计算：
 \begin{figure}
 \centering
   \includegraphics[width=\textwidth]{figures/chap4/4MPPM-error}
-  \caption{4个时隙的MPPM性能曲线}
+  \caption{MPPM信号条件归零接收机性能曲线}
   \label{fig:4MPPM-error}
 \end{figure}
 
@@ -607,7 +610,7 @@ p_{1|1} &= \int_0^{\infty} |\bra{x}\ket{\alpha}|^2 dx = \frac{1}{2}(1+\erf{\sqrt
 \end{equation}
 这里用0表示符号$\ket{-\alpha}$，而用1表示符号$\ket{\alpha}$，
 用$p_{0|0}$和$p_{1|1}$分别表示在符号0和符号1的情况下，探测正确的概率。
-在大信号近似下，利用余误差函数的CHernoff界\cite{chang2011chernoff}，可得
+在大信号近似下，利用余误差函数的Chernoff界\cite{chang2011chernoff}，可得
 \begin{equation}
 p_{0|0} = p_{1|1} = 1 - \frac{1}{2} e^{-2\alpha^2}.
 \end{equation}
@@ -658,8 +661,9 @@ G_{i,j} = e^{1/2 d(c_i, c_j) n}.
 得到最优解了。
 
 为了方便分析，我们也采用大信号近似，根据前面的结论，
-大信号时的平均错误概率$\sim e^{-d_{\min} n}$，
-这里$d_{\min}$为码字的最小汉明距离。
+大信号时的平均错误概率约为$ \frac{D}{2M} e^{-d_{\min} n}$，
+这里$d_{\min}$为码字的最小汉明距离，而$D$为码符号集合中Hannming距离等于
+$d_{\min}$的码字对数。
 
 
 
@@ -727,7 +731,7 @@ p_{1|1} &= 0.
 \end{split}
 \end{equation}
 
-\begin{figure}[H]
+\begin{figure} %[H]
 \centering
   \includegraphics[width=\textwidth]{figures/chap4/OOK-Code-error}
   \caption{OOK信号汉明码和极化码的条件归零接收机性能}

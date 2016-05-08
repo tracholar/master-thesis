@@ -924,9 +924,10 @@ G = \left[
 \begin{equation}
 P_e = 1 - \frac{1}{M^2}(\sqrt{1 + (M-1)e^{-n}} + (M-1)\sqrt{1-e^{-n}})^2.
 \end{equation}
-当光子数很大时，其渐近性能为
+当光子数很大时，对上式进行近似，保留二阶项$e^{-2n}$，可得其渐近性能为
 \begin{equation}
-P_e \approx \frac{(M-1)^2}{M^2} e^{-2|\alpha|^2}.
+P_e \approx \frac{(M-1)}{4} e^{-2|\alpha|^2}.
+\label{eq:PPM-Hel-error}
 \end{equation}
 
 早在1982年，Dolinar就提出一种适用于PPM信号的
@@ -964,6 +965,8 @@ P_e = \frac{1}{M}[(1-e^{-|\alpha|^2})^M + M e^{-|\alpha|^2} - 1].
 \begin{equation}
 P_e \approx \frac{M-1}{2} e^{-2|\alpha|^2}.
 \end{equation}
+与式\ref{eq:PPM-Hel-error}对比，可以看到条件归零接收机与最优检测
+在大光子数时只相差3dB。
 
 与最优位移接收机思想类似，如果在条件归零接收机每一个时隙里，
 采用不精确归零，则可进一步提升接收机在小信号时的性能\cite{guha2011approaching}。
