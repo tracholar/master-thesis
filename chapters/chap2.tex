@@ -223,7 +223,7 @@ a_\pm = \frac{a_S \pm a_{LO}}{\sqrt{2}}.
 
 
 在通信的接收端，接收机对电磁场进行探测，可以得到一些统计量。
-例如在前面介绍的三种经典监测方案，输出的统计量分别是光子数目、
+例如在前面介绍的三种经典监测方案中，输出的统计量分别是光子数目、
 $\alpha_\theta$、$\{\alpha_1, \alpha_2\}$。
 由于量子涨落和噪声的影响，对于给定的发送信号，
 这些统计量通常不是一个固定的值，而是一个随机变量。
@@ -534,14 +534,14 @@ $\hat{I}_H$是一个$H=n^{M-1}$阶单位矩阵。
 因此，对于OOK、M阶PSK、M阶PPM信号，
 平方根检测都是最优检测。
 对于QAM信号，平方根检测不是最优的测量，但是非常接近最优。
-图\ref{fig:SRM-vs-Hel}显示的是16-QAM平方根检测和
-通过半正定规划计算出来的最优检测性能差异。
+图\ref{fig:SRM-vs-Hel}显示的是16-QAM平方根检测(SRM)和
+通过半正定规划计算出来的最优检测性能(Helstrom)差异。
 可以看到只在小信号区域有明显差异。
 
 \begin{figure}
 \centering
   \includegraphics[width=0.6\textwidth]{figures/chap2/QAM-SRM-vs-Helstrom}
-  \caption{QAM信号平方根检测与Helstrom极限}
+  \caption{QAM信号平方根检测(SRM)性能与Helstrom极限}
   \label{fig:SRM-vs-Hel}
 \end{figure}
 
@@ -1064,9 +1064,9 @@ C_n + C_m \le C_{n+m}
 在量子信道中，可以取不等号，
 它存在极限
 \begin{equation}
-C = \lim_{n \rightarrow \infty} C_n / n
+C = \lim_{n \rightarrow \infty} C_n / n.
 \end{equation}
-被称为信道$\mathcal{H}$的信道容量。
+该极限被称为信道$\mathcal{H}$的信道容量。
 经过A. S. Holevo, P. Hausladen,W. K. Wootters等人的努力，
 证明了对任意量子态$\{\hat{\rho}_x\}$，信道$\mathcal{H}$的容量为\cite{holevo1973bounds,hausladen1996classical, holevo1996capacity}
 \begin{equation}

@@ -184,7 +184,7 @@ c_{ij} & \le A_i e^{-1/2 d_{\min} n}, i\neq j.
 \end{split}
 \end{equation}
 其中$d_{\min} = \min_{i \neq j} d(\bm{c}_i , \bm{c}_j)$
-是码符号集合的最小汉明距离，容易验证当$i \neq j$时，有$G_{ij} \le e^{-1/2 d_{\min} n}$。
+是码符号集合的最小Hamming距离，容易验证当$i \neq j$时，有$G_{ij} \le e^{-1/2 d_{\min} n}$。
 
 当$i=1$时，显然成立。
 我们假设当$i\le m$时成立，那么当$i=m+1$时，
@@ -241,17 +241,12 @@ P_e &\approx 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
 \end{equation}
 这里$D$是码间距离等于最小距离的码字对数。
 例如，对单脉冲PPM信号，任意两个码字间距离都是最小距离2，
-所以它的渐近误差性能为$\frac{(M-1)}{4} e^{-2 n}$。
+所以$D=\frac{M(M-1)}{2}$，从而它的渐近误差性能为$\frac{(M-1)}{4} e^{-2 n}$。
 与式\ref{eq:PPM-Hel-error}对比可以看到，两种方法求得的结果一致。
 
 
 
 \subsection{MPPM条件归零接收机}
-在第二章中，我们简单地介绍了Dolinar在1982年提出的，
-针对PPM信号设计的条件归零(CPN)接收机。
-我们将该接收机推广到更一般的情况，
-用来接收MPPM信号。
-
 
 \begin{figure}
 \centering
@@ -259,6 +254,13 @@ P_e &\approx 1 - \frac{1}{M} \sum_{i=1}^M (1 - \frac{1}{8} \hat{Z}^2_{ii})^2 \\
   \caption{条件归零接收机及接收过程示意图}
   \label{fig:CPN}
 \end{figure}
+
+
+在第二章中，我们简单地介绍了Dolinar在1982年提出的，
+针对PPM信号设计的条件归零(CPN)接收机。
+我们将该接收机推广到更一般的情况，
+用来接收MPPM信号。
+
 
 如图\ref{fig:CPN}所示，在每一个时隙，
 信号通过一个高透过率分束器
@@ -310,13 +312,13 @@ P_e^{B} = p_0 e^{-n}.
 反馈策略通过探测器接收到的历史结果和当前结果
 来决定下一个时隙采用哪一种位移操作，
 即下一个时隙的位移量可以表示为历史的输出和当前的输出的函数。
-设当前时刻为$k$，历史输出为$\zeta_{k-1}=(z_1,z_2,...,z_{k-1})$，那么
-下一时刻的位移量为
+设当前时隙为$k$，历史输出为$\zeta_{k-1}=(z_1,z_2,...,z_{k-1})$，那么
+下一个时隙的位移量为
 \begin{equation}
 \beta_{k+1} = \beta_{k+1}([\zeta_{k-1} , z_k]) = \beta_{k+1}(\zeta_k).
 \end{equation}
-如果当前时刻的输出为$z_k=0$，即没有光子计数时间发生，
-那么下一个时刻的位移量为$\beta([\zeta_{k-1} 0]) = \beta^{z_1...z_{k-1}0}$，
+如果当前时隙的输出为$z_k=0$，即没有光子计数时间发生，
+那么下一个时隙的位移量为$\beta([\zeta_{k-1} 0]) = \beta^{z_1...z_{k-1}0}$，
 如果$z_k=1$，则$\beta([\zeta_{k-1} 1]) = \beta^{z_1...z_{k-1}1}$，
 整个策略可以表示为一颗决策树如图\ref{fig:CPN-strategy}所示。
 
@@ -348,7 +350,7 @@ P_c = \sum_z p_{h(\bm{z}),\bm{z}} = \sum_{\bm{z}} \max_i p_{i,\bm{z}}.
 通过观察\ref{eq:DD-A-error}式和\ref{eq:DD-B-error}式
 我们可以知道$p_1 < p_0$时，即有脉冲的先验概率
 比较大，适合采用B类探测，反之适合采用A类探测。
-我们可以取位移策略为最大后验概率策略
+我们可以采取最大后验概率位移策略
 \begin{equation}
 \begin{split}
 \beta_k(\zeta_{k-1}) &= \begin{cases}
@@ -523,7 +525,7 @@ c_i = x_i G, i=0,1,...,2^m-1.
 \end{equation}
 其中$x_i$为数字$i$的$m$位二进制表达。
 
-极化编码是一种利用信道极化特性设计的一种编码方案\cite{arikan2009channel,korada2009polar,wilde2013polar}，
+极化编码是一种利用信道极化特性设计的编码方案\cite{arikan2009channel,korada2009polar,wilde2013polar}，
 采用这种编码方案能够逼近Holevo容量\cite{guha2012polar}。
 极化编码也可以看做一种特殊的Reed-Muller(RM)码，
 可以通过如下方法生成\cite{arikan2008performance}。
@@ -604,8 +606,8 @@ G_{P}(8,5) = \left[
 而条件概率为
 \begin{equation}
 \begin{split}
-p_{0|0} &= \int_{-\infty}^0 |\bra{x}\ket{-\alpha}|^2 dx = \frac{1}{2}(1+\erf{\sqrt{2}\alpha}) \\
-p_{1|1} &= \int_0^{\infty} |\bra{x}\ket{\alpha}|^2 dx = \frac{1}{2}(1+\erf{\sqrt{2}\alpha}) 
+p_{0|0} &= \int_{-\infty}^0 |\bra{x}\ket{-\alpha}|^2 dx = \frac{1}{2}(1+\erf(\sqrt{2}\alpha) ) \\
+p_{1|1} &= \int_0^{\infty} |\bra{x}\ket{\alpha}|^2 dx = \frac{1}{2}(1+\erf(\sqrt{2}\alpha) ) 
 \end{split}
 \end{equation}
 这里用0表示符号$\ket{-\alpha}$，而用1表示符号$\ket{\alpha}$，
@@ -627,7 +629,7 @@ p_e \approx \frac{1}{2} e^{-2\alpha^2}.
 为了便于进一步分析，这里我们采用近似分析，
 只考虑在大信号近似的情况下，即$|\alpha| \gg 1$时，
 接收机的误符号率。
-我们假设码字的最小汉明距离为$d_{\min}$，
+我们假设码字的最小Hamming距离为$d_{\min}$，
 那么在一个码字内，
 发生$f = \lceil d_{\min}/2 \rceil$个比特错误
 将无法通过译码纠错，
@@ -641,9 +643,9 @@ n = \begin{cases}
 因为发生更多比特错误的概率是它的高阶小量，可以忽略，
 所以经典的探测方案大信号近似下，
 平均错误概率$\sim e^{-\lceil d_{\min}/2\rceil n}$，
-例如，(7,4)Hamming码的最小汉明距离为3，
+例如，(7,4)Hamming码的最小Hamming距离为3，
 所以它的误符号率$\sim e^{-2n}$。
-而(8,5)极化码最小汉明距离为2，所以
+而(8,5)极化码最小Hamming距离为2，所以
 它的误符号率$\sim e^{-n}$。
 
 
@@ -655,14 +657,14 @@ n = \begin{cases}
 \begin{equation}
 G_{i,j} = e^{1/2 d(c_i, c_j) n}.
 \end{equation}
-其中$c_i$是第$i$个码字，$d(c_i, c_j)$是两个码字的汉明距离，
+其中$c_i$是第$i$个码字，$d(c_i, c_j)$是两个码字的Hamming距离，
 参数$n$如前面的定义。
 根据Gram矩阵，就可以利用CVX工具箱\cite{cvx,gb08}求解问题\ref{eq:Hel-SDP}
 得到最优解了。
 
 为了方便分析，我们也采用大信号近似，根据前面的结论，
 大信号时的平均错误概率约为$ \frac{D}{2M} e^{-d_{\min} n}$，
-这里$d_{\min}$为码字的最小汉明距离，而$D$为码符号集合中Hannming距离等于
+这里$d_{\min}$为码字的最小Hamming距离，而$D$为码符号集合中Hannming距离等于
 $d_{\min}$的码字对数。
 
 
@@ -734,14 +736,14 @@ p_{1|1} &= 0.
 \begin{figure} %[H]
 \centering
   \includegraphics[width=\textwidth]{figures/chap4/OOK-Code-error}
-  \caption{OOK信号汉明码和极化码的条件归零接收机性能}
+  \caption{OOK信号Hamming码和极化码的条件归零接收机性能}
   \label{fig:OOK-Code-error}
 \end{figure}
 
 
 利用上述结果，我们就可以利用式\ref{eq:state-transform}更新状态方程了，
 进而采用动态规划的方法对控制策略进行优化。
-我们选择了(7,4)汉明码和(8,4)极化码进行数值仿真，
+我们选择了(7,4)Hamming码和(8,4)极化码进行数值仿真，
 仿真结果如图\ref{fig:OOK-Code-error}所示。
 可以看到，对于OOK调制这两种不同的编码方案，
 条件归零接收机可以在任意光子数下突破经典检测的极限。
